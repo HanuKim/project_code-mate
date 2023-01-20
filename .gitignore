@@ -6,7 +6,7 @@
 /.pnp
 .pnp.js
 .history
-src/shared/config.js
+src/shared/config.ts
 
 # testing
 /coverage
