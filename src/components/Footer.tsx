@@ -1,20 +1,18 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 export default function Footer() {
   return (
-    <>
-      <Container>
-        <InfoWrap>
-          <div>Infomation</div>
-        </InfoWrap>
-      </Container>
-    </>
+    <Container>
+      <InfoWrap>
+        <div>Infomation</div>
+      </InfoWrap>
+    </Container>
   );
 }
 
 const Container = styled.div`
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   left: 0;
   width: 100%;
@@ -24,9 +22,9 @@ const Container = styled.div`
 `;
 
 const InfoWrap = styled.div`
-  max-width: 300px;
+  /* max-width: 300px; */
   width: 100%;
-  height: 100px;
+  height: 100%;
   color: white;
 
   /* background-color: white; */

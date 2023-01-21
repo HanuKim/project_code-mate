@@ -1,13 +1,20 @@
-import React from "react";
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const goToMypageHandler = () => {
+    navigate('/Mypage');
+  };
+
   return (
     <>
       <HeaderContainer>
         <LogoBox />
-        <LoginBtn>로그인/회원가입</LoginBtn>
+        <LoginBtn onClick={goToMypageHandler}>로그인/회원가입</LoginBtn>
       </HeaderContainer>
     </>
   );
