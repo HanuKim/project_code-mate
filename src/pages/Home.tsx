@@ -1,23 +1,144 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import {HiOutlinePencilSquare} from 'react-icons/hi2';
 import basicImg from '../img/basicImg.png';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+} from 'firebase/firestore';
+import {dbService} from '../shared/firebase';
+import {async} from '@firebase/util';
 
 export default function Home() {
+  interface PostState {
+    id: string;
+    nickname: string;
+    category: any;
+    comment: string[];
+    content: string;
+    createdAt: any;
+    title: string;
+    userid: number;
+  }
+
+  // interface CategoryState {
+  //   all: string;
+  //   back: string;
+  //   front: string;
+  //   design: string;
+  //   publ: string;
+  //   pm: string;
+  // }
+  const [posts, setPosts] = useState<PostState[]>([]);
+  const [category, setCategory]: any = useState('');
+  // any 타입 말고 어떤 타입을 줘야 하는지 확인해보기
+
+  // post 데이터에서 createAt을 내림차순으로 정렬
+  const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
+
+  const getPost = () => {
+    onSnapshot(q, (snapshot) => {
+      const newPosts = snapshot.docs.map((doc) => {
+        console.log('doc', doc.data());
+        const newPost = {
+          id: doc.id,
+          ...doc.data(), // <- poststate
+          createdAt: doc.data().createdAt.toDate(), // timestamp로 저장된 데이터 가공
+        } as PostState;
+        // poststate로 들어올걸 확신해서 as를 사용함
+        // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
+        console.log('newpost', newPost);
+        return newPost;
+      });
+      setPosts(newPosts);
+      console.log('posts2', newPosts);
+    });
+  };
+
+  const setCat = async (cat: string) => {
+    setCategory(cat);
+    await updateDoc(doc(dbService, 'category', 'currentCategory'), {
+      category: cat,
+    });
+  };
+  useEffect(() => {
+    getPost();
+    console.log('posts', posts);
+    console.log('category', category);
+
+    const getCategory = async () => {
+      const snapshot = await getDoc(
+        doc(dbService, 'category', 'currentCategory')
+      );
+      console.log(snapshot.data());
+      setCategory(snapshot.data().category); // 스냅샷.data() 오류났었는데 tsconfig.json에 "strictNullChecks": false, 추가해줬더니 오류안남. 이렇게 해도 괜찮은건지 확인필요
+    };
+    getCategory();
+  }, []);
+
+  // const BorderStyles = (categoryitem:string) => {
+  //   for (let i = 0; i < category.length; i++)
+  //   { style = {{ borderColor: category[i] === categoryitem ? '#262b7f' : '#a8a8a8' } }
+  // }
+  // }
+
   return (
     <Container>
       {/* <Modal /> */}
 
       {/* 카테고리 */}
-      <MainTopContainer>
-        <MainTopBt>전체</MainTopBt>
-        <MainTopBt>프론트엔드</MainTopBt>
-        <MainTopBt>백엔드</MainTopBt>
-        <MainTopBt>디자이너</MainTopBt>
-        <MainTopBt>퍼블리셔</MainTopBt>
-        <MainTopBt>PM</MainTopBt>
-      </MainTopContainer>
+      <CategoryContainer>
+        <CategoryBt
+          onClick={() => setCat('all')}
+          style={{borderColor: category === 'all' ? '#262b7f' : '#a8a8a8'}}
+        >
+          전체
+        </CategoryBt>
+        <CategoryBt
+          onClick={() => setCat('front')}
+          style={{
+            borderColor: category === 'front' ? '#262b7f' : '#a8a8a8',
+          }}
+        >
+          프론트엔드
+        </CategoryBt>
+        <CategoryBt
+          onClick={() => setCat('back')}
+          style={{borderColor: category === 'back' ? '#262b7f' : '#a8a8a8'}}
+        >
+          백엔드
+        </CategoryBt>
+        <CategoryBt
+          onClick={() => setCat('design')}
+          style={{
+            borderColor: category === 'design' ? '#262b7f' : '#a8a8a8',
+          }}
+        >
+          디자이너
+        </CategoryBt>
+        <CategoryBt
+          onClick={() => setCat('publ')}
+          style={{borderColor: category === 'publ' ? '#262b7f' : '#a8a8a8'}}
+        >
+          퍼블리셔
+        </CategoryBt>
+        <CategoryBt
+          onClick={() => setCat('pm')}
+          style={{borderColor: category === 'pm' ? '#262b7f' : '#a8a8a8'}}
+        >
+          PM
+        </CategoryBt>
+      </CategoryContainer>
 
       {/* 글쓰기 버튼 */}
       <WriteContainer>
@@ -28,64 +149,50 @@ export default function Home() {
 
       {/* 포스트 전체 */}
       <PostsContainer>
-        {/* 포스트 1개 */}
-        <Posts>
-          {/* 포스트 상단 프로필 + 날짜 */}
-          <PostsTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>김미영</ProfileNickName>
-            </ProfileContainer>
-            <Date>2023-01-20</Date>
-          </PostsTopContainer>
-          {/* 제목, 내용 */}
-          <TitleText>Title</TitleText>
-          <ContentText>토이 프로젝트 팀원 구합니다.</ContentText>
-          {/* 선택된 카테고리 */}
-          <BottomCategoryContainer>
-            <BottomCategoryBt>백엔드</BottomCategoryBt>
-            <BottomCategoryBt>프론트엔드</BottomCategoryBt>
-            <BottomCategoryBt>퍼블리셔</BottomCategoryBt>
-          </BottomCategoryContainer>
-        </Posts>
-        <Posts>
-          {/* 포스트 상단 프로필 + 날짜 */}
-          <PostsTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>김미영</ProfileNickName>
-            </ProfileContainer>
-            <Date>2023-01-20</Date>
-          </PostsTopContainer>
-          {/* 제목, 내용 */}
-          <TitleText>Title</TitleText>
-          <ContentText>토이 프로젝트 팀원 구합니다.</ContentText>
-          {/* 선택된 카테고리 */}
-          <BottomCategoryContainer>
-            <BottomCategoryBt>백엔드</BottomCategoryBt>
-            <BottomCategoryBt>프론트엔드</BottomCategoryBt>
-            <BottomCategoryBt>퍼블리셔</BottomCategoryBt>
-          </BottomCategoryContainer>
-        </Posts>
-        <Posts>
-          {/* 포스트 상단 프로필 + 날짜 */}
-          <PostsTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>김미영</ProfileNickName>
-            </ProfileContainer>
-            <Date>2023-01-20</Date>
-          </PostsTopContainer>
-          {/* 제목, 내용 */}
-          <TitleText>Title</TitleText>
-          <ContentText>토이 프로젝트 팀원 구합니다.</ContentText>
-          {/* 선택된 카테고리 */}
-          <BottomCategoryContainer>
-            <BottomCategoryBt>백엔드</BottomCategoryBt>
-            <BottomCategoryBt>프론트엔드</BottomCategoryBt>
-            <BottomCategoryBt>퍼블리셔</BottomCategoryBt>
-          </BottomCategoryContainer>
-        </Posts>
+        {posts.map((post) => {
+          for (let i = 0; i < post.category.length; i++) {
+            if (category === post.category[i]) {
+              return (
+                <Posts key={post.id}>
+                  {/* 포스트 상단 프로필 + 날짜 */}
+                  <PostsTopContainer>
+                    <ProfileContainer>
+                      <ProfilePhoto />
+                      <ProfileNickName>{post.nickname}</ProfileNickName>
+                    </ProfileContainer>
+                    <Date>{JSON.stringify(post.createdAt).slice(1, 11)}</Date>
+                  </PostsTopContainer>
+                  {/* 제목, 내용 */}
+                  <TitleText>{post.title}</TitleText>
+                  <ContentText>{post.content}</ContentText>
+                  {/* 선택된 카테고리 */}
+                  <BottomCategoryContainer>
+                    {post.category.map((item: string) => {
+                      {
+                        /* 키 지정해줘야됨 */
+                      }
+                      return (
+                        <BottomCategoryBt>
+                          {item === 'front'
+                            ? '프론트엔드'
+                            : item === 'back'
+                            ? '백엔드'
+                            : item === 'design'
+                            ? '디자이너'
+                            : item === 'publ'
+                            ? '퍼블리셔'
+                            : item === 'pm'
+                            ? 'PM'
+                            : '없음'}
+                        </BottomCategoryBt>
+                      );
+                    })}
+                  </BottomCategoryContainer>
+                </Posts>
+              );
+            }
+          }
+        })}
       </PostsContainer>
     </Container>
   );
@@ -97,12 +204,12 @@ const Container = styled.div`
   margin: 20px auto;
 `;
 
-const MainTopContainer = styled.div`
+const CategoryContainer = styled.div`
   display: flex;
   gap: 25px;
   justify-content: center;
 `;
-const MainTopBt = styled.button`
+const CategoryBt = styled.button`
   height: 55px;
   width: 150px;
   border: 1px solid #a8a8a8;
@@ -111,10 +218,6 @@ const MainTopBt = styled.button`
   color: #a8a8a8;
   font-size: 18px;
   cursor: pointer;
-  &:hover {
-    border: 1px solid #262b7f;
-    color: #262b7f;
-  }
 `;
 const WriteContainer = styled.div`
   text-align: right;
@@ -144,6 +247,7 @@ const Posts = styled.div`
   height: 280px;
   border-radius: 30px;
   padding: 40px;
+  cursor: pointer;
 `;
 
 const PostsTopContainer = styled.div`
@@ -186,13 +290,13 @@ const TitleText = styled.h1`
 const ContentText = styled.p`
   font-size: 16px;
   margin-left: 30px;
-`
+`;
 
 const BottomCategoryContainer = styled.div`
   display: flex;
   gap: 15px;
   margin: 50px 0 0 30px;
-`
+`;
 
 const BottomCategoryBt = styled.button`
   width: 100px;
