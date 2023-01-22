@@ -13,10 +13,13 @@ import {
   getDoc,
   DocumentData,
   Timestamp,
+  limit,
+  QuerySnapshot,
 } from 'firebase/firestore';
 import {dbService} from '../shared/firebase';
 import MainCategory from '../components/main/MainCategory';
 import PostList from '../components/main/PostList';
+import { useFirestoreQuery } from '@react-query-firebase/firestore';
 
 export default function Home() {
   interface PostState {
@@ -44,6 +47,19 @@ export default function Home() {
 
   // post 데이터에서 createAt을 내림차순으로 정렬
   const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
+
+  // // 데이터 실시간 업데이트
+  // const storeQuery = useFirestoreQuery(['post'], q, {
+  //   subscribe: true,
+  // });
+  // console.log(storeQuery)
+
+  // if (storeQuery.isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+  // if (storeQuery.isError) {
+  //   return <div>Error!!!!</div>;
+  // }
 
   const getPost = () => {
     onSnapshot(q, (snapshot) => {
