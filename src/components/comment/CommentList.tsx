@@ -1,64 +1,107 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import basicImg from '../../img/basicImg.png';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+  limit,
+  QuerySnapshot,
+} from 'firebase/firestore';
+import { dbService } from '../../shared/firebase';
+import { CommentState, Comment } from '../../shared/type';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
+import { async } from '@firebase/util';
+import { useParams } from 'react-router-dom';
 
 export default function CommentList() {
+  const [isEdit, setIsEdit]:any = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [posts, setPosts] = useState([]);
+  const { id } = useParams();
+  console.log(id)
+
+  const onClickIsEditSwitch = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setIsEdit((prev:boolean)=> !prev)
+    }
+
+  
+  const q = query(
+      collection(dbService, 'comment'),
+      orderBy('createdAt', 'desc')
+    );
+  
+  const getComment = () => {
+    onSnapshot(q, (snapshot) => {
+      const newComments = snapshot.docs.map((doc) => {
+          const newComment = {
+            id: doc.id,
+            ...doc.data(), // <- poststate
+            createdAt: doc.data().createdAt.toDate(), // timestamp로 저장된 데이터 가공
+          } as Comment;
+          // poststate로 들어올걸 확신해서 as를 사용함
+          // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
+          console.log(doc.data().createdAt.toDate());
+          return newComment;
+        
+      })
+      setComments(newComments);
+    });
+  };
+  const setEdit = async() => {
+    await updateDoc(doc(dbService, 'comment', id), {
+      
+    });
+    getComment();
+  }
+  
+  useEffect(() => {
+    getComment();
+    console.log(comments);
+  }, []);
+
+
   return (
     <Container>
       <CommentTitle>Comment</CommentTitle>
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
+        {comments.map((comment) => {
+          if (comment.postId === id) {
+            return (
+              <CommentContentContainer key={comment.id}>
+                {/* 댓글쓴이+날짜 */}
+                <CommentTopContainer>
+                  <ProfileContainer>
+                    <ProfilePhoto />
+                    <ProfileNickName>{comment.nickName}</ProfileNickName>
+                  </ProfileContainer>
+                  <Date>{JSON.stringify(comment.createdAt).slice(1, 11)}</Date>
+                </CommentTopContainer>
+                <ContentText>{comment.commentText}</ContentText>
+                <DeleteModifyButtonsContainer>
+                  <CommentDeleteModifyButton onClick={onClickIsEditSwitch}>
+                    수정
+                  </CommentDeleteModifyButton>
+                  <CommentDeleteModifyButton>삭제</CommentDeleteModifyButton>
+                </DeleteModifyButtonsContainer>
+              </CommentContentContainer>
+            );
+          } else return;
+        })}
         {/* 댓글1개 */}
-        <CommentContentContainer>
-          {/* 댓글쓴이+날짜 */}
-          <CommentTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>먕먀미</ProfileNickName>
-            </ProfileContainer>
-            <Date>2022-12-14</Date>
-          </CommentTopContainer>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <DeleteModifyButtonsContainer>
-            <CommentDeleteModifyButton>수정</CommentDeleteModifyButton>
-            <CommentDeleteModifyButton>삭제</CommentDeleteModifyButton>
-          </DeleteModifyButtonsContainer>
-        </CommentContentContainer>
-        {/* 댓글1개 */}
-        <CommentContentContainer>
-          {/* 댓글쓴이+날짜 */}
-          <CommentTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>먕먀미</ProfileNickName>
-            </ProfileContainer>
-            <Date>2022-12-14</Date>
-          </CommentTopContainer>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <DeleteModifyButtonsContainer>
-            <CommentDeleteModifyButton>수정</CommentDeleteModifyButton>
-            <CommentDeleteModifyButton>삭제</CommentDeleteModifyButton>
-          </DeleteModifyButtonsContainer>
-        </CommentContentContainer>
-        {/* 댓글1개 */}
-        <CommentContentContainer>
-          {/* 댓글쓴이+날짜 */}
-          <CommentTopContainer>
-            <ProfileContainer>
-              <ProfilePhoto />
-              <ProfileNickName>먕먀미</ProfileNickName>
-            </ProfileContainer>
-            <Date>2022-12-14</Date>
-          </CommentTopContainer>
-          <ContentText>안녕하세요.참여합니다.</ContentText>
-          <DeleteModifyButtonsContainer>
-            <CommentDeleteModifyButton>수정</CommentDeleteModifyButton>
-            <CommentDeleteModifyButton>삭제</CommentDeleteModifyButton>
-          </DeleteModifyButtonsContainer>
-        </CommentContentContainer>
+        
+
       </CommentsContainer>
     </Container>
   );
@@ -86,7 +129,7 @@ const CommentContentContainer = styled.div`
   width: 70%;
   border: 1px solid black;
   border-radius: 10px;
-  padding: 20px 20px 35px 20px;
+  padding: 20px 20px 45px 20px;
   position: relative;
 `;
 
@@ -123,12 +166,15 @@ const Date = styled.p`
   font-size: 15px;
 `;
 
-const ContentText = styled.p``;
+const ContentText = styled.p`
+  white-space: pre-wrap;
+`;
 const DeleteModifyButtonsContainer = styled.div`
   position: absolute;
   display: flex;
   gap: 5px;
   right: 15px;
+  bottom: 10px
 `;
 const CommentDeleteModifyButton = styled.button`
   background-color: #ffffff;

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {HiOutlinePencilSquare} from 'react-icons/hi2';
 import {
@@ -19,19 +19,12 @@ import {
 import {dbService} from '../shared/firebase';
 import MainCategory from '../components/main/MainCategory';
 import PostList from '../components/main/PostList';
-import { useFirestoreQuery } from '@react-query-firebase/firestore';
+import {useFirestoreQuery} from '@react-query-firebase/firestore';
+import {PostState} from '../shared/type';
+import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
-  interface PostState {
-    id: string;
-    nickname: string;
-    category: any;
-    comment: string[];
-    content: string;
-    createdAt: any;
-    title: string;
-    userid: number;
-  }
+  
 
   // interface CategoryState {
   //   all: string;
@@ -81,7 +74,6 @@ export default function Home() {
   };
 
   // 현재 누른 카테고리를 category 컬렉션에 업데이트
-  
 
   useEffect(() => {
     getPost();
@@ -100,7 +92,6 @@ export default function Home() {
 
   return (
     <Container>
-
       {/* 카테고리 */}
       {/* Slice로 어떻게 넣지..? */}
       <MainCategory category={category} setCategory={setCategory} />
@@ -114,7 +105,6 @@ export default function Home() {
 
       {/* 포스트 */}
       <PostList posts={posts} category={category} />
-
     </Container>
   );
 }
@@ -124,7 +114,6 @@ const Container = styled.div`
   width: 80%;
   margin: 20px auto;
 `;
-
 
 const WriteContainer = styled.div`
   text-align: right;
@@ -141,5 +130,3 @@ const WriteBt = styled.button`
     border: 1px solid #262b7f;
   }
 `;
-
-

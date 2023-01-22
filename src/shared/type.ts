@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface PostState {
     id: string;
     nickname: string;
@@ -10,10 +12,13 @@ export interface PostState {
 }
   
 export interface Comment {
-  comment: string;
+  id: string;
+  commentText: string;
   postId: string;
   userId: string;
   nickName: string;
+  createdAt: string;
+  isEdit: boolean;
 }
 export interface CommentState {
   comments: Comment[];

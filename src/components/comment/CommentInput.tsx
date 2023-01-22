@@ -2,21 +2,65 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 import {RootState} from '../../redux/config/configStore';
 import {useDispatch, useSelector} from 'react-redux';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+  limit,
+  QuerySnapshot,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { auth, dbService } from '../../shared/firebase';
+import { useParams } from 'react-router-dom';
+
 
 export default function CommentInput() {
-  const [commentText, setCommentText] = useState('');
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const [commentText, setCommentText]:any= useState('');
+
+  const uid = auth.currentUser?.uid;
+
+
+  const newComment = {
+    commentText,
+    postId: id,
+    userId: '1',
+    nickName: '묨묘미',
+    createdAt: serverTimestamp(),
+    isEdit: false,
+  };
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value);
   };
 
-  const handleSubmitButtonClick = (e: React.FormEvent<HTMLFormElement>) => {
+  // ADD
+  const handleSubmitButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (commentText === '') {
+    // 내용
+    if (!commentText.trim() || commentText === null) {
       alert('내용을 입력해');
       return;
-    } else setCommentText('');
+    } else {
+      await addDoc(collection(dbService, 'comment'), newComment);
+      setCommentText('')
+    }
+
+
+    
   };
+
+
 
   return (
     <Container>
@@ -26,6 +70,7 @@ export default function CommentInput() {
             placeholder='댓글을 입력 해주세요.'
             onChange={handleChangeComment}
             value={commentText}
+            cols={30}
             wrap='hard'
           />
           <CommentSubmitButton>등록</CommentSubmitButton>

@@ -10,7 +10,7 @@ const Router = () => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='comment' element={<Comment />} />
+        <Route path='/comment/:id' element={<Comment />} />
       </Routes>
       <Footer />
     </BrowserRouter>

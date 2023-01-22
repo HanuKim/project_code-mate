@@ -1,9 +1,12 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import basicImg from '../../img/basicImg.png'
 import { PostState } from '../../shared/type';
-export default function Post({post}:{post: PostState}) {
+export default function Post({ post }: { post: PostState }) {
+  const navigate = useNavigate();
   return (
-    <Posts>
+    <Posts onClick={() => { navigate(`/comment/${post.id}`) }}>
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
@@ -51,6 +54,9 @@ const Posts = styled.div`
   border-radius: 30px;
   padding: 40px;
   cursor: pointer;
+  &:hover {
+    border: 2px solid #262b7f;
+  }
 `;
 
 const PostsTopContainer = styled.div`
