@@ -168,24 +168,26 @@ export default function Home() {
                   {/* 선택된 카테고리 */}
                   <BottomCategoryContainer>
                     {post.category.map((item: string) => {
-                      {
-                        /* 키 지정해줘야됨 */
+                      // 카테고리가 all이면 버튼보이지않게
+                      if (item === 'all') {
+                        return;
+                      } else {
+                        return (
+                          <BottomCategoryBt>
+                            {item === 'front'
+                              ? '프론트엔드'
+                              : item === 'back'
+                              ? '백엔드'
+                              : item === 'design'
+                              ? '디자이너'
+                              : item === 'publ'
+                              ? '퍼블리셔'
+                              : item === 'pm'
+                              ? 'PM'
+                              : ''}
+                          </BottomCategoryBt>
+                        );
                       }
-                      return (
-                        <BottomCategoryBt>
-                          {item === 'front'
-                            ? '프론트엔드'
-                            : item === 'back'
-                            ? '백엔드'
-                            : item === 'design'
-                            ? '디자이너'
-                            : item === 'publ'
-                            ? '퍼블리셔'
-                            : item === 'pm'
-                            ? 'PM'
-                            : '없음'}
-                        </BottomCategoryBt>
-                      );
                     })}
                   </BottomCategoryContainer>
                 </Posts>
