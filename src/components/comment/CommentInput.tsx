@@ -55,9 +55,6 @@ export default function CommentInput() {
       await addDoc(collection(dbService, 'comment'), newComment);
       setCommentText('')
     }
-
-
-    
   };
 
 
