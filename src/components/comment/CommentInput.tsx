@@ -20,6 +20,7 @@ import {
 } from 'firebase/firestore';
 import { auth, dbService } from '../../shared/firebase';
 import { useParams } from 'react-router-dom';
+import CheckModal from '../modal/CheckModal';
 
 
 export default function CommentInput() {
@@ -27,9 +28,12 @@ export default function CommentInput() {
   const { id } = useParams();
 
   const [commentText, setCommentText]:any= useState('');
-
+  const [checkViewModal, setCheckViewModal] = useState(false);
   const uid = auth.currentUser?.uid;
 
+  const openEditModalClick = () => {
+    setCheckViewModal(true);
+  };
 
   const newComment = {
     commentText,
@@ -49,7 +53,7 @@ export default function CommentInput() {
     e.preventDefault();
     // 내용
     if (!commentText.trim() || commentText === null) {
-      alert('내용을 입력해');
+      setCheckViewModal(true)
       return;
     } else {
       await addDoc(collection(dbService, 'comment'), newComment);
@@ -60,20 +64,23 @@ export default function CommentInput() {
 
 
   return (
-    <Container>
-      <CommentForm onSubmit={handleSubmitButtonClick}>
-        <CommentLabel>
-          <CommentText
-            placeholder='댓글을 입력 해주세요.'
-            onChange={handleChangeComment}
-            value={commentText}
-            cols={30}
-            wrap='hard'
-          />
-          <CommentSubmitButton>등록</CommentSubmitButton>
-        </CommentLabel>
-      </CommentForm>
-    </Container>
+    <>
+      {checkViewModal ? <CheckModal setCheckViewModal={setCheckViewModal} /> : null}
+      <Container>
+        <CommentForm onSubmit={handleSubmitButtonClick}>
+          <CommentLabel>
+            <CommentText
+              placeholder='댓글을 입력 해주세요.'
+              onChange={handleChangeComment}
+              value={commentText}
+              cols={30}
+              wrap='hard'
+            />
+            <CommentSubmitButton>등록</CommentSubmitButton>
+          </CommentLabel>
+        </CommentForm>
+      </Container>
+    </>
   );
 }
 const Container = styled.div`

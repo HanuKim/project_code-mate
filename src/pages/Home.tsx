@@ -51,7 +51,9 @@ export default function Home() {
   // if (storeQuery.isError) {
   //   return <div>Error!!!!</div>;
   // }
-
+   const now = new Date(1673842517382);
+   console.log(now);
+  // 1673824517382
   const getTimegap = (posting: any) => {
     const msgap = Date.now() - posting;
     const minutegap = Math.floor(msgap / 60000);
@@ -60,7 +62,7 @@ export default function Home() {
     if (msgap < 0) {
       return '0분전';
     }
-    if (daygap > 8) {
+    if (daygap > 7) {
       const time = new Date(posting);
       const timegap = time.toJSON().substring(0, 10);
       return <p>{timegap}</p>;

@@ -40,6 +40,7 @@ export default function CommentList() {
   );
 
     
+// 1673928917382
 
     // post 시간 나타내는 함수
     const getTimegap = (posting: any) => {
@@ -50,7 +51,7 @@ export default function CommentList() {
       if (msgap < 0) {
         return '0분전';
       }
-      if (daygap > 8) {
+      if (daygap > 7) {
         const time = new Date(posting);
         const timegap = time.toJSON().substring(0, 10);
         return <p>{timegap}</p>;

@@ -22,3 +22,8 @@ export interface Comment {
 export interface CommentState {
   comments: Comment[];
 }
+
+export interface ModalProps {
+  modalWidth: number;
+  modalHeight: number;
+}

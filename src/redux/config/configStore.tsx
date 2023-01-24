@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
+// import modalReducer from '../modules/modalSlice';
 // import commentSlice from '../modules/commentSlice';
 
 const store = configureStore({
   reducer:{}
-    // { comments: commentSlice },
+    // { modal: modalReducer },
+  // { comments: commentSlice },
   // 여기에서 store와 module이 연결된다.
 });
 

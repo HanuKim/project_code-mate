@@ -23,6 +23,10 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/config/configStore';
 import {async} from '@firebase/util';
 import {useParams} from 'react-router-dom';
+import CheckModal from '../modal/DeleteModal';
+import {useDispatch} from 'react-redux';
+import DeleteModal from '../modal/DeleteModal';
+import EditModal from '../modal/EditModal';
 
 export default function CommentItem({
   comment,
@@ -42,26 +46,32 @@ export default function CommentItem({
     isEdit: comment.isEdit,
   });
 
+  const dispatch = useDispatch();
+
+  // 모달
+  const [viewDeleteModal, setDeleteViewModal] = useState(false);
+  const [viewEditModal, setEditViewModal] = useState(false);
+  const openDeleteModalClick = () => {
+    setDeleteViewModal(true);
+  };
+  const openEditModalClick = () => {
+    setEditViewModal(true);
+  };
+
   //isEdit true로 바꾸기
   const onClickIsEditSwitch = (commentid: string) => {
     setEditComments({...editComments, isEdit: true});
   };
 
-  //수정 후 등록버튼 누르면 data 업데이트
-  const submitEditText = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    if (editText === '') {
-      alert('수정 할 내용을 입력해주세요.');
-      return;
-    } else {
-      const commentRef = doc(dbService, 'comment', comment.id);
-      await updateDoc(commentRef, {
-        commentText: editText,
-      });
-      setEditComments({...editComments, isEdit: false});
-    }
+
+  const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditText(e.target.value);
+  };
+
+  // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
+  const cancleEditButton = (commentid: string) => {
+    console.log(commentid);
+    setEditComments({...editComments, isEdit: false});
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
@@ -76,24 +86,6 @@ export default function CommentItem({
     }
   };
 
-  const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditText(e.target.value);
-  };
-
-  // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = (commentid: string) => {
-    console.log(commentid);
-      setEditComments({...editComments, isEdit: false});
-    
-  };
-
-  // 삭제버튼
-  const deleteCommentClickButton = async (commentid: string) => {
-    console.log(commentid);
-    alert('삭제하시겠습니까');
-    await deleteDoc(doc(dbService, 'comment', commentid));
-  };
-
   // editComments state가 변경될 때 마다 get해오도록 설정
   useEffect(() => {
     getComment();
@@ -101,57 +93,73 @@ export default function CommentItem({
   }, []);
 
   return (
-    <CommentContentContainer>
-      {/* 댓글쓴이+날짜 */}
-      <CommentTopContainer>
-        <ProfileContainer>
-          <ProfilePhoto />
-          <ProfileNickName>{comment.nickName}</ProfileNickName>
-          <ButtonContainer>
-            {editComments.isEdit ? (
-              <>
-                <CommentButton onClick={submitEditText}>등록</CommentButton>
-                <CommentButton
-                  onClick={() => {
-                    cancleEditButton(comment.id);
-                  }}
-                >
-                  취소
-                </CommentButton>
-              </>
-            ) : (
-              <>
-                <CommentButton
-                  onClick={() => {
-                    onClickIsEditSwitch(comment.id);
-                  }}
-                >
-                  수정
-                </CommentButton>
-                <CommentButton
-                  onClick={() => {
-                    deleteCommentClickButton(comment.id);
-                  }}
-                >
-                  삭제
-                </CommentButton>
-              </>
-            )}
-          </ButtonContainer>
-        </ProfileContainer>
-        <Date>{comment.createdAt}</Date>
-        {/* {JSON.stringify(comment.createdAt.slice(1, 11))} */}
-      </CommentTopContainer>
-      {/* 수정버튼 누르면 인풋 생기게 */}
-      {editComments.isEdit ? (
-        <CommentEditInput
-          defaultValue={comment.commentText}
-          onChange={editTextOnChange}
+    <>
+      {viewDeleteModal ? (
+        <DeleteModal
+          setDeleteViewModal={setDeleteViewModal}
+          comment={comment}
         />
-      ) : (
-        <ContentText>{comment.commentText}</ContentText>
-      )}
-    </CommentContentContainer>
+      ) : null}
+      {viewEditModal ? (
+        <EditModal
+          setEditViewModal={setEditViewModal}
+          comment={comment}
+          editText={editText}
+          setEditComments={setEditComments}
+          editComments={editComments}
+          setEditText={setEditText}
+        />
+      ) : null}
+      <CommentContentContainer>
+        {/* 댓글쓴이+날짜 */}
+        <CommentTopContainer>
+          <ProfileContainer>
+            <ProfilePhoto />
+            <ProfileNickName>{comment.nickName}</ProfileNickName>
+            <ButtonContainer>
+              {editComments.isEdit ? (
+                <>
+                  <CommentButton onClick={openEditModalClick}>
+                    등록
+                  </CommentButton>
+                  <CommentButton
+                    onClick={() => {
+                      cancleEditButton(comment.id);
+                    }}
+                  >
+                    취소
+                  </CommentButton>
+                </>
+              ) : (
+                <>
+                  <CommentButton
+                    onClick={() => {
+                      onClickIsEditSwitch(comment.id);
+                    }}
+                  >
+                    수정
+                  </CommentButton>
+                  <CommentButton onClick={openDeleteModalClick}>
+                    삭제
+                  </CommentButton>
+                </>
+              )}
+            </ButtonContainer>
+          </ProfileContainer>
+          <Date>{comment.createdAt}</Date>
+          {/* {JSON.stringify(comment.createdAt.slice(1, 11))} */}
+        </CommentTopContainer>
+        {/* 수정버튼 누르면 인풋 생기게 */}
+        {editComments.isEdit ? (
+          <CommentEditInput
+            defaultValue={comment.commentText}
+            onChange={editTextOnChange}
+          />
+        ) : (
+          <ContentText>{comment.commentText}</ContentText>
+        )}
+      </CommentContentContainer>
+    </>
   );
 }
 const CommentContentContainer = styled.div`
