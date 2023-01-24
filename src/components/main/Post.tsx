@@ -13,7 +13,7 @@ export default function Post({ post }: { post: PostState }) {
           <ProfilePhoto />
           <ProfileNickName>{post.nickname}</ProfileNickName>
         </ProfileContainer>
-        <Date>{JSON.stringify(post.createdAt).slice(1, 11)}</Date>
+        <Date>{post.createdAt}</Date>
       </PostsTopContainer>
       {/* 제목, 내용 */}
       <TitleText>{post.title}</TitleText>

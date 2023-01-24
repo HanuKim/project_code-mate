@@ -36,7 +36,7 @@ export default function CommentInput() {
     postId: id,
     userId: '1',
     nickName: '묨묘미',
-    createdAt: serverTimestamp(),
+    createdAt: Date.now(),
     isEdit: false,
   };
 

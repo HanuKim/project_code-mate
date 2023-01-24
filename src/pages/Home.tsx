@@ -24,8 +24,6 @@ import {PostState} from '../shared/type';
 import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
-  
-
   // interface CategoryState {
   //   all: string;
   //   back: string;
@@ -54,6 +52,28 @@ export default function Home() {
   //   return <div>Error!!!!</div>;
   // }
 
+  const getTimegap = (posting: any) => {
+    const msgap = Date.now() - posting;
+    const minutegap = Math.floor(msgap / 60000);
+    const hourgap = Math.floor(msgap / 3600000);
+    const daygap = Math.floor(msgap / 86400000);
+    if (msgap < 0) {
+      return '0분전';
+    }
+    if (daygap > 8) {
+      const time = new Date(posting);
+      const timegap = time.toJSON().substring(0, 10);
+      return <p>{timegap}</p>;
+    }
+    if (hourgap > 24) {
+      return <p>{daygap}일 전</p>;
+    }
+    if (minutegap > 60) {
+      return <p>{hourgap}시간 전</p>;
+    } else {
+      return <p>{minutegap}분 전</p>;
+    }
+  };
   const getPost = () => {
     onSnapshot(q, (snapshot) => {
       const newPosts = snapshot.docs.map((doc) => {
@@ -61,7 +81,7 @@ export default function Home() {
         const newPost = {
           id: doc.id,
           ...doc.data(), // <- poststate
-          createdAt: doc.data().createdAt.toDate(), // timestamp로 저장된 데이터 가공
+          createdAt: getTimegap(doc.data().createdAt), // timestamp로 저장된 데이터 가공
         } as PostState;
         // poststate로 들어올걸 확신해서 as를 사용함
         // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음

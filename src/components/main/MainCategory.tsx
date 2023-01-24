@@ -64,7 +64,7 @@ export default function MainCategory({
 const CategoryContainer = styled.div`
   display: flex;
   gap: 25px;
-  justify-content: center;
+  justify-content: center
 `;
 const CategoryBt = styled.button`
   height: 55px;

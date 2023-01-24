@@ -83,9 +83,8 @@ export default function CommentItem({
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
   const cancleEditButton = (commentid: string) => {
     console.log(commentid);
-    if (commentid === editComments.id) {
       setEditComments({...editComments, isEdit: false});
-    }
+    
   };
 
   // 삭제버튼
@@ -140,7 +139,8 @@ export default function CommentItem({
             )}
           </ButtonContainer>
         </ProfileContainer>
-        <Date>{JSON.stringify(comment.createdAt).slice(1, 11)}</Date>
+        <Date>{comment.createdAt}</Date>
+        {/* {JSON.stringify(comment.createdAt.slice(1, 11))} */}
       </CommentTopContainer>
       {/* 수정버튼 누르면 인풋 생기게 */}
       {editComments.isEdit ? (
