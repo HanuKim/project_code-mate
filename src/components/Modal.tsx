@@ -1,3 +1,4 @@
+
 import React, {useState, PropsWithChildren, useEffect} from 'react';
 import styled from 'styled-components';
 import LoginForm from '../pages/LoginForm';
@@ -29,7 +30,7 @@ function Modal({
   }, []);
 
   return (
-    <ModalContainer>
+    <>
       <Container modalWidth={350} modalHeight={400}>
         {/* isNotLogin이 true이면 회원가입 모달으로 / false면 로그인 모달으로 */}
         {isNotLogin ? (
@@ -49,8 +50,8 @@ function Modal({
             setOpenModal(false);
           }
         }}
-      ></ContainerBg>
-    </ModalContainer>
+      />
+    </>
   );
 }
 
@@ -58,8 +59,6 @@ interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
-
-const ModalContainer = styled.div``;
 
 const ContainerBg = styled.div`
   width: 100%;
@@ -72,8 +71,8 @@ const ContainerBg = styled.div`
 `;
 
 const Container = styled.div<ModalProps>`
-  width: ${(props) => props.modalWidth + 'px'};
-  height: ${(props) => props.modalHeight + 'px'};
+  width: ${(props) => props.modalWidth + "px"};
+  height: ${(props) => props.modalHeight + "px"};
   border: 1px solid #aaa;
   border-radius: 15px;
   position: absolute;
