@@ -24,37 +24,13 @@ import {PostState} from '../shared/type';
 import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
-  // interface CategoryState {
-  //   all: string;
-  //   back: string;
-  //   front: string;
-  //   design: string;
-  //   publ: string;
-  //   pm: string;
-  // }
   const [posts, setPosts] = useState<PostState[]>([]);
-  const [category, setCategory]: any = useState('');
-  // any 타입 말고 어떤 타입을 줘야 하는지 확인해보기
+  const [category, setCategory] = useState('');
 
   // post 데이터에서 createAt을 내림차순으로 정렬
   const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
 
-  // // 데이터 실시간 업데이트
-  // const storeQuery = useFirestoreQuery(['post'], q, {
-  //   subscribe: true,
-  // });
-  // console.log(storeQuery)
-
-  // if (storeQuery.isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (storeQuery.isError) {
-  //   return <div>Error!!!!</div>;
-  // }
-   const now = new Date(1673842517382);
-   console.log(now);
-  // 1673824517382
-  const getTimegap = (posting: any) => {
+  const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
     const minutegap = Math.floor(msgap / 60000);
     const hourgap = Math.floor(msgap / 3600000);

@@ -3,9 +3,9 @@ import { Timestamp } from 'firebase/firestore';
 export interface PostState {
     id: string;
     nickname: string;
-    category: any;
+    category: string[];
     content: string;
-    createdAt: any;
+    createdAt: string;
     title: string;
     userid: number;
 }
@@ -18,9 +18,6 @@ export interface Comment {
   nickName: string;
   createdAt: string;
   isEdit: boolean;
-}
-export interface CommentState {
-  comments: Comment[];
 }
 
 export interface ModalProps {

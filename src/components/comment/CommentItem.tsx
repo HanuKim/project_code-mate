@@ -18,7 +18,7 @@ import {
   where,
 } from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
-import {CommentState, Comment} from '../../shared/type';
+import {Comment} from '../../shared/type';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/config/configStore';
 import {async} from '@firebase/util';
@@ -28,15 +28,9 @@ import {useDispatch} from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
 
-export default function CommentItem({
-  comment,
-  comments,
-}: {
-  comment: Comment;
-  comments: Comment[];
-}) {
-  const [editText, setEditText]: any = useState('');
-  const [editComments, setEditComments]: any = useState({
+export default function CommentItem({comment}: {comment: Comment}) {
+  const [editText, setEditText] = useState('');
+  const [editComments, setEditComments] = useState<Comment>({
     id: comment.id,
     commentText: comment.commentText,
     postId: comment.postId,
@@ -62,7 +56,6 @@ export default function CommentItem({
   const onClickIsEditSwitch = (commentid: string) => {
     setEditComments({...editComments, isEdit: true});
   };
-
 
   const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditText(e.target.value);

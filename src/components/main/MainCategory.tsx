@@ -6,8 +6,9 @@ export default function MainCategory({
   category,
   setCategory,
 }: {
-  category: any;
-  setCategory: any;
+  category: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>
+;
 }) {
   const setCat = async (cat: string) => {
     setCategory(cat);

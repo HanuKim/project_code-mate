@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import basicImg from '../../img/basicImg.png'
 import { PostState } from '../../shared/type';
+
 export default function Post({ post }: { post: PostState }) {
   const navigate = useNavigate();
   return (

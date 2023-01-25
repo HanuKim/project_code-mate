@@ -18,14 +18,15 @@ import {
 } from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
 import styled from 'styled-components';
+import {Comment} from '../../shared/type';
 // import {openModal, closeModal} from '../../redux/modules/modalSlice';
 
 export default function DeleteModal({
   setDeleteViewModal,
   comment,
 }: {
-  setDeleteViewModal: any;
-  comment: any;
+  setDeleteViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  comment: Comment;
 }) {
   const closeModal = () => {
     setDeleteViewModal(false);

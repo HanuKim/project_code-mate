@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { PostState } from '../../shared/type';
 import Post from './Post';
-export default function PostList({posts,category}:{posts:PostState[],category:any}) {
+export default function PostList({posts,category}:{posts:PostState[],category:string}) {
   return (
     <PostsContainer>
       {posts.map((post) => {

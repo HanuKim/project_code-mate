@@ -4,10 +4,6 @@ import {RootState} from '../../redux/config/configStore';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -18,22 +14,17 @@ import {
   QuerySnapshot,
   serverTimestamp,
 } from 'firebase/firestore';
-import { auth, dbService } from '../../shared/firebase';
-import { useParams } from 'react-router-dom';
+import {auth, dbService} from '../../shared/firebase';
+import {useParams} from 'react-router-dom';
 import CheckModal from '../modal/CheckModal';
-
 
 export default function CommentInput() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const {id} = useParams();
 
-  const [commentText, setCommentText]:any= useState('');
+  const [commentText, setCommentText] = useState('');
   const [checkViewModal, setCheckViewModal] = useState(false);
   const uid = auth.currentUser?.uid;
-
-  const openEditModalClick = () => {
-    setCheckViewModal(true);
-  };
 
   const newComment = {
     commentText,
@@ -49,23 +40,25 @@ export default function CommentInput() {
   };
 
   // ADD
-  const handleSubmitButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitButtonClick = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     // 내용
     if (!commentText.trim() || commentText === null) {
-      setCheckViewModal(true)
+      setCheckViewModal(true);
       return;
     } else {
       await addDoc(collection(dbService, 'comment'), newComment);
-      setCommentText('')
+      setCommentText('');
     }
   };
 
-
-
   return (
     <>
-      {checkViewModal ? <CheckModal setCheckViewModal={setCheckViewModal} /> : null}
+      {checkViewModal ? (
+        <CheckModal setCheckViewModal={setCheckViewModal} />
+      ) : null}
       <Container>
         <CommentForm onSubmit={handleSubmitButtonClick}>
           <CommentLabel>

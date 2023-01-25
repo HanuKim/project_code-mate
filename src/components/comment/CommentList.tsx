@@ -18,20 +18,17 @@ import {
   where,
 } from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
-import {CommentState, Comment} from '../../shared/type';
+import {Comment} from '../../shared/type';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/config/configStore';
 import {async} from '@firebase/util';
-import { useParams } from 'react-router-dom';
-import CommentItem from './CommentItem'
+import {useParams} from 'react-router-dom';
+import CommentItem from './CommentItem';
 
 export default function CommentList() {
-  
-
   const [comments, setComments] = useState<Comment[]>([]);
-  const [posts, setPosts] = useState([]);
-  const { id } = useParams();
-  
+  const {id} = useParams();
+
   const q = query(
     collection(dbService, 'comment'),
     orderBy('createdAt', 'desc'),
@@ -39,46 +36,40 @@ export default function CommentList() {
     // Where를 만들 때에는 색인을 만들어줘야 한다. 브라우저에서 나오는 에러 링크를 누르면 됨
   );
 
-    
-// 1673928917382
+  // 1673928917382
 
-    // post 시간 나타내는 함수
-    const getTimegap = (posting: any) => {
-      const msgap = Date.now() - posting;
-      const minutegap = Math.floor(msgap / 60000);
-      const hourgap = Math.floor(msgap / 3600000);
-      const daygap = Math.floor(msgap / 86400000);
-      if (msgap < 0) {
-        return '0분전';
-      }
-      if (daygap > 7) {
-        const time = new Date(posting);
-        const timegap = time.toJSON().substring(0, 10);
-        return <p>{timegap}</p>;
-      }
-      if (hourgap > 24) {
-        return <p>{daygap}일 전</p>;
-      }
-      if (minutegap > 60) {
-        return <p>{hourgap}시간 전</p>;
-      } else {
-        return <p>{minutegap}분 전</p>;
-      }
-    };
-  
+  // post 시간 나타내는 함수
+  const getTimegap = (posting: number) => { 
+    const msgap = Date.now() - posting;
+    const minutegap = Math.floor(msgap / 60000);
+    const hourgap = Math.floor(msgap / 3600000);
+    const daygap = Math.floor(msgap / 86400000);
+    if (msgap < 0) {
+      return '0분전';
+    }
+    if (daygap > 7) {
+      const time = new Date(posting);
+      const timegap = time.toJSON().substring(0, 10);
+      return <p>{timegap}</p>;
+    }
+    if (hourgap > 24) {
+      return <p>{daygap}일 전</p>;
+    }
+    if (minutegap > 60) {
+      return <p>{hourgap}시간 전</p>;
+    } else {
+      return <p>{minutegap}분 전</p>;
+    }
+  };
+
   const getComment = () => {
     onSnapshot(q, (snapshot) => {
       const newComments = snapshot.docs.map((doc) => {
         const newComment = {
           id: doc.id,
-          ...doc.data(), // <- poststate
-          createdAt: getTimegap(doc.data().createdAt)
-          // doc.data().createdAt, // timestamp로 저장된 데이터 가공
-
-        } as any;
-          // Comment;
-        // poststate로 들어올걸 확신해서 as를 사용함
-        // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
+          ...doc.data(),
+          createdAt: getTimegap(doc.data().createdAt),
+        } as Comment;
         console.log('newComment', newComment);
         return newComment;
       });
@@ -97,10 +88,11 @@ export default function CommentList() {
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
         {comments.map((comment) => {
-          return <CommentItem comment={comment} comments={comments} />;
-          {/* 댓글1개 */ }
+          return <CommentItem comment={comment} />;
+          {
+            /* 댓글1개 */
+          }
         })}
-        
       </CommentsContainer>
     </Container>
   );
@@ -123,4 +115,3 @@ const CommentsContainer = styled.div`
   gap: 20px;
   margin-bottom: 30px;
 `;
-
