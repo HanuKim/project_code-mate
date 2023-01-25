@@ -7,11 +7,11 @@ import { auth } from "../shared/firebase";
 import { getAuth } from 'firebase/auth';
 
 
-export const SignUpForm = ({
+function SignUpForm ({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //todo 닉네임 상태 관리
@@ -98,6 +98,9 @@ export const SignUpForm = ({
     </Container>
   );
 };
+
+export default SignUpForm;
+
 
 const Container = styled.div`
   margin-top: 40px;
