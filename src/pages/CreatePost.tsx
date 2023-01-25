@@ -1,10 +1,10 @@
 import React, { FC, useState } from "react";
 import styled from "styled-components";
-import Map from "./Map";
-import { RootState } from "../../../redux/config/configStore";
-import { PostState } from "../../../shared/type";
+import Map from "../components/main/Map";
+import { RootState } from "../redux/config/configStore";
+import { PostState } from "../shared/type";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { dbService } from "../../../shared/firebase";
+import { dbService } from "../shared/firebase";
 import { useNavigate } from "react-router-dom";
 import { Id } from "@reduxjs/toolkit/dist/tsHelpers";
 

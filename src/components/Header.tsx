@@ -1,12 +1,14 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
     <>
       <HeaderContainer>
-        <LogoBox />
+        <LogoBox onClick={()=>{navigate('/')}}/>
         <LoginBtn>로그인/회원가입</LoginBtn>
       </HeaderContainer>
     </>
