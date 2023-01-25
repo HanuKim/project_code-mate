@@ -1,3 +1,4 @@
+
 import React, { useState, PropsWithChildren } from "react";
 import styled from "styled-components";
 import LoginForm from "../pages/LoginForm";
@@ -8,6 +9,7 @@ interface ModalDefaultType {
 }
 
 function Modal({ onClickToggleModal, children }: PropsWithChildren<ModalDefaultType>) {
+
   return (
     <ModalContainer>
       <Container modalWidth={350} modalHeight={400}>
@@ -34,8 +36,8 @@ interface ModalProps {
 const ModalContainer = styled.div``;
 
 const ContainerBg = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
@@ -44,8 +46,8 @@ const ContainerBg = styled.div`
 `;
 
 const Container = styled.div<ModalProps>`
-  width: ${(props) => props.modalWidth + "px"};
-  height: ${(props) => props.modalHeight + "px"};
+  width: ${props => props.modalWidth + 'px'};
+  height: ${props => props.modalHeight + 'px'};
   border: 1px solid #aaa;
   border-radius: 15px;
   position: absolute;

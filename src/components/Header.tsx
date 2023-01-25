@@ -1,9 +1,13 @@
+
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
 import Modal from "./Modal";
 
+interface Props {
+  setIsOpen: React.Dispatch<React.SetStateAction<any>>;
+}
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
 
@@ -12,9 +16,18 @@ export default function Header() {
   }, [isOpenModal]);
 
   const navigate = useNavigate();
+
+  const goToMypageHandler = () => {
+    navigate('/Mypage');
+  };
+  const goToHomeHandler = () => {
+    navigate('/');
+  };
+
   return (
     <>
       <HeaderContainer>
+
         <LogoBox
           onClick={() => {
             navigate("/");
@@ -22,6 +35,8 @@ export default function Header() {
         />
         {isOpenModal && <Modal onClickToggleModal={onClickToggleModal}>이곳에 children이 들어갑니다.</Modal>}
         <LoginBtn onClick={onClickToggleModal}>로그인/회원가입</LoginBtn>
+
+
       </HeaderContainer>
     </>
   );
@@ -30,10 +45,14 @@ export default function Header() {
 const HeaderContainer = styled.header`
   width: 100%;
   height: 120px;
+
+  margin-bottom: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
+  box-shadow: 1px -1px 3px #333;
+
 `;
 
 const LogoBox = styled.div`
@@ -62,6 +81,6 @@ const LoginBtn = styled.button`
     background-color: #262b7f;
     color: #fff;
     border: 1px solid #262b7f;
-    box-shadow: 1px 1px 1px #aaa;
+
   }
 `;

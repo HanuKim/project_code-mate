@@ -1,3 +1,5 @@
+
+
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {HiOutlinePencilSquare} from 'react-icons/hi2';
@@ -108,7 +110,6 @@ export default function Home() {
   );
 }
 const Container = styled.div`
-  background-color: #f2f2f2;
   max-width: 1440px;
   width: 80%;
   margin: 20px auto;
@@ -128,4 +129,6 @@ const WriteBt = styled.button`
   &:hover {
     border: 1px solid #262b7f;
   }
+
 `;
+
