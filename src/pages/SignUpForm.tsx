@@ -1,79 +1,56 @@
-// import Modal from "../components/Modal";
+import React from "react";
+import Modal from "../components/Modal";
 import styled from "styled-components";
-import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../shared/firebase";
 
-export const SignUpForm = ({
+function SignUpForm({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  //todo 닉네임 상태 관리
-  const [] = useState("");
-
-  console.log("email : ", email);
-  console.log("PW : ", password);
-
-  const signUpForm = (e: any) => {
-    e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("회원가입 성공 ! :", userCredential);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
+}) {
   return (
     <Container>
-      <form onSubmit={signUpForm}>
-        <div className="form-inner">
+      <form>
+        <div className='form-inner'>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
           <SignUpFormContainer>
             <div>
               <EmailInput
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
               />
             </div>
             <div>
               <NickNameInput
-                type="nickname"
-                name="nickname"
-                id="nickname"
-                placeholder="NickName"
+                type='nickname'
+                name='nickname'
+                id='nickname'
+                placeholder='NickName'
               />
             </div>
             <div>
               <PwInput
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
               />
             </div>
             <div>
               <PwChekckInput
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
               />
             </div>
-            <JoinBtn type="submit" onClick={() => {}}>
+            <JoinBtn
+              onClick={() => {
+                setIsNotLogin(false);
+              }}
+            >
               회원가입
             </JoinBtn>
           </SignUpFormContainer>
@@ -81,7 +58,7 @@ export const SignUpForm = ({
       </form>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   margin-top: 40px;
@@ -146,3 +123,5 @@ const JoinBtn = styled.button`
     color: #262b7f;
   }
 `;
+
+export default SignUpForm;
