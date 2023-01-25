@@ -1,28 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "../components/Modal";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-function LoginForm() {
+function LoginForm({
+  setIsNotLogin,
+}: {
+  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const navigate = useNavigate();
 
   return (
     <Container>
       <form>
-        <div className="form-inner">
+        <div className='form-inner'>
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
             <div>
-              <EmailInput type="email" name="email" id="email" placeholder="Email" />
+              <EmailInput
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+              />
             </div>
             <div>
-              <PwInput type="password" name="password" id="password" placeholder="Password" />
+              <PwInput
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+              />
             </div>
             <LoginBtnContainer>
               <SignUpBtn
                 onClick={() => {
-                  navigate("/signupform");
+                  setIsNotLogin(true);
                 }}
               >
                 회원가입
