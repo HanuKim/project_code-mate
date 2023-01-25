@@ -1,15 +1,30 @@
-import React from 'react';
-import styled from 'styled-components';
 
-interface Props {
-  setIsOpen: (isOpen: boolean) => void;
+import React, { useState, PropsWithChildren } from "react";
+import styled from "styled-components";
+import LoginForm from "../pages/LoginForm";
+import { useNavigate } from "react-router-dom";
+
+interface ModalDefaultType {
+  onClickToggleModal: () => void;
 }
 
-export default function Modal({ setIsOpen }: any) {
+function Modal({ onClickToggleModal, children }: PropsWithChildren<ModalDefaultType>) {
+
   return (
-    <ContainerBg>
-      <Container modalWidth={650} modalHeight={800}></Container>
-    </ContainerBg>
+    <ModalContainer>
+      <Container modalWidth={350} modalHeight={400}>
+        <LoginForm />
+      </Container>
+      <ContainerBg
+        onClick={(e: React.MouseEvent) => {
+          e.preventDefault();
+
+          if (onClickToggleModal) {
+            onClickToggleModal();
+          }
+        }}
+      ></ContainerBg>
+    </ModalContainer>
   );
 }
 
@@ -18,6 +33,8 @@ interface ModalProps {
   modalHeight: number;
 }
 
+const ModalContainer = styled.div``;
+
 const ContainerBg = styled.div`
   width: 100%;
   height: 100%;
@@ -25,7 +42,7 @@ const ContainerBg = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 1;
 `;
 
 const Container = styled.div<ModalProps>`
@@ -38,5 +55,9 @@ const Container = styled.div<ModalProps>`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f2f2f2;
-  box-shadow: 3px 3px 3px black;
+  box-shadow: 3px 3px 5px black;
+  align-items: center;
+  z-index: 2;
 `;
+
+export default Modal;
