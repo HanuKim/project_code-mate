@@ -26,6 +26,7 @@ import {useNavigate} from 'react-router-dom';
 export default function Home() {
   const [posts, setPosts] = useState<PostState[]>([]);
   const [category, setCategory] = useState('');
+  const navigate = useNavigate();
 
   // post 데이터에서 createAt을 내림차순으로 정렬
   const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
@@ -96,7 +97,7 @@ export default function Home() {
 
       {/* 글쓰기 버튼 */}
       <WriteContainer>
-        <WriteBt>
+        <WriteBt onClick={()=>{navigate('/createpost')}}>
           <HiOutlinePencilSquare size={30} />
         </WriteBt>
       </WriteContainer>
