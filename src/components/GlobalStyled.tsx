@@ -1,6 +1,6 @@
 // import React from "react";
-import {createGlobalStyle} from 'styled-components';
-import reset from 'styled-reset';
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
 
 const globalStyles = createGlobalStyle`
 
@@ -15,6 +15,9 @@ const globalStyles = createGlobalStyle`
         font-family: 'Noto Sans KR', sans-serif;
         letter-spacing : -0.01em;
         line-height :1.5;
+        width : 100%;
+        height : 100%;
+        position: relative;
     }
 
 `;

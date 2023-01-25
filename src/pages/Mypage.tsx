@@ -1,35 +1,22 @@
 // react-icons 다운
 
-import { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
-import MypageModal from '../components/MypageModal';
+import { useState, useCallback, useEffect } from "react";
+import styled from "styled-components";
+import MypageModal from "../components/MypageModal";
 // import { ShowImage } from '../components/ShowImage';
-import UploadImage from '../components/UploadImage';
+import UploadImage from "../components/UploadImage";
 import {
   addDoc,
   collection,
   onSnapshot,
   orderBy,
   query,
-} from 'firebase/firestore';
-import { dbService } from '../shared/firebase';
-import MypageCreate from '../components/MypageCreate';
-import { auth } from '../shared/firebase';
-import Profile from '../components/Profile';
-import { useParams } from 'react-router-dom';
-
-// type ShowImage = {
-//   id: string;
-//   imageUrl: string;
-//   serverTime: string;
-//   nickName: string;
-//   contents: string;
-// };
-// interface Introduce {
-//   introduce: string;
-//   userId: string;
-//   createdAt: any;
-// }
+} from "firebase/firestore";
+import { dbService } from "../shared/firebase";
+import MypageCreate from "../components/MypageCreate";
+import { auth } from "../shared/firebase";
+import Profile from "../components/Profile";
+import { useParams } from "react-router-dom";
 
 export default function Mypage() {
   return (
@@ -59,7 +46,7 @@ export default function Mypage() {
                   </MypageModal>
                 )}
                 <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
-                <InputBtn type={'submit'}>등록</InputBtn>
+                <InputBtn type={"submit"}>등록</InputBtn>
               </InputBtnWrap>
             </InputContainer>
           </TopContainer>
