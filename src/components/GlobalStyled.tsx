@@ -3,25 +3,20 @@ import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 const globalStyles = createGlobalStyle`
-    // css 초기값 정의
-    /* ${reset}; */
 
-    // 따로 스타일링
-    Anything {
-        text-decoration:none;
-        color:inherit;
-    }
 
-    *{
+    * {
+        color: #333;
         box-sizing:border-box;
     }
-
-    body{
-        background-color: #f2f2f2;
-        min-height: 100vh;
+    
+    body {
+        background-color : #e0e0e0;
+        font-family: 'Noto Sans KR', sans-serif;
+        letter-spacing : -0.01em;
+        line-height :1.5;
     }
 
-    
 `;
 
 export default globalStyles;
