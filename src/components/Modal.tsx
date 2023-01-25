@@ -1,7 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-export default function Modal() {
+interface Props {
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export default function Modal({ setIsOpen }: any) {
   return (
     <ContainerBg>
       <Container modalWidth={650} modalHeight={800}></Container>
@@ -15,18 +19,18 @@ interface ModalProps {
 }
 
 const ContainerBg = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
 `;
 
 const Container = styled.div<ModalProps>`
-  width: ${(props) => props.modalWidth + "px"};
-  height: ${(props) => props.modalHeight + "px"};
+  width: ${props => props.modalWidth + 'px'};
+  height: ${props => props.modalHeight + 'px'};
   border: 1px solid #aaa;
   border-radius: 15px;
   position: absolute;

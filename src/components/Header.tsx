@@ -1,20 +1,29 @@
-import React from "react";
 
-
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
 import { useNavigate } from 'react-router-dom';
 
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
+interface Props {
+  setIsOpen: React.Dispatch<React.SetStateAction<any>>;
+}
 
 export default function Header() {
-
   const navigate = useNavigate();
+
+  const goToMypageHandler = () => {
+    navigate('/Mypage');
+  };
+  const goToHomeHandler = () => {
+    navigate('/');
+  };
+
   return (
     <>
       <HeaderContainer>
-        <LogoBox onClick={()=>{navigate('/')}}/>
+        <LogoBox onClick={goToHomeHandler} />
+        <LoginBtn onClick={goToMypageHandler}>로그인/회원가입</LoginBtn>
 
-        <LoginBtn>로그인/회원가입</LoginBtn>
       </HeaderContainer>
     </>
   );
