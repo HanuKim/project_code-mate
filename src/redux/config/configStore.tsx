@@ -1,5 +1,5 @@
-import { createStore } from "redux";
-import { combineReducers } from "redux";
+import { createStore } from 'redux';
+import { combineReducers } from 'redux';
 /*
 1. createStore()
 리덕스의 가장 핵심이 되는 스토어를 만드는 메소드(함수) 입니다. 

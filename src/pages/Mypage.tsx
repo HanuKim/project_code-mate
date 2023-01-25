@@ -1,5 +1,35 @@
-import React, { useState } from 'react';
+// react-icons 다운
+
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
+import MypageModal from '../components/MypageModal';
+// import { ShowImage } from '../components/ShowImage';
+import UploadImage from '../components/UploadImage';
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore';
+import { dbService } from '../shared/firebase';
+import MypageCreate from '../components/MypageCreate';
+import { auth } from '../shared/firebase';
+import Profile from '../components/Profile';
+import { useParams } from 'react-router-dom';
+
+// type ShowImage = {
+//   id: string;
+//   imageUrl: string;
+//   serverTime: string;
+//   nickName: string;
+//   contents: string;
+// };
+// interface Introduce {
+//   introduce: string;
+//   userId: string;
+//   createdAt: any;
+// }
 
 export default function Mypage() {
   return (
@@ -9,17 +39,28 @@ export default function Mypage() {
           <TopContainer>
             <ProfileTitle>
               <TopProfileContainer>
-                <TopProfilePhoto />
-                <TopProfileNickName>Lee Tae Eon</TopProfileNickName>
+                <TopProfilePhoto>
+                  <ProfileWrap>
+                    <Profile />
+                  </ProfileWrap>
+                </TopProfilePhoto>
+                <ProfileContents>ProfileContents</ProfileContents>
+                <TopProfileNickName></TopProfileNickName>
               </TopProfileContainer>
-              <UploadWrap>
-                <UploadBtn> 사진 등록 </UploadBtn>
-              </UploadWrap>
-              {/* <UploadContents></UploadContents> */}
+              <UploadWrap></UploadWrap>
             </ProfileTitle>
+
             <InputContainer>
-              <InputBox></InputBox>
-              <InputBtn>등록</InputBtn>
+              <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox>
+              <InputBtnWrap>
+                {/* {isOpenModall && (
+                  <MypageModal onClickToggleModal={onClickToggleModall}>
+                    <MypageCreate />
+                  </MypageModal>
+                )}
+                <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
+                <InputBtn type={'submit'}>등록</InputBtn>
+              </InputBtnWrap>
             </InputContainer>
           </TopContainer>
 
@@ -31,7 +72,7 @@ export default function Mypage() {
                   <ProfilePhoto />
                   <ProfileNickName>Lee</ProfileNickName>
                 </ProfileContainer>
-                <Date>0000-00-00</Date>
+                <Datee>0000-00-00</Datee>
               </PostsTopWrap>
               <TitleText>제목</TitleText>
               <ContentText>내용</ContentText>
@@ -41,6 +82,56 @@ export default function Mypage() {
                 <CategoryBtn>Publisher</CategoryBtn>
               </CategoryContainer>
             </Posts>
+            {/* --test posts --- */}
+            <Posts>
+              <PostsTopWrap>
+                <ProfileContainer>
+                  <ProfilePhoto />
+                  <ProfileNickName>Lee</ProfileNickName>
+                </ProfileContainer>
+                <Datee>0000-00-00</Datee>
+              </PostsTopWrap>
+              <TitleText>제목</TitleText>
+              <ContentText>내용</ContentText>
+              <CategoryContainer>
+                <CategoryBtn>BackEnd</CategoryBtn>
+                <CategoryBtn>FrontEnd</CategoryBtn>
+                <CategoryBtn>Publisher</CategoryBtn>
+              </CategoryContainer>
+            </Posts>
+            <Posts>
+              <PostsTopWrap>
+                <ProfileContainer>
+                  <ProfilePhoto />
+                  <ProfileNickName>Lee</ProfileNickName>
+                </ProfileContainer>
+                <Datee>0000-00-00</Datee>
+              </PostsTopWrap>
+              <TitleText>제목</TitleText>
+              <ContentText>내용</ContentText>
+              <CategoryContainer>
+                <CategoryBtn>BackEnd</CategoryBtn>
+                <CategoryBtn>FrontEnd</CategoryBtn>
+                <CategoryBtn>Publisher</CategoryBtn>
+              </CategoryContainer>
+            </Posts>
+            <Posts>
+              <PostsTopWrap>
+                <ProfileContainer>
+                  <ProfilePhoto />
+                  <ProfileNickName>Lee</ProfileNickName>
+                </ProfileContainer>
+                <Datee>0000-00-00</Datee>
+              </PostsTopWrap>
+              <TitleText>제목</TitleText>
+              <ContentText>내용</ContentText>
+              <CategoryContainer>
+                <CategoryBtn>BackEnd</CategoryBtn>
+                <CategoryBtn>FrontEnd</CategoryBtn>
+                <CategoryBtn>Publisher</CategoryBtn>
+              </CategoryContainer>
+            </Posts>
+            {/* --- test ---- */}
           </BottomContainer>
         </MypageBox>
       </Container>
@@ -85,32 +176,42 @@ const UploadWrap = styled.div`
   /* background-color: blue; */
   min-width: 200px;
   position: absolute;
-  top: 190px;
-  left: 60px;
+  top: 185px;
+  left: 50px;
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.form`
   /* background-color: skyblue; */
-  position: relative;
+  /* position: relative; */
 `;
 
 const InputBox = styled.textarea`
-  background-color: white;
+  /* background-color: red; */
   height: 560px;
   width: 100%;
   border-radius: 10px;
   padding: 15px;
+  border: 1px solid black;
+`;
+
+const InputBtnWrap = styled.div`
+  /* background-color: red; */
+  position: flex;
+  margin-left: 800px;
 `;
 
 const InputBtn = styled.button`
-  position: absolute;
-  right: 20px;
-  top: 510px;
+  /* position: flex; */
+
   background-color: #262b7f;
   color: white;
   width: 60px;
   height: 30px;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 const UploadContents = styled.input`
@@ -118,10 +219,7 @@ const UploadContents = styled.input`
   width: 100%;
 `;
 
-const UploadBtn = styled.button`
-  width: 100px;
-  height: 25px;
-`;
+const TestInput = styled.button``;
 
 // ------------ post ---------------
 
@@ -156,7 +254,7 @@ const PostsTopWrap = styled.div`
 
 const ProfileContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
   margin-top: -18px;
 `;
@@ -176,21 +274,21 @@ const ProfileNickName = styled.p`
   font-weight: 500;
 `;
 
-const Date = styled.p`
+const Datee = styled.p`
   color: #aaaaaa;
   font-size: 15px;
   margin-top: -12px;
 `;
 
 const TitleText = styled.h1`
-  margin: 25px 0 20px 40px;
+  margin: 20px 0 20px 40px;
   font-size: 25px;
   font-weight: 600;
 `;
 
 const ContentText = styled.p`
   font-size: 16px;
-  margin-left: 40px;
+  margin-left: 43px;
 `;
 
 const CategoryContainer = styled.div`
@@ -206,7 +304,7 @@ const CategoryBtn = styled.button`
   border-radius: 30px;
   color: #efefef;
   background-color: #262b7f;
-  filter: drop-shadow(1px 2px 3px #818181);
+  /* filter: drop-shadow(1px 2px 3px #818181); */
 `;
 
 const TopProfileContainer = styled.div`
@@ -217,18 +315,70 @@ const TopProfileContainer = styled.div`
 `;
 
 const TopProfilePhoto = styled.div`
-  background-image: url(https://www.pngall.com/wp-content/uploads/5/Profile.png);
+  /* background-image: url(https://www.pngall.com/wp-content/uploads/5/Profile.png); */
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
-  cursor: pointer;
+  /* cursor: pointer; */
   width: 140px;
   height: 140px;
-  border: 1px solid black;
-  border-radius: 100px;
+  /* border: 1px solid black;
+  border-radius: 100px; */
 `;
 
 const TopProfileNickName = styled.p`
   font-size: 18px;
   font-weight: 500;
+`;
+
+const DialogButton = styled.div`
+  width: 120px;
+  height: 36px;
+  background-color: #262b7f;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 400;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    /* transform: translateY(-1px); */
+  }
+`;
+
+const ProfileWrap = styled.div`
+  /* background-color: red; */
+`;
+
+const ProfileBox = styled.div`
+  /* background-color: blue; */
+  display: flex;
+  width: 300px;
+`;
+
+const Test = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Test1 = styled.div`
+  /* background-color: gray; */
+`;
+
+const Test2 = styled.div`
+  /* background-color: pink; */
+`;
+
+const ProfileContents = styled.div`
+  /* background-color: red; */
+  width: 680px;
+  height: 200px;
+  margin-left: 30px;
+  margin-top: 30px;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 30px;
 `;
