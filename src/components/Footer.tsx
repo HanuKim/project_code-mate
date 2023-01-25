@@ -14,7 +14,7 @@ export default function Footer() {
 }
 
 const Container = styled.div`
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   left: 0;
   width: 100%;

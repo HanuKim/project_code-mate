@@ -19,7 +19,7 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
 `;
 
 const LogoBox = styled.div`
