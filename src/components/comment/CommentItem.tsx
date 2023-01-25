@@ -219,8 +219,6 @@ const CommentRightButton = styled.button`
   width: 50px;
   height: 30px;
   border-radius: 20px;
-  /* left:-55px;
-  top: -26px; */
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

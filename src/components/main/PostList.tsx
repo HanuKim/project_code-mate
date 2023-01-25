@@ -1,7 +1,13 @@
-import styled from 'styled-components';
-import { PostState } from '../../shared/type';
-import Post from './Post';
-export default function PostList({posts,category}:{posts:PostState[],category:string}) {
+import styled from "styled-components";
+import { PostState } from "../../shared/type";
+import Post from "./Post";
+export default function PostList({
+  posts,
+  category,
+}: {
+  posts: PostState[];
+  category: string;
+}) {
   return (
     <PostsContainer>
       {posts.map((post) => {
@@ -19,5 +25,5 @@ const PostsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  min-height: 50.26vh;
 `;
-
