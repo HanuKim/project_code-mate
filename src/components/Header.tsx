@@ -1,12 +1,19 @@
 import React from "react";
+
+
+import { useNavigate } from 'react-router-dom';
+
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
 
 export default function Header() {
+
+  const navigate = useNavigate();
   return (
     <>
       <HeaderContainer>
-        <LogoBox />
+        <LogoBox onClick={()=>{navigate('/')}}/>
+
         <LoginBtn>로그인/회원가입</LoginBtn>
       </HeaderContainer>
     </>
@@ -16,12 +23,14 @@ export default function Header() {
 const HeaderContainer = styled.header`
   width: 100%;
   height: 120px;
+
   margin-bottom: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   box-shadow: 1px -1px 3px #333;
+
 `;
 
 const LogoBox = styled.div`
@@ -50,5 +59,6 @@ const LoginBtn = styled.button`
     background-color: #262b7f;
     color: #fff;
     border: 1px solid #262b7f;
+
   }
 `;

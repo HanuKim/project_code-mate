@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import Router from "./router/Router";
 import GlobalStyles from "../src/components/GlobalStyled";
-import { dbService } from "./shared/firebase";
+
 
 function App() {
   return (

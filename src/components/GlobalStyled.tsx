@@ -4,6 +4,7 @@ import reset from "styled-reset";
 
 const globalStyles = createGlobalStyle`
 
+
     * {
         color: #333;
         box-sizing:border-box;
@@ -15,6 +16,7 @@ const globalStyles = createGlobalStyle`
         letter-spacing : -0.01em;
         line-height :1.5;
     }
+
 `;
 
 export default globalStyles;
