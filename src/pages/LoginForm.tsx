@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const goToSignUpPage = () => {
+    navigate("src/components/modal/SignUpModal.tsx");
+  };
 
   return (
     <Container>
@@ -20,13 +23,7 @@ function LoginForm() {
               <PwInput type="password" name="password" id="password" placeholder="Password" />
             </div>
             <LoginBtnContainer>
-              <SignUpBtn
-                onClick={() => {
-                  navigate("/signupform");
-                }}
-              >
-                회원가입
-              </SignUpBtn>
+              <SignUpBtn onClick={goToSignUpPage}>회원가입</SignUpBtn>
               <LoginBtn>로그인</LoginBtn>
             </LoginBtnContainer>
           </LoginFormContainer>

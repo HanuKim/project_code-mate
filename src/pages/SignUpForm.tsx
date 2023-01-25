@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "../components/Modal";
+import SignUpModal from "../components/modal/SignUpModal";
 import styled from "styled-components";
 
 function SignUpForm() {

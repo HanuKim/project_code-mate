@@ -1,32 +1,17 @@
-import React, { useState, useEffect, PropsWithChildren } from "react";
+import React, { useState, PropsWithChildren } from "react";
 import styled from "styled-components";
-import LoginForm from "../pages/LoginForm";
+import SignUpForm from "../../pages/SignUpForm";
 import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
 
 interface ModalDefaultType {
   onClickToggleModal: () => void;
 }
 
-function Modal({ onClickToggleModal, children }: PropsWithChildren<ModalDefaultType>) {
-  // 모달창 떴을 때 스크롤 방지, 인풋창 초기화
-  useEffect(() => {
-    document.body.style.cssText = `
-      position: fixed; 
-      top: -${window.scrollY}px;
-      overflow-y: scroll;
-      width: 100%;`;
-    return () => {
-      const scrollY = document.body.style.top;
-      document.body.style.cssText = "";
-      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
-    };
-  }, []);
-
-  return createPortal(
+function SignUpModal({ onClickToggleModal, children }: PropsWithChildren<ModalDefaultType>) {
+  return (
     <ModalContainer>
       <Container modalWidth={350} modalHeight={400}>
-        <LoginForm />
+        <SignUpForm />
       </Container>
       <ContainerBg
         onClick={(e: React.MouseEvent) => {
@@ -37,8 +22,7 @@ function Modal({ onClickToggleModal, children }: PropsWithChildren<ModalDefaultT
           }
         }}
       ></ContainerBg>
-    </ModalContainer>,
-    document.getElementById("modal-root")
+    </ModalContainer>
   );
 }
 
@@ -64,7 +48,7 @@ const Container = styled.div<ModalProps>`
   height: ${(props) => props.modalHeight + "px"};
   border: 1px solid #aaa;
   border-radius: 15px;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -74,4 +58,4 @@ const Container = styled.div<ModalProps>`
   z-index: 2;
 `;
 
-export default Modal;
+export default SignUpModal;
