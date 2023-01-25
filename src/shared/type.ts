@@ -14,7 +14,7 @@ export interface Comment {
   id: string;
   commentText: string;
   postId: string;
-  userId: string;
+  userId: any;
   nickName: string;
   createdAt: string;
   isEdit: boolean;

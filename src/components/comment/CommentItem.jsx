@@ -27,16 +27,11 @@ import CheckModal from '../modal/DeleteModal';
 import {useDispatch} from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
+import {getAuth} from 'firebase/auth';
 
-export default function CommentItem({
-  comment,
-  ref,
-}: {
-  comment: Comment;
-  ref: (node?: Element) => void;
-}) {
+export default function CommentItem({comment}) {
   const [editText, setEditText] = useState('');
-  const [editComments, setEditComments] = useState<Comment>({
+  const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
     postId: comment.postId,
@@ -45,7 +40,8 @@ export default function CommentItem({
     createdAt: comment.createdAt,
     isEdit: comment.isEdit,
   });
-
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
 
   // 모달
@@ -59,16 +55,16 @@ export default function CommentItem({
   };
 
   //isEdit true로 바꾸기
-  const onClickIsEditSwitch = (commentid: string) => {
+  const onClickIsEditSwitch = (commentid) => {
     setEditComments({...editComments, isEdit: true});
   };
 
-  const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const editTextOnChange = (e) => {
     setEditText(e.target.value);
   };
 
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = (commentid: string) => {
+  const cancleEditButton = (commentid) => {
     console.log(commentid);
     setEditComments({...editComments, isEdit: false});
   };
@@ -108,7 +104,7 @@ export default function CommentItem({
           setEditText={setEditText}
         />
       ) : null}
-      <CommentContentContainer ref={ref}>
+      <CommentContentContainer>
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
@@ -128,7 +124,8 @@ export default function CommentItem({
                     취소
                   </CommentButton>
                 </>
-              ) : (
+              ) : uid === comment.userId ? (
+                  // 로그인한 uid와 댓글의 uid가 같아야지만 수정,삭제버튼 보이게
                 <>
                   <CommentButton
                     onClick={() => {
@@ -141,7 +138,7 @@ export default function CommentItem({
                     삭제
                   </CommentButton>
                 </>
-              )}
+                ) : null}
             </ButtonContainer>
           </ProfileContainer>
           <Date>{comment.createdAt}</Date>
