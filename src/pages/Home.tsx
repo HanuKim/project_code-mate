@@ -1,90 +1,134 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import Modal from '../components/Modal';
-import Footer from '../components/Footer';
-import styled from 'styled-components';
 
-import { useRef } from 'react';
-import { signup, login, logout, useAuth } from '../shared/firebase';
-import Profile from '../components/Profile';
+
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {HiOutlinePencilSquare} from 'react-icons/hi2';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+  limit,
+  QuerySnapshot,
+} from 'firebase/firestore';
+import {dbService} from '../shared/firebase';
+import MainCategory from '../components/main/MainCategory';
+import PostList from '../components/main/PostList';
+import {useFirestoreQuery} from '@react-query-firebase/firestore';
+import {PostState} from '../shared/type';
+import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
-  const currentUser = useAuth();
+  const [posts, setPosts] = useState<PostState[]>([]);
+  const [category, setCategory] = useState('');
+  const navigate = useNavigate();
 
-  const emailRef = useRef<any>();
-  const passwordRef = useRef<any>();
-  async function handleSignup() {
-    setLoading(true);
-    try {
-      await signup(emailRef.current.value, passwordRef.current.value);
-    } catch (error) {
-      console.log('error:', error);
-      alert('Error!');
-    }
-    setLoading(false);
-  }
+  // post 데이터에서 createAt을 내림차순으로 정렬
+  const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
 
-  async function handleLogin() {
-    setLoading(true);
-    try {
-      await login(emailRef.current.value, passwordRef.current.value);
-    } catch {
-      alert('Error!');
+  const getTimegap = (posting: number) => {
+    const msgap = Date.now() - posting;
+    const minutegap = Math.floor(msgap / 60000);
+    const hourgap = Math.floor(msgap / 3600000);
+    const daygap = Math.floor(msgap / 86400000);
+    if (msgap < 0) {
+      return '0분전';
     }
-    setLoading(false);
-  }
+    if (daygap > 7) {
+      const time = new Date(posting);
+      const timegap = time.toJSON().substring(0, 10);
+      return <p>{timegap}</p>;
+    }
+    if (hourgap > 24) {
+      return <p>{daygap}일 전</p>;
+    }
+    if (minutegap > 60) {
+      return <p>{hourgap}시간 전</p>;
+    } else {
+      return <p>{minutegap}분 전</p>;
+    }
+  };
+  const getPost = () => {
+    onSnapshot(q, (snapshot) => {
+      const newPosts = snapshot.docs.map((doc) => {
+        console.log('doc', doc.data());
+        const newPost = {
+          id: doc.id,
+          ...doc.data(), // <- poststate
+          createdAt: getTimegap(doc.data().createdAt), // timestamp로 저장된 데이터 가공
+        } as PostState;
+        // poststate로 들어올걸 확신해서 as를 사용함
+        // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
+        console.log('newpost', newPost);
+        return newPost;
+      });
+      setPosts(newPosts);
+      console.log('posts2', newPosts);
+    });
+  };
 
-  async function handleLogout() {
-    setLoading(true);
-    try {
-      await logout();
-    } catch {
-      alert('Error!');
-    }
-    setLoading(false);
-  }
+  // 현재 누른 카테고리를 category 컬렉션에 업데이트
+
+  useEffect(() => {
+    getPost();
+    console.log('posts', posts);
+    console.log('category', category);
+
+    const getCategory = async () => {
+      const snapshot = await getDoc(
+        doc(dbService, 'category', 'currentCategory')
+      );
+      console.log(snapshot.data());
+      setCategory(snapshot.data().category); // 스냅샷.data() 오류났었는데 tsconfig.json에 "strictNullChecks": false, 추가해줬더니 오류안남. 이렇게 해도 괜찮은건지 확인필요
+    };
+    getCategory();
+  }, []);
 
   return (
-    <>
-      {/* <div>아이템입니다.</div>
-      <button onClick={() => setIsOpen(true)}>사진 등록</button>
-      {isOpen && <Modal setIsOpen={setIsOpen} />}
-      <Testbox>sdfdfsf</Testbox> */}
-      <div id="main">
-        <div>Currently logged in as: {currentUser?.email} </div>
+    <Container>
+      {/* 카테고리 */}
+      {/* Slice로 어떻게 넣지..? */}
+      <MainCategory category={category} setCategory={setCategory} />
 
-        {!currentUser && (
-          <>
-            <div className="fields">
-              <input ref={emailRef} placeholder="Email" />
-              <input ref={passwordRef} type="password" placeholder="Password" />
-            </div>
+      {/* 글쓰기 버튼 */}
+      <WriteContainer>
+        <WriteBt onClick={()=>{navigate('/createpost')}}>
+          <HiOutlinePencilSquare size={30} />
+        </WriteBt>
+      </WriteContainer>
 
-            <button disabled={loading} onClick={handleSignup}>
-              Sign Up
-            </button>
-            <button disabled={loading} onClick={handleLogin}>
-              Log In
-            </button>
-          </>
-        )}
-        {currentUser && (
-          <>
-            <Profile />
-            <button disabled={loading || !currentUser} onClick={handleLogout}>
-              Log Out
-            </button>
-          </>
-        )}
-      </div>
-    </>
+      {/* 포스트 */}
+      <PostList posts={posts} category={category} />
+    </Container>
   );
 }
+const Container = styled.div`
+  max-width: 1440px;
+  width: 80%;
+  margin: 20px auto;
+`;
 
-{
-  /* const Testbox = styled.div`
-  height: 1000px;
-    `; */
-}
+const WriteContainer = styled.div`
+  text-align: right;
+`;
+const WriteBt = styled.button`
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 40px 0 20px 0;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #262b7f;
+  }
+
+`;
+

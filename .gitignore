@@ -1,4 +1,6 @@
 
+node_modules
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -7,6 +9,11 @@
 .pnp.js
 .history
 src/shared/config.ts
+
+.env
+.gitmessage.txt
+
+
 
 # testing
 /coverage
