@@ -51,7 +51,7 @@ const Map = () => {
   );
   const mapOptions = {
     center: position, // 지도의 중심좌표
-    level: 3, // 지도의 확대 레벨
+    level: 2, // 지도의 확대 레벨
   };
 
   useEffect(() => {
