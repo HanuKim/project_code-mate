@@ -1,54 +1,73 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../shared/firebase";
 
-function LoginForm({
+export const LoginForm = ({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const navigate = useNavigate();
+}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  console.log("email : ", email);
+  console.log("PW : ", password);
+
+  const signIn = (e: any) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // console.log("로그인 성공 ! : ", userCredential);
+        alert("회원가입 성공");
+      })
+      .catch((error) => {
+        // console.log(error);
+        alert("다시 입력해주세요.");
+      });
+  };
 
   return (
     <Container>
-      <form>
-        <div className='form-inner'>
+      <form onSubmit={signIn}>
+        <div className="form-inner">
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
             <div>
               <EmailInput
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
               <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <LoginBtnContainer>
-              <SignUpBtn
-                onClick={() => {
-                  setIsNotLogin(true);
-                }}
-              >
-                회원가입
-              </SignUpBtn>
-              <LoginBtn>로그인</LoginBtn>
-            </LoginBtnContainer>
+            <SignUpBtn
+              onClick={() => {
+                setIsNotLogin(true);
+              }}>
+              회원가입
+            </SignUpBtn>
+            <LoginBtn>로그인</LoginBtn>
           </LoginFormContainer>
         </div>
       </form>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   margin-top: 40px;
@@ -113,6 +132,3 @@ const LoginBtn = styled.button`
     color: #262b7f;
   }
 `;
-
-const LoginBtnContainer = styled.div``;
-export default LoginForm;
