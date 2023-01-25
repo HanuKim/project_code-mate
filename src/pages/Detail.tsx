@@ -6,14 +6,15 @@ import Button from "../components/Button";
 import MapContainer from "../components/MapContainer";
 import JobCategory from "../components/JobCategory";
 import CodeMate from "../img/CodeMate.png";
-
+import Comments from '../components/comment/Comments';
+import CommentInput from '../components/comment/CommentInput';
+import CommentList from '../components/comment/CommentList';
 export default function Detail() {
   return (
     <>
-      <Header />
       <Container>
         <InnerWidth>
-          <div className="map">
+          <div className='map'>
             <MapContainer />
           </div>
           <ContentsContainer>
@@ -23,53 +24,20 @@ export default function Detail() {
                 <ProfileName>7전8기</ProfileName>
               </ProfileWrap>
               <Button
-                delete="삭제"
-                edit="수정"
+                delete='삭제'
+                edit='수정'
                 btnWidth={80}
-                btnHeight={40}></Button>
+                btnHeight={40}
+              ></Button>
             </ProfileContainer>
             <Title>CodeMate 토이 프로젝트 하실 분 구합니다.</Title>
             <Contents>여기엔 내용이 들어갑니다.</Contents>
             <JobCategory></JobCategory>
           </ContentsContainer>
         </InnerWidth>
-        <CommentEdit>
-          <Input placeholder="Comment" />
-          <div style={{ position: "relative", height: "40px" }}>
-            <CommentEditBtn>등록</CommentEditBtn>
-          </div>
-        </CommentEdit>
-        <CommentContainer>
-          <CommentTitle>Comment</CommentTitle>
-          <CommentWrap>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-            <Comment>
-              - 저도 참여하고 싶어용!
-              <CommentWriter>루피</CommentWriter>
-            </Comment>
-          </CommentWrap>
-        </CommentContainer>
+        <CommentInput />
+        <CommentList />
       </Container>
-      <Footer />
     </>
   );
 }
@@ -190,21 +158,21 @@ const Input = styled.textarea`
   }
 `;
 
-const CommentEditBtn = styled.button`
-position : absolute;
-right : 0;
-  width: 60px;
-  height: 40px;
-  border: 1px solid #d0d0d0;
-  border-radius: 10px;
-  cursor: pointer;
-  transition-duration : .3s;
-  :hover {
-    color: #f2f2f2;
-    background-color #262b7f;
-    border: 1px solid #262b7f;
-  };
-`;
+// const CommentEditBtn = styled.button`
+// position : absolute;
+// right : 0;
+//   width: 60px;
+//   height: 40px;
+//   border: 1px solid #d0d0d0;
+//   border-radius: 10px;
+//   cursor: pointer;
+//   transition-duration : .3s;
+//   :hover {
+//     color: #f2f2f2;
+//     background-color #262b7f;
+//     border: 1px solid #262b7f;
+//   };
+// `;
 
 const CommentContainer = styled.div`
   max-width: 1100px;

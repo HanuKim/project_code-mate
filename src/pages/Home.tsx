@@ -109,7 +109,6 @@ export default function Home() {
   );
 }
 const Container = styled.div`
-  background-color: #f2f2f2;
   max-width: 1440px;
   width: 80%;
   margin: 20px auto;

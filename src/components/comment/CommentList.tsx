@@ -101,7 +101,6 @@ export default function CommentList() {
 const Container = styled.div`
   width: 80%;
   margin: 0 auto;
-  margin-top: 100px;
 `;
 
 const CommentTitle = styled.h1`
