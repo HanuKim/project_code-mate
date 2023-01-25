@@ -7,8 +7,11 @@ import Header from "../components/Header";
 import Comment from "../components/comment/Comments";
 import CreatePost from "../pages/CreatePost";
 import Detail from "../pages/Detail";
+import { getAuth } from 'firebase/auth';
 
 const Router = () => {
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
   return (
     <BrowserRouter>
       <Header />
@@ -17,7 +20,7 @@ const Router = () => {
         <Route path="/comment/:id" element={<Comment />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/Mypage" element={<Mypage />} />
+        <Route path='/Mypage/:id' element={<Mypage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

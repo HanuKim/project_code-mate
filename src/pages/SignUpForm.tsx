@@ -1,8 +1,11 @@
 // import Modal from "../components/Modal";
 import styled from "styled-components";
+
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../shared/firebase";
+import { getAuth } from 'firebase/auth';
+
 
 export const SignUpForm = ({
   setIsNotLogin,
@@ -13,6 +16,18 @@ export const SignUpForm = ({
   const [password, setPassword] = useState("");
   //todo 닉네임 상태 관리
   const [] = useState("");
+  
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+
+  const 변수 = {
+    introduce: '',
+    location: '',
+    nickname:'',
+    position: '',
+    stack: '',
+    userid : uid,
+  }
 
   console.log("email : ", email);
   console.log("PW : ", password);
@@ -27,6 +42,7 @@ export const SignUpForm = ({
         console.log(error);
       });
   };
+
 
   return (
     <Container>

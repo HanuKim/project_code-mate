@@ -1,42 +1,46 @@
+import {getAuth} from 'firebase/auth';
+import React, {useState, useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
+import Modal from './Modal';
 
-import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
-import Modal from "./Modal";
-
-interface Props {
-  setIsOpen: React.Dispatch<React.SetStateAction<any>>;
-}
+// interface Props {
+//   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
+// }
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
 
-  const onClickToggleModal = useCallback(() => {
+  const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
-  }, [isOpenModal]);
+  }
 
   const navigate = useNavigate();
 
-  const goToMypageHandler = () => {
-    navigate('/Mypage');
-  };
-  const goToHomeHandler = () => {
-    navigate('/');
-  };
 
   return (
     <>
       <HeaderContainer>
-
         <LogoBox
           onClick={() => {
-            navigate("/");
+            navigate('/');
           }}
         />
-        {isOpenModal && <Modal onClickToggleModal={onClickToggleModal}>이곳에 children이 들어갑니다.</Modal>}
+        {isOpenModal ? (
+          <Modal setOpenModal={setOpenModal} isOpenModal={isOpenModal}/>
+        ):null}
         <LoginBtn onClick={onClickToggleModal}>로그인/회원가입</LoginBtn>
-
-
+        {authService.currentUser ? (
+          <LoginBtn
+            onClick={() => {
+              navigate(`/Mypage/${uid}`);
+            }}
+          >
+            마이페이지
+          </LoginBtn>
+        ) : null}
       </HeaderContainer>
     </>
   );
@@ -52,7 +56,6 @@ const HeaderContainer = styled.header`
   align-items: center;
   background-color: #ffffff;
   box-shadow: 1px -1px 3px #333;
-
 `;
 
 const LogoBox = styled.div`
@@ -81,6 +84,5 @@ const LoginBtn = styled.button`
     background-color: #262b7f;
     color: #fff;
     border: 1px solid #262b7f;
-
   }
 `;

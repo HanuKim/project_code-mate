@@ -1,14 +1,22 @@
-import React, { useState } from "react";
-import Modal from "../components/Modal";
-import styled from "styled-components";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../shared/firebase";
+
+import React, {PropsWithChildren, useState} from 'react';
+import Modal from '../components/Modal';
+import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom';
+import {signInWithEmailAndPassword, getAuth} from 'firebase/auth';
+import {auth} from '../shared/firebase';
+// React.Dispatch<React.SetStateAction<boolean>>
+
 
 export const LoginForm = ({
   setIsNotLogin,
+  setOpenModal,
 }: {
+setIsNotLogin: any;
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+const authService = getAuth();
+const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,11 +28,13 @@ export const LoginForm = ({
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // console.log("로그인 성공 ! : ", userCredential);
+        setOpenModal(false);
         alert("회원가입 성공");
       })
       .catch((error) => {
         // console.log(error);
         alert("다시 입력해주세요.");
+
       });
   };
 
@@ -37,16 +47,19 @@ export const LoginForm = ({
           <LoginFormContainer>
             <div>
               <EmailInput
+
                 type="email"
                 name="email"
                 id="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+
               />
             </div>
             <div>
               <PwInput
+
                 type="password"
                 name="password"
                 id="password"
@@ -62,6 +75,7 @@ export const LoginForm = ({
               회원가입
             </SignUpBtn>
             <LoginBtn>로그인</LoginBtn>
+
           </LoginFormContainer>
         </div>
       </form>
