@@ -2,23 +2,57 @@ import React from "react";
 import Modal from "../components/Modal";
 import styled from "styled-components";
 
-function SignUpForm() {
+function SignUpForm({
+  setIsNotLogin,
+}: {
+  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <Container>
       <form>
-        <div className="form-inner">
+        <div className='form-inner'>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
           <SignUpFormContainer>
             <div>
-              <EmailInput type="email" name="email" id="email" placeholder="Email" />
+              <EmailInput
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+              />
             </div>
             <div>
-              <PwInput type="password" name="password" id="password" placeholder="Password" />
+              <NickNameInput
+                type='nickname'
+                name='nickname'
+                id='nickname'
+                placeholder='NickName'
+              />
             </div>
             <div>
-              <PwChekckInput type="password" name="password" id="password" placeholder="Password" />
+              <PwInput
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+              />
             </div>
+            <div>
+              <PwChekckInput
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+              />
+            </div>
+            <JoinBtn
+              onClick={() => {
+                setIsNotLogin(false);
+              }}
+            >
+              회원가입
+            </JoinBtn>
           </SignUpFormContainer>
         </div>
       </form>
@@ -48,6 +82,13 @@ const EmailInput = styled.input`
   color: #d0d0d0;
 `;
 
+const NickNameInput = styled.input`
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 86%;
+  color: #d0d0d0;
+`;
+
 const PwInput = styled.input`
   margin-bottom: 10px;
   padding: 8px;
@@ -60,6 +101,27 @@ const PwChekckInput = styled.input`
   padding: 8px;
   width: 86%;
   color: #d0d0d0;
+`;
+
+const JoinBtn = styled.button`
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  width: 86%;
+  margin: 20px;
+  margin-left: 0px;
+  margin-top: 10px;
+  position: flex;
+  align-items: center;
+  background-color: #262b7f;
+  color: #ffffff;
+  cursor: pointer;
+  &:hover {
+    background-color: #ffffff;
+    border: 1px solid #262b7f;
+    box-shadow: 1px 1px 1px 1px #262b7f;
+    color: #262b7f;
+  }
 `;
 
 export default SignUpForm;
