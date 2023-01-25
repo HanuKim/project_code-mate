@@ -8,20 +8,20 @@ import {auth} from '../shared/firebase';
 // React.Dispatch<React.SetStateAction<boolean>>
 
 
-export const LoginForm = ({
+function LoginForm ({
   setIsNotLogin,
   setOpenModal,
 }: {
-setIsNotLogin: any;
-  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-const authService = getAuth();
-const uid = authService.currentUser?.uid;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  setIsNotLogin: any;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  console.log("email : ", email);
-  console.log("PW : ", password);
+  console.log('email : ', email);
+  console.log('PW : ', password);
 
   const signIn = (e: any) => {
     e.preventDefault();
@@ -29,41 +29,35 @@ const uid = authService.currentUser?.uid;
       .then((userCredential) => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
-        alert("회원가입 성공");
       })
       .catch((error) => {
         // console.log(error);
-        alert("다시 입력해주세요.");
-
       });
   };
 
   return (
     <Container>
       <form onSubmit={signIn}>
-        <div className="form-inner">
+        <div className='form-inner'>
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
             <div>
               <EmailInput
-
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-
               />
             </div>
             <div>
               <PwInput
-
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -71,18 +65,18 @@ const uid = authService.currentUser?.uid;
             <SignUpBtn
               onClick={() => {
                 setIsNotLogin(true);
-              }}>
+              }}
+            >
               회원가입
             </SignUpBtn>
             <LoginBtn>로그인</LoginBtn>
-
           </LoginFormContainer>
         </div>
       </form>
     </Container>
   );
 };
-
+export default LoginForm;
 const Container = styled.div`
   margin-top: 40px;
 `;

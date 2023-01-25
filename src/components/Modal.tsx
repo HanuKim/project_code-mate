@@ -54,7 +54,7 @@ function Modal({
     </>
   );
 }
-
+export default Modal;
 interface ModalProps {
   modalWidth: number;
   modalHeight: number;
@@ -85,4 +85,4 @@ const Container = styled.div<ModalProps>`
   z-index: 2;
 `;
 
-export default Modal;
+
