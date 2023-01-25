@@ -7,7 +7,7 @@ import { PostState } from '../../shared/type';
 export default function Post({ post }: { post: PostState }) {
   const navigate = useNavigate();
   return (
-    <Posts onClick={() => { navigate(`/comment/${post.id}`) }}>
+    <Posts onClick={() => { navigate(`/detail/${post.id}`) }}>
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
@@ -51,7 +51,8 @@ export default function Post({ post }: { post: PostState }) {
 const Posts = styled.div`
   background-color: #ffffff;
   width: 100%;
-  height: 280px;
+  min-height: 280px;
+  height: 100%;
   border-radius: 30px;
   padding: 40px;
   cursor: pointer;
@@ -63,6 +64,8 @@ const Posts = styled.div`
 const PostsTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  height: 30px;
+  align-items: center;
 `;
 
 const ProfileContainer = styled.div`
