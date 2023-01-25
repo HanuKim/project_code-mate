@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import basicImg from "../../img/basicImg.png";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import basicImg from '../../img/basicImg.png';
 import {
   collection,
   onSnapshot,
@@ -16,20 +16,26 @@ import {
   limit,
   QuerySnapshot,
   where,
-} from "firebase/firestore";
-import { dbService } from "../../shared/firebase";
-import { Comment } from "../../shared/type";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/config/configStore";
-import { async } from "@firebase/util";
-import { useParams } from "react-router-dom";
-import CheckModal from "../modal/DeleteModal";
-import { useDispatch } from "react-redux";
-import DeleteModal from "../modal/DeleteModal";
-import EditModal from "../modal/EditModal";
+} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
+import {Comment} from '../../shared/type';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/config/configStore';
+import {async} from '@firebase/util';
+import {useParams} from 'react-router-dom';
+import CheckModal from '../modal/DeleteModal';
+import {useDispatch} from 'react-redux';
+import DeleteModal from '../modal/DeleteModal';
+import EditModal from '../modal/EditModal';
 
-export default function CommentItem({ comment }: { comment: Comment }) {
-  const [editText, setEditText] = useState("");
+export default function CommentItem({
+  comment,
+  ref,
+}: {
+  comment: Comment;
+  ref: (node?: Element) => void;
+}) {
+  const [editText, setEditText] = useState('');
   const [editComments, setEditComments] = useState<Comment>({
     id: comment.id,
     commentText: comment.commentText,
@@ -54,7 +60,7 @@ export default function CommentItem({ comment }: { comment: Comment }) {
 
   //isEdit true로 바꾸기
   const onClickIsEditSwitch = (commentid: string) => {
-    setEditComments({ ...editComments, isEdit: true });
+    setEditComments({...editComments, isEdit: true});
   };
 
   const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -64,12 +70,12 @@ export default function CommentItem({ comment }: { comment: Comment }) {
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
   const cancleEditButton = (commentid: string) => {
     console.log(commentid);
-    setEditComments({ ...editComments, isEdit: false });
+    setEditComments({...editComments, isEdit: false});
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
   const getComment = async () => {
-    const snapshot = await getDoc(doc(dbService, "comment", comment.id));
+    const snapshot = await getDoc(doc(dbService, 'comment', comment.id));
     const data = snapshot.data();
     if (data.id === editComments.id) {
       setEditComments({
@@ -79,10 +85,9 @@ export default function CommentItem({ comment }: { comment: Comment }) {
     }
   };
 
-  // editComments state가 변경될 때 마다 get해오도록 설정
+  // 리렌더링 일어날 때마다 최초 1번만 getCommet() 실행
   useEffect(() => {
     getComment();
-    console.log("editComments", editComments);
   }, []);
 
   return (
@@ -103,7 +108,7 @@ export default function CommentItem({ comment }: { comment: Comment }) {
           setEditText={setEditText}
         />
       ) : null}
-      <CommentContentContainer>
+      <CommentContentContainer ref={ref}>
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
@@ -118,7 +123,8 @@ export default function CommentItem({ comment }: { comment: Comment }) {
                   <CommentButton
                     onClick={() => {
                       cancleEditButton(comment.id);
-                    }}>
+                    }}
+                  >
                     취소
                   </CommentButton>
                 </>
@@ -127,7 +133,8 @@ export default function CommentItem({ comment }: { comment: Comment }) {
                   <CommentButton
                     onClick={() => {
                       onClickIsEditSwitch(comment.id);
-                    }}>
+                    }}
+                  >
                     수정
                   </CommentButton>
                   <CommentButton onClick={openDeleteModalClick}>

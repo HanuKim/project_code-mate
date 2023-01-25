@@ -17,8 +17,12 @@ import MypageCreate from "../components/MypageCreate";
 import { auth } from "../shared/firebase";
 import Profile from "../components/Profile";
 import { useParams } from "react-router-dom";
+import { getAuth } from 'firebase/auth';
 
 export default function Mypage() {
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+  console.log(uid)
   return (
     <>
       <Container>

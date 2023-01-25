@@ -1,14 +1,46 @@
-import React, { useState } from "react";
-import Modal from "../components/Modal";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import React, {PropsWithChildren, useState} from 'react';
+import Modal from '../components/Modal';
+import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom';
+import {signInWithEmailAndPassword, getAuth} from 'firebase/auth';
+import {auth} from '../shared/firebase';
+// React.Dispatch<React.SetStateAction<boolean>>
 
 function LoginForm({
   setIsNotLogin,
+  setOpenModal,
 }: {
-  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNotLogin: any;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const authService = getAuth();
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [pw, setPW] = useState('');
+  const handleChangeEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+  const handleChangePWInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPW(e.target.value);
+  };
+
+  // 로그인함수
+  const goLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, pw)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log('로그인완료', user);
+        setEmail('');
+        setPW('');
+        setOpenModal(false);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log('errorMessage:', errorCode, errorMessage);
+      });
+  };
 
   return (
     <Container>
@@ -23,6 +55,8 @@ function LoginForm({
                 name='email'
                 id='email'
                 placeholder='Email'
+                value={email}
+                onChange={handleChangeEmailInput}
               />
             </div>
             <div>
@@ -31,6 +65,8 @@ function LoginForm({
                 name='password'
                 id='password'
                 placeholder='Password'
+                value={pw}
+                onChange={handleChangePWInput}
               />
             </div>
             <LoginBtnContainer>
@@ -41,7 +77,7 @@ function LoginForm({
               >
                 회원가입
               </SignUpBtn>
-              <LoginBtn>로그인</LoginBtn>
+              <LoginBtn onClick={goLogin}>로그인</LoginBtn>
             </LoginBtnContainer>
           </LoginFormContainer>
         </div>

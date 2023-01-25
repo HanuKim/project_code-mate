@@ -1,18 +1,33 @@
-import React, {useState, PropsWithChildren} from 'react';
+import React, {useState, PropsWithChildren, useEffect} from 'react';
 import styled from 'styled-components';
 import LoginForm from '../pages/LoginForm';
 import SignUpForm from '../pages/SignUpForm';
 import {useNavigate} from 'react-router-dom';
 
-interface ModalDefaultType {
-  onClickToggleModal: () => void;
-}
+
 
 function Modal({
-  onClickToggleModal,
-  children,
-}: PropsWithChildren<ModalDefaultType>) {
+  setOpenModal,
+  isOpenModal,
+}: {
+  isOpenModal:boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [isNotLogin, setIsNotLogin] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+    };
+  }, []);
+
   return (
     <ModalContainer>
       <Container modalWidth={350} modalHeight={400}>
@@ -20,15 +35,18 @@ function Modal({
         {isNotLogin ? (
           <SignUpForm setIsNotLogin={setIsNotLogin} />
         ) : (
-          <LoginForm setIsNotLogin={setIsNotLogin} />
+          <LoginForm
+            setIsNotLogin={setIsNotLogin}
+            setOpenModal={setOpenModal}
+          />
         )}
       </Container>
       <ContainerBg
         onClick={(e: React.MouseEvent) => {
           e.preventDefault();
 
-          if (onClickToggleModal) {
-            onClickToggleModal();
+          if (isOpenModal) {
+            setOpenModal(false);
           }
         }}
       ></ContainerBg>

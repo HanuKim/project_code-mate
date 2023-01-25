@@ -24,10 +24,14 @@ import { RootState } from "../../redux/config/configStore";
 import { async } from "@firebase/util";
 import { useParams } from "react-router-dom";
 import CommentItem from "./CommentItem";
+import { useInView } from 'react-intersection-observer';
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
   const { id } = useParams();
+
+  const [ref, setRef] = useInView();
+
 
   const q = query(
     collection(dbService, "comment"),
@@ -88,7 +92,7 @@ export default function CommentList() {
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
         {comments.map((comment) => {
-          return <CommentItem comment={comment} />;
+          return <CommentItem comment={comment} ref={ref} />;
           {
             /* 댓글1개 */
           }

@@ -1,12 +1,25 @@
 import React from "react";
 import Modal from "../components/Modal";
 import styled from "styled-components";
+import { getAuth } from 'firebase/auth';
 
 function SignUpForm({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+  }) {
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+
+  const 변수 = {
+    introduce: '',
+    location: '',
+    nickname:'',
+    position: '',
+    stack: '',
+    userid : uid,
+  }
+
   return (
     <Container>
       <form>
