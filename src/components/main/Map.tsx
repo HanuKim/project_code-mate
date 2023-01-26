@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { MapProps } from "../..//shared/type";
+import styled from "styled-components";
 
 declare global {
   interface Window {
@@ -6,7 +8,11 @@ declare global {
   }
 }
 
-const Map = () => {
+const { kakao } = window;
+
+const Map = ({ state, setState }: any) => {
+  const [searchAddress, SetSearchAddress] = useState();
+
   //스크립트 파일 읽어오기
   const new_script = (src: string) => {
     return new Promise((resolve: any, reject) => {
@@ -23,40 +29,89 @@ const Map = () => {
   };
 
   useEffect(() => {
-    //카카오맵 스크립트 읽어오기
-    const my_script = new_script(
-      "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=	7bbd3551eff1e6523bd8cfcdda41f9bf"
-    );
-
-    //스크립트 읽기 완료 후 카카오맵 설정
-    my_script.then(() => {
-      console.log("script loaded!!!");
-      const kakao = window["kakao"];
-      kakao.maps.load(() => {
-        const mapContainer = document.getElementById("map");
-        const options = {
-          center: new kakao.maps.LatLng(37.56000302825312, 126.97540593203321), //좌표설정
-          level: 3,
-        };
-        const map = new kakao.maps.Map(mapContainer, options); //맵생성
-        //마커설정
-        const markerPosition = new kakao.maps.LatLng(
-          37.56000302825312,
-          126.97540593203321
-        );
-        const marker = new kakao.maps.Marker({
-          position: markerPosition,
-        });
-        marker.setMap(map);
+    kakao.maps.load(() => {
+      const mapContainer = document.getElementById("map") as HTMLElement;
+      const options = {
+        center: new kakao.maps.LatLng(state.center.lat, state.center.lng),
+        level: 3,
+      };
+      const map = new kakao.maps.Map(mapContainer, options);
+      //마커가 표시 될 위치
+      const markerPosition = new kakao.maps.LatLng(
+        state.center.lat,
+        state.center.lng
+      );
+      // 마커를 생성
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
       });
+
+      // 마커를 지도 위에 표시
+      marker.setMap(map);
     });
-  }, []);
+  }, [state.center.lat, state.center.lng]);
+  // 주소 입력후 검색 클릭 시 원하는 주소로 이동
+  const SearchMap = () => {
+    const ps = new kakao.maps.services.Places();
+    const placesSearchCB = function (data: any, status: any, pagination: any) {
+      if (status === kakao.maps.services.Status.OK) {
+        const newSearch = data[0];
+        setState({
+          center: { lat: newSearch.y, lng: newSearch.x },
+        });
+      }
+    };
+    ps.keywordSearch(searchAddress, placesSearchCB);
+  };
+  const handleSearchAddress = (e: any) => {
+    SetSearchAddress(e.target.value);
+  };
 
   return (
-    <div className="App">
-      <div id="map" className="map" />
-    </div>
+    <>
+      <div
+        id="map"
+        style={{
+          width: "100%",
+          height: "600px",
+          alignItems: "center",
+          justifyContent: "center",
+          marginLeft: "auto",
+        }}
+      />
+      <div>
+        <MapInput
+          placeholder="주소를 입력해주세요."
+          onChange={handleSearchAddress}
+        />
+        <MapSummitButton onClick={SearchMap}>확인</MapSummitButton>
+      </div>
+    </>
   );
 };
 
 export default Map;
+
+const MapInput = styled.input`
+  width: 80%;
+  height: 80px;
+  border-radius: 10px;
+  padding: 15px 20px;
+  resize: none;
+  margin: 10px 0;
+  outline-color: #262b7f;
+`;
+const MapSummitButton = styled.button`
+  float: right;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  width: 17%;
+  height: 80px;
+  border-radius: 10px;
+  margin: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: #262b7f;
+    color: #ffffff;
+  }
+`;

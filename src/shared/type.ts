@@ -8,8 +8,13 @@ export interface PostState {
   createdAt: string;
   title: string;
   userid: number;
+  coord: string;
+  profileImg: string;
 }
-
+export interface MapProps {
+  center?: { lat: number; lng: number };
+  isPanto?: boolean;
+}
 export interface Comment {
   id: string;
   commentText: string;
@@ -25,7 +30,6 @@ export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
-
 
 export interface BtnProps {
   btnWidth?: number;
