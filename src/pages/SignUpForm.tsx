@@ -2,6 +2,7 @@
 import styled from "styled-components";
 
 import React, { useState } from "react";
+
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {auth, dbService} from '../shared/firebase';
 import { getAuth } from 'firebase/auth';
@@ -18,8 +19,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 
-
-function SignUpForm ({
+function SignUpForm({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,10 +28,11 @@ function SignUpForm ({
   const [password, setPassword] = useState("");
   const [nickName, setNickName] = useState("");
   //todo 닉네임 상태 관리
-  const [] = useState("");
-  
+  const [nickname, setNickname] = useState("");
+
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
+
   const displayName = auth.currentUser?.displayName;
   console.log('displayName', displayName);
   const userInfo = {
@@ -62,7 +63,6 @@ function SignUpForm ({
       });
   };
 
-
   return (
     <Container>
       <form onSubmit={signUpForm}>
@@ -88,6 +88,7 @@ function SignUpForm ({
                 placeholder="NickName"
                 value={nickName}
                 onChange={(e)=> setNickName(e.target.value)}
+
               />
             </div>
             <div>
@@ -118,10 +119,9 @@ function SignUpForm ({
       </form>
     </Container>
   );
-};
+}
 
 export default SignUpForm;
-
 
 const Container = styled.div`
   margin-top: 40px;
