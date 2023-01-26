@@ -1,17 +1,14 @@
-
-import React, {useState, PropsWithChildren, useEffect} from 'react';
-import styled from 'styled-components';
-import LoginForm from '../pages/LoginForm';
-import SignUpForm from '../pages/SignUpForm';
-import {useNavigate} from 'react-router-dom';
-
-
+import React, { useState, PropsWithChildren, useEffect } from "react";
+import styled from "styled-components";
+import LoginForm from "../pages/LoginForm";
+import SignUpForm from "../pages/SignUpForm";
+import { useNavigate } from "react-router-dom";
 
 function Modal({
   setOpenModal,
   isOpenModal,
 }: {
-  isOpenModal:boolean;
+  isOpenModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [isNotLogin, setIsNotLogin] = useState(false);
@@ -24,8 +21,8 @@ function Modal({
       width: 100%;`;
     return () => {
       const scrollY = document.body.style.top;
-      document.body.style.cssText = '';
-      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      document.body.style.cssText = "";
+      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
     };
   }, []);
 
@@ -36,10 +33,7 @@ function Modal({
         {isNotLogin ? (
           <SignUpForm setIsNotLogin={setIsNotLogin} />
         ) : (
-          <LoginForm
-            setIsNotLogin={setIsNotLogin}
-            setOpenModal={setOpenModal}
-          />
+          <LoginForm setIsNotLogin={setIsNotLogin} setOpenModal={setOpenModal} />
         )}
       </Container>
       <ContainerBg
@@ -84,5 +78,3 @@ const Container = styled.div<ModalProps>`
   align-items: center;
   z-index: 2;
 `;
-
-

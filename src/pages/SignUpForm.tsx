@@ -1,11 +1,9 @@
 // import Modal from "../components/Modal";
 import styled from "styled-components";
-
 import React, { useState } from "react";
-
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {auth, dbService} from '../shared/firebase';
-import { getAuth } from 'firebase/auth';
+import { auth, dbService } from "../shared/firebase";
+import { getAuth } from "firebase/auth";
 import {
   collection,
   addDoc,
@@ -17,28 +15,26 @@ import {
   limit,
   QuerySnapshot,
   serverTimestamp,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
-function SignUpForm({
-  setIsNotLogin,
-}: {
-  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
+  const [modal, setModal] = useState(false);
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
   const displayName = auth.currentUser?.displayName;
-  console.log('displayName', displayName);
+  console.log("displayName", displayName);
   const userInfo = {
-    introduce: '',
-    location: '',
+    introduce: "",
+    location: "",
     nickname: nickname,
-    position: '',
-    stack: '',
+    position: "",
+    stack: "",
     userid: uid,
   };
 
@@ -49,8 +45,8 @@ function SignUpForm({
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        console.log('회원가입 성공 ! :', userCredential);
-        await addDoc(collection(dbService, 'user'), userInfo);
+        console.log("회원가입 성공 ! :", userCredential);
+        await addDoc(collection(dbService, "user"), userInfo);
         setIsNotLogin(false);
         updateProfile(authService.currentUser, {
           displayName: nickname,
@@ -65,6 +61,7 @@ function SignUpForm({
     <Container>
       <form onSubmit={signUpForm}>
         <div className="form-inner">
+          <CloseButton onClick={() => setModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
           <SignUpFormContainer>
@@ -83,10 +80,9 @@ function SignUpForm({
                 type="nickname"
                 name="nickname"
                 id="nickname"
-                placeholder="NickName"
+                placeholder="Nick name"
                 value={nickname}
-                onChange={(e)=> setNickname(e.target.value)}
-
+                onChange={(e) => setNickname(e.target.value)}
               />
             </div>
             <div>
@@ -94,7 +90,7 @@ function SignUpForm({
                 type="password"
                 name="password"
                 id="password"
-                placeholder="Password"
+                placeholder="Password Confirm"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -102,11 +98,11 @@ function SignUpForm({
             <div>
               <PwChekckInput
                 type="password"
-                name="password"
-                id="password"
+                name="passwordConfirm"
+                id="passwordConfirm"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
               />
             </div>
             <JoinBtn type="submit" onClick={() => {}}>
@@ -122,7 +118,24 @@ function SignUpForm({
 export default SignUpForm;
 
 const Container = styled.div`
-  margin-top: 40px;
+  margin-top: 18px;
+`;
+
+const CloseButton = styled.button`
+  width: 18px;
+  height: 18px;
+  margin-left: 310px;
+  margin-bottom: 20px;
+  border-radius: 100px;
+  border: none;
+  background-color: black;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    background-color: #262b7f;
+    box-shadow: 2px 4px 3px -3px black;
+    transition: 0.3s;
+  }
 `;
 
 const SignUpFormContainer = styled.div`
@@ -133,7 +146,6 @@ const SignUpFormContainer = styled.div`
 const TitleText = styled.h2`
   font-size: 20px;
   margin-left: 40px;
-  margin-top: 60px;
 `;
 
 const EmailInput = styled.input`
