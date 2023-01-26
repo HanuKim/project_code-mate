@@ -1,12 +1,13 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import styled from "styled-components";
-import basicImg from "../img/basicImg.png";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
-import { collection, addDoc } from "firebase/firestore";
-import { dbService } from "../shared/firebase";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
 import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import basicImg from "../../img/basicImg.png";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -14,27 +15,30 @@ const CreatePost = () => {
   const [content, setContent]: any = useState("");
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
-  const [category, setCategory] = useState([]);
-  const [editText, setEditText]: any = useState("");
+  const [category, setCategory] = useState(["all"]);
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
     center: { lat: 37.49676871972202, lng: 127.02474726969814 },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+  const displayName = authService.currentUser?.displayName;
+  const photoURL = authService.currentUser?.photoURL;
 
   //add
   const newPost = {
     title,
     content,
     category,
-    userId: "1",
-    nickName: "묨묘미",
+    userId: uid,
+    nickName: displayName,
     createdAt: Date.now(),
     isEdit: false,
+    profileImg: photoURL,
     coord: state.center,
   };
-
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
   };
@@ -47,12 +51,16 @@ const CreatePost = () => {
   ) => {
     e.preventDefault();
     // 내용
-    if (!title.trim() || title === null) {
+    if (!newPost.title || title === null) {
       setCorrectTitle(true);
       return;
     }
     if (!content.trim() || content === null) {
       setCorrectContent(true);
+      return;
+    }
+    if (newPost == null) {
+      console.log("빈값있음");
       return;
     } else {
       await addDoc(collection(dbService, "post"), newPost);
@@ -61,15 +69,15 @@ const CreatePost = () => {
       navigate(`/`);
     }
   };
-  console.log("newPost", newPost);
+
   return (
     <Container>
       <CommentForm onSubmit={handleSubmitButtonClick}>
         <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
-            <ProfilePhoto />
-            <ProfileNickName>닉네임</ProfileNickName>
+            <ProfilePhoto background={photoURL ?? "black"} />
+            <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
         <CreateCategory category={category} setCategory={setCategory} />
@@ -113,24 +121,20 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-const ProfilePhoto = styled.div`
-  background-image: url(${basicImg});
+const ProfilePhoto = styled.div<{ background: any }>`
+  background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`
-  font-size: 18px;
-  font-weight: 500;
-`;
-
-const Dates = styled.p`
-  color: #aaaaaa;
   font-size: 15px;
+  font-weight: 500;
 `;
 
 const Container = styled.div`

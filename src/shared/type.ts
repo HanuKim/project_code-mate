@@ -9,6 +9,7 @@ export interface PostState {
   title: string;
   userid: number;
   coord: string;
+  profileImg: string;
 }
 export interface MapProps {
   center?: { lat: number; lng: number };
@@ -29,7 +30,6 @@ export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
-
 
 export interface BtnProps {
   btnWidth?: number;

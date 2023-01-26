@@ -14,20 +14,19 @@ import {
   orderBy,
   query,
   where,
-} from 'firebase/firestore';
-import { auth, dbService, authService } from '../shared/firebase';
-import Profile from '../components/Profile';
-import { useParams } from 'react-router-dom';
-import MyPost from '../components/MyPost';
-import { identifier } from '@babel/types';
+} from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import Profile from "../components/Profile";
+import { useParams } from "react-router-dom";
+import MyPost from "../components/MyPost";
+import { identifier } from "@babel/types";
 
 export default function Mypage() {
   const [isEdit, setIsEdit] = useState(false);
-  const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  console.log(uid)
+  console.log(uid);
 
-  const [profileContents, setProfileContents] = useState<any>('[]');
+  const [profileContents, setProfileContents] = useState<any>("[]");
 
   // const [nickName, setNickname] = useState('');
   // const [stack, setStack] = useState('');
@@ -45,11 +44,11 @@ export default function Mypage() {
   const { id } = useParams();
 
   const q = query(
-    collection(dbService, 'user'),
-    orderBy('createdAt', 'desc'),
+    collection(dbService, "user"),
+    orderBy("createdAt", "desc"),
     where(
-      'userId',
-      '==',
+      "userId",
+      "==",
       !authService.currentUser || authService.currentUser?.uid
     )
   );
@@ -79,8 +78,8 @@ export default function Mypage() {
   // };
 
   const getProfile = () => {
-    onSnapshot(q, snapshot => {
-      const newContents = snapshot.docs.map(doc => {
+    onSnapshot(q, (snapshot) => {
+      const newContents = snapshot.docs.map((doc) => {
         const newContent = {
           id: doc.id,
           ...doc.data(),
@@ -94,7 +93,7 @@ export default function Mypage() {
   useEffect(() => {
     getProfile();
   }, []);
-  console.log('profileContents', profileContents);
+  console.log("profileContents", profileContents);
 
   return (
     <>

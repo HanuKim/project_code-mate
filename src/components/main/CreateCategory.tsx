@@ -1,16 +1,24 @@
 import { current } from "@reduxjs/toolkit";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
 export default function CreateCategory({ category, setCategory }: any) {
+  const [isClickfront, setIsClickfront] = useState(false);
+  const [isClickBack, setIsClickBack] = useState(false);
+  const [isClickDesign, setIsClickDesign] = useState(false);
+  const [isClickPul, setIsClickPul] = useState(false);
+  const [isClickPm, setIsClickPm] = useState(false);
+
   const setCat = useCallback(
     (e: any) => {
       const cat = e.target.value;
       console.log("checked = ", cat);
       const setCate = category.filter((current: string) => current !== cat);
       console.log("setCate = ", setCate);
-      if (e.target.value) {
-        setCate.push(cat, "all");
+      if (cat) {
+        setCate.push(cat);
+      } else {
+        return;
       }
       setCategory(setCate);
     },
@@ -23,40 +31,55 @@ export default function CreateCategory({ category, setCategory }: any) {
     <CategoryContainer>
       <CategoryBt
         value="front"
-        onClick={setCat}
+        onClick={(e) => {
+          setCat(e);
+          setIsClickfront(!isClickfront);
+        }}
         style={{
-          borderColor: category === "front" ? "#262b7f" : "#a8a8a8",
+          borderColor: isClickfront ? "#262b7f" : "#a8a8a8",
         }}
       >
         프론트엔드
       </CategoryBt>
       <CategoryBt
         value="back"
-        onClick={setCat}
-        style={{ borderColor: category === "back" ? "#262b7f" : "#a8a8a8" }}
+        onClick={(e) => {
+          setCat(e);
+          setIsClickBack(!isClickBack);
+        }}
+        style={{ borderColor: isClickBack ? "#262b7f" : "#a8a8a8" }}
       >
         백엔드
       </CategoryBt>
       <CategoryBt
         value="design"
-        onClick={setCat}
+        onClick={(e) => {
+          setCat(e);
+          setIsClickDesign(!isClickDesign);
+        }}
         style={{
-          borderColor: category === "design" ? "#262b7f" : "#a8a8a8",
+          borderColor: isClickDesign ? "#262b7f" : "#a8a8a8",
         }}
       >
         디자이너
       </CategoryBt>
       <CategoryBt
         value="publ"
-        onClick={setCat}
-        style={{ borderColor: category === "publ" ? "#262b7f" : "#a8a8a8" }}
+        onClick={(e) => {
+          setCat(e);
+          setIsClickPul(!isClickPul);
+        }}
+        style={{ borderColor: isClickPul ? "#262b7f" : "#a8a8a8" }}
       >
         퍼블리셔
       </CategoryBt>
       <CategoryBt
         value="pm"
-        onClick={setCat}
-        style={{ borderColor: category === "pm" ? "#262b7f" : "#a8a8a8" }}
+        onClick={(e) => {
+          setCat(e);
+          setIsClickPm(!isClickPm);
+        }}
+        style={{ borderColor: isClickPm ? "#262b7f" : "#a8a8a8" }}
       >
         PM
       </CategoryBt>
