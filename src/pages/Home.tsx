@@ -132,36 +132,3 @@ const WriteBt = styled.button`
     border: 1px solid #262b7f;
   }
 `;
-// const dbRef = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
-// const data = {
-//   introduce: "안녕하세요",
-//   location: "서울",
-//   nickname: "칼세이건",
-//   position: "프론트엔드",
-//   stack: "자바스크립트",
-//   userid: "",
-// }
-// // Add a new document with a generated id.
-// const addUser = async()=>{
-// await addDoc(collection(dbService, "users"), newUser);
-// }
-
-// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-// Firestore DB 연결 Code
-const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
-const data = {
-  introduce: "반갑습니다",
-  location: "서울",
-  nickname: "김숙",
-  position: "PM",
-  stack: "노션",
-  userid: "",
-};
-addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then((docRef) => {
-    console.log("Document has been added successfully");
-  })
-  .catch((error) => {
-    console.log(error);
-  });

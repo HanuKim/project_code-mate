@@ -3,8 +3,9 @@ import styled from "styled-components";
 
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../shared/firebase";
+import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 
 function SignUpForm({
   setIsNotLogin,
@@ -13,7 +14,6 @@ function SignUpForm({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //todo 닉네임 상태 관리
   const [nickname, setNickname] = useState("");
 
   const authService = getAuth();
@@ -164,3 +164,21 @@ const JoinBtn = styled.button`
     color: #262b7f;
   }
 `;
+
+// Firestore DB 연결 Code
+const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
+const data = {
+  introduce: "",
+  location: "",
+  nickname: "",
+  position: "",
+  stack: "",
+  userid: "",
+};
+addDoc(db, data) // (들어갈 db, 넣을 데이터)
+  .then((db) => {
+    console.log("Document has been added successfully");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
