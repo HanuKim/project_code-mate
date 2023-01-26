@@ -13,6 +13,7 @@ export default function Header() {
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
+
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
   };

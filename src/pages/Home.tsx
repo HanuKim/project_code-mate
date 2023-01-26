@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+
 import {
   collection,
   onSnapshot,
@@ -23,6 +25,7 @@ import PostList from "../components/main/PostList";
 import { useFirestoreQuery } from "@react-query-firebase/firestore";
 import { PostState } from "../shared/type";
 import { useNavigate } from "react-router-dom";
+
 
 export default function Home() {
   const [posts, setPosts] = useState<PostState[]>([]);

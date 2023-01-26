@@ -1,8 +1,9 @@
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { storage, auth } from "../shared/firebase";
-import styled from "styled-components";
+
+import { onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { storage, auth } from '../shared/firebase';
+import styled from 'styled-components';
 
 export default function Profile() {
   const currentUser = useAuth();
@@ -60,7 +61,6 @@ export default function Profile() {
       <button disabled={loading || !photo} onClick={handleClick}>
         Upload
       </button>
-      <button>수정</button>
     </div>
   );
 }
