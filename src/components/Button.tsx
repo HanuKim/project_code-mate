@@ -1,12 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-interface BtnProps {
-  btnWidth?: number;
-  btnHeight?: number;
-  delete?: string;
-  edit?: string;
-}
+import { BtnProps } from "../shared/type";
 
 // 버튼 크기를 props로 내려서 경우에 따라 다르게 적용하고싶은데 어떻게 해야??
 // interface 생성해서.
