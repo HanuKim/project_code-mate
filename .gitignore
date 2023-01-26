@@ -1,4 +1,6 @@
+
 node_modules
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -7,7 +9,11 @@ node_modules
 .pnp.js
 .history
 src/shared/config.ts
+
+.env
 .gitmessage.txt
+
+
 
 # testing
 /coverage
@@ -24,4 +30,4 @@ src/shared/config.ts
 
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
+yarn-error.log*.DS_Store

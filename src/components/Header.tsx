@@ -1,15 +1,46 @@
-import React from "react";
-import { useNavigate } from 'react-router-dom';
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
+import {getAuth} from 'firebase/auth';
+import React, {useState, useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
+import Modal from './Modal';
 
+// interface Props {
+//   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
+// }
 export default function Header() {
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
+
+  const onClickToggleModal = () => {
+    setOpenModal(!isOpenModal);
+  }
+
   const navigate = useNavigate();
+
+
   return (
     <>
       <HeaderContainer>
-        <LogoBox onClick={()=>{navigate('/')}}/>
-        <LoginBtn>로그인/회원가입</LoginBtn>
+        <LogoBox
+          onClick={() => {
+            navigate('/');
+          }}
+        />
+        {isOpenModal ? (
+          <Modal setOpenModal={setOpenModal} isOpenModal={isOpenModal}/>
+        ):null}
+        <LoginBtn onClick={onClickToggleModal}>로그인/회원가입</LoginBtn>
+        {authService.currentUser ? (
+          <LoginBtn
+            onClick={() => {
+              navigate(`/Mypage/${uid}`);
+            }}
+          >
+            마이페이지
+          </LoginBtn>
+        ) : null}
       </HeaderContainer>
     </>
   );
@@ -18,10 +49,13 @@ export default function Header() {
 const HeaderContainer = styled.header`
   width: 100%;
   height: 120px;
+
+  margin-bottom: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
+  box-shadow: 1px -1px 3px #333;
 `;
 
 const LogoBox = styled.div`
@@ -50,6 +84,5 @@ const LoginBtn = styled.button`
     background-color: #262b7f;
     color: #fff;
     border: 1px solid #262b7f;
-    box-shadow: 1px 1px 1px #aaa;
   }
 `;

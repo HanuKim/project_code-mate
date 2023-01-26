@@ -28,7 +28,13 @@ import {useDispatch} from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
 
-export default function CommentItem({comment}: {comment: Comment}) {
+export default function CommentItem({
+  comment,
+  ref,
+}: {
+  comment: Comment;
+  ref: (node?: Element) => void;
+}) {
   const [editText, setEditText] = useState('');
   const [editComments, setEditComments] = useState<Comment>({
     id: comment.id,
@@ -79,10 +85,9 @@ export default function CommentItem({comment}: {comment: Comment}) {
     }
   };
 
-  // editComments state가 변경될 때 마다 get해오도록 설정
+  // 리렌더링 일어날 때마다 최초 1번만 getCommet() 실행
   useEffect(() => {
     getComment();
-    console.log('editComments', editComments);
   }, []);
 
   return (
@@ -103,7 +108,7 @@ export default function CommentItem({comment}: {comment: Comment}) {
           setEditText={setEditText}
         />
       ) : null}
-      <CommentContentContainer>
+      <CommentContentContainer ref={ref}>
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
@@ -156,7 +161,7 @@ export default function CommentItem({comment}: {comment: Comment}) {
   );
 }
 const CommentContentContainer = styled.div`
-  width: 70%;
+  width: 100%;
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px 20px 45px 20px;
@@ -221,8 +226,6 @@ const CommentRightButton = styled.button`
   width: 50px;
   height: 30px;
   border-radius: 20px;
-  /* left:-55px;
-  top: -26px; */
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

@@ -10,11 +10,11 @@ import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [TitleText, setTitleText]: any = useState("");
-  const [ContentText, setContentText]: any = useState("");
+  const [title, setTitle]: any = useState("");
+  const [content, setContent]: any = useState("");
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
-  const [Postcategory, setPostCategory] = useState([]);
+  const [category, setCategory] = useState([]);
   const [editText, setEditText]: any = useState("");
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
@@ -25,9 +25,9 @@ const CreatePost = () => {
 
   //add
   const newPost = {
-    TitleText,
-    ContentText,
-    Postcategory,
+    title,
+    content,
+    category,
     userId: "1",
     nickName: "묨묘미",
     createdAt: Date.now(),
@@ -36,10 +36,10 @@ const CreatePost = () => {
   };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTitleText(e.target.value);
+    setTitle(e.target.value);
   };
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContentText(e.target.value);
+    setContent(e.target.value);
   };
 
   const handleSubmitButtonClick = async (
@@ -47,17 +47,17 @@ const CreatePost = () => {
   ) => {
     e.preventDefault();
     // 내용
-    if (!TitleText.trim() || TitleText === null) {
+    if (!title.trim() || title === null) {
       setCorrectTitle(true);
       return;
     }
-    if (!ContentText.trim() || ContentText === null) {
+    if (!content.trim() || content === null) {
       setCorrectContent(true);
       return;
     } else {
       await addDoc(collection(dbService, "post"), newPost);
-      setTitleText("");
-      setContentText("");
+      setTitle("");
+      setContent("");
       navigate(`/`);
     }
   };
@@ -72,15 +72,12 @@ const CreatePost = () => {
             <ProfileNickName>닉네임</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
-        <CreateCategory
-          Postcategory={Postcategory}
-          setPostCategory={setPostCategory}
-        />
+        <CreateCategory category={category} setCategory={setCategory} />
         <CommentLabel>
           <Postitle
             placeholder="제목을 입력 해주세요."
             onChange={handleChangeTitle}
-            value={TitleText}
+            value={title}
             cols={10}
             wrap="hard"
           />
@@ -90,7 +87,7 @@ const CreatePost = () => {
           <PostText
             placeholder="내용을 입력 해주세요."
             onChange={handleChangeContent}
-            value={ContentText}
+            value={content}
             cols={30}
             wrap="hard"
           />

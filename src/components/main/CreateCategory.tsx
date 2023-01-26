@@ -2,22 +2,22 @@ import { current } from "@reduxjs/toolkit";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
-export default function CreateCategory({ Postcategory, setPostCategory }: any) {
+export default function CreateCategory({ category, setCategory }: any) {
   const setCat = useCallback(
     (e: any) => {
       const cat = e.target.value;
       console.log("checked = ", cat);
-      const setCate = Postcategory.filter((current: string) => current !== cat);
+      const setCate = category.filter((current: string) => current !== cat);
       console.log("setCate = ", setCate);
       if (e.target.value) {
-        setCate.push(cat);
+        setCate.push(cat, "all");
       }
-      setPostCategory(setCate);
+      setCategory(setCate);
     },
-    [Postcategory]
+    [category]
   );
 
-  console.log("Postcategory = ", Postcategory);
+  console.log("Postcategory = ", category);
 
   return (
     <CategoryContainer>
@@ -25,7 +25,7 @@ export default function CreateCategory({ Postcategory, setPostCategory }: any) {
         value="front"
         onClick={setCat}
         style={{
-          borderColor: Postcategory === "front" ? "#262b7f" : "#a8a8a8",
+          borderColor: category === "front" ? "#262b7f" : "#a8a8a8",
         }}
       >
         프론트엔드
@@ -33,7 +33,7 @@ export default function CreateCategory({ Postcategory, setPostCategory }: any) {
       <CategoryBt
         value="back"
         onClick={setCat}
-        style={{ borderColor: Postcategory === "back" ? "#262b7f" : "#a8a8a8" }}
+        style={{ borderColor: category === "back" ? "#262b7f" : "#a8a8a8" }}
       >
         백엔드
       </CategoryBt>
@@ -41,7 +41,7 @@ export default function CreateCategory({ Postcategory, setPostCategory }: any) {
         value="design"
         onClick={setCat}
         style={{
-          borderColor: Postcategory === "design" ? "#262b7f" : "#a8a8a8",
+          borderColor: category === "design" ? "#262b7f" : "#a8a8a8",
         }}
       >
         디자이너
@@ -49,14 +49,14 @@ export default function CreateCategory({ Postcategory, setPostCategory }: any) {
       <CategoryBt
         value="publ"
         onClick={setCat}
-        style={{ borderColor: Postcategory === "publ" ? "#262b7f" : "#a8a8a8" }}
+        style={{ borderColor: category === "publ" ? "#262b7f" : "#a8a8a8" }}
       >
         퍼블리셔
       </CategoryBt>
       <CategoryBt
         value="pm"
         onClick={setCat}
-        style={{ borderColor: Postcategory === "pm" ? "#262b7f" : "#a8a8a8" }}
+        style={{ borderColor: category === "pm" ? "#262b7f" : "#a8a8a8" }}
       >
         PM
       </CategoryBt>

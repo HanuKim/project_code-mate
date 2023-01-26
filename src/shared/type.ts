@@ -28,3 +28,10 @@ export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
+
+export interface BtnProps {
+  btnWidth?: number;
+  btnHeight?: number;
+  delete?: string;
+  edit?: string;
+}
