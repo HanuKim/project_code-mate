@@ -16,6 +16,7 @@ import {
   limit,
   QuerySnapshot,
   where,
+
 } from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
 import {Comment} from '../../shared/type';
@@ -32,6 +33,7 @@ import {getAuth} from 'firebase/auth';
 
 export default function CommentItem({comment}) {
   const [editText, setEditText] = useState('');
+
   const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
