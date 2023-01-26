@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import basicImg from '../../img/basicImg.png';
-import { PostState } from '../../shared/type';
+import {PostState} from '../../shared/type';
 
-export default function Post({ post }: { post: PostState }) {
+export default function Post({post}: {post: PostState}) {
   const navigate = useNavigate();
   return (
     <Posts
@@ -15,7 +15,7 @@ export default function Post({ post }: { post: PostState }) {
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
-          <ProfilePhoto />
+          <ProfilePhoto background={post.profileImg ?? basicImg} />
           <ProfileNickName>{post.nickname}</ProfileNickName>
         </ProfileContainer>
         <Date>{post.createdAt}</Date>
@@ -80,14 +80,15 @@ const ProfileContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const ProfilePhoto = styled.div`
-  background-image: url(${basicImg});
+const ProfilePhoto = styled.div<{background:any}>`
+  background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`

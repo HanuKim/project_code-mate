@@ -26,8 +26,6 @@ import { getAuth } from '@firebase/auth';
 export default function Mypage() {
   const [isEdit, setIsEdit] = useState(false);
 
-const uid = authService.currentUser?.uid;
-  console.log(uid);
   const [profileContents, setProfileContents] = useState<any>("[]");
 
   // const authService = getAuth();
