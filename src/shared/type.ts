@@ -1,15 +1,19 @@
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 
 export interface PostState {
-    id: string;
-    nickname: string;
-    category: string[];
-    content: string;
-    createdAt: string;
-    title: string;
-    userid: number;
+  id: string;
+  nickname: string;
+  category: string[];
+  content: string;
+  createdAt: string;
+  title: string;
+  userid: number;
+  coord: string;
 }
-  
+export interface MapProps {
+  center?: { lat: number; lng: number };
+  isPanto?: boolean;
+}
 export interface Comment {
   id: string;
   commentText: string;
