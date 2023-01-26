@@ -18,16 +18,18 @@ export interface Comment {
   id: string;
   commentText: string;
   postId: string;
-  userId: string;
+  userId: any;
   nickName: string;
   createdAt: string;
   isEdit: boolean;
+  profileImg: string;
 }
 
 export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
+
 
 export interface BtnProps {
   btnWidth?: number;

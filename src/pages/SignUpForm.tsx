@@ -2,9 +2,22 @@
 import styled from "styled-components";
 
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../shared/firebase";
-import { getAuth } from "firebase/auth";
+
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {auth, dbService} from '../shared/firebase';
+import { getAuth } from 'firebase/auth';
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+  limit,
+  QuerySnapshot,
+  serverTimestamp,
+} from 'firebase/firestore';
 
 function SignUpForm({
   setIsNotLogin,
@@ -13,18 +26,21 @@ function SignUpForm({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nickName, setNickName] = useState("");
   //todo 닉네임 상태 관리
   const [nickname, setNickname] = useState("");
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
-  const 변수 = {
-    introduce: "",
-    location: "",
-    nickname: "",
-    position: "",
-    stack: "",
+  const displayName = auth.currentUser?.displayName;
+  console.log('displayName', displayName);
+  const userInfo = {
+    introduce: '',
+    location: '',
+    nickname: nickName,
+    position: '',
+    stack: '',
     userid: uid,
   };
 
@@ -34,8 +50,13 @@ function SignUpForm({
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("회원가입 성공 ! :", userCredential);
+      .then(async (userCredential) => {
+        console.log('회원가입 성공 ! :', userCredential);
+        await addDoc(collection(dbService, 'user'), userInfo);
+        setIsNotLogin(false);
+        updateProfile(authService.currentUser, {
+          displayName: nickName,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -65,8 +86,9 @@ function SignUpForm({
                 name="nickname"
                 id="nickname"
                 placeholder="NickName"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                value={nickName}
+                onChange={(e)=> setNickName(e.target.value)}
+
               />
             </div>
             <div>

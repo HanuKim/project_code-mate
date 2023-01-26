@@ -29,6 +29,7 @@ function LoginForm ({
       .then((userCredential) => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
+        console.log(uid)
       })
       .catch((error) => {
         // console.log(error);

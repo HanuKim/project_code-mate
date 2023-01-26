@@ -92,7 +92,7 @@ export default function CommentList() {
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
         {comments.map((comment) => {
-          return <CommentItem comment={comment} ref={ref} />;
+          return <CommentItem comment={comment} />;
           {
             /* 댓글1개 */
           }
