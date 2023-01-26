@@ -12,20 +12,18 @@ export default function CreateCategory({ category, setCategory }: any) {
   const setCat = useCallback(
     (e: any) => {
       const cat = e.target.value;
-      console.log("checked = ", cat);
       const setCate = category.filter((current: string) => current !== cat);
-      console.log("setCate = ", setCate);
+      console.log("current", current !== cat);
       if (cat) {
         setCate.push(cat);
       } else {
         return;
       }
       setCategory(setCate);
+      console.log("setCate = ", setCate);
     },
     [category]
   );
-
-  console.log("Postcategory = ", category);
 
   return (
     <CategoryContainer>
