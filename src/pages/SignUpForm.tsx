@@ -1,9 +1,21 @@
 // import Modal from "../components/Modal";
 import styled from "styled-components";
-import React, { useState, useReducer, useCallback, useEffect } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../shared/firebase";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  DocumentData,
+  Timestamp,
+  limit,
+  QuerySnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 
 function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [email, setEmail] = useState("");
@@ -15,10 +27,12 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
-  const 변수 = {
+  const displayName = auth.currentUser?.displayName;
+  console.log("displayName", displayName);
+  const userInfo = {
     introduce: "",
     location: "",
-    nickname: "",
+    nickname: nickname,
     position: "",
     stack: "",
     userid: uid,
@@ -30,8 +44,13 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         console.log("회원가입 성공 ! :", userCredential);
+        await addDoc(collection(dbService, "user"), userInfo);
+        setIsNotLogin(false);
+        updateProfile(authService.currentUser, {
+          displayName: nickname,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -177,3 +196,21 @@ const JoinBtn = styled.button`
     color: #262b7f;
   }
 `;
+
+// Firestore DB 연결 Code
+const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
+const data = {
+  introduce: "",
+  location: "",
+  nickname: "",
+  position: "",
+  stack: "",
+  userid: "",
+};
+addDoc(db, data) // (들어갈 db, 넣을 데이터)
+  .then((db) => {
+    console.log("Document has been added successfully");
+  })
+  .catch((error) => {
+    console.log(error);
+  });

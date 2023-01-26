@@ -28,11 +28,12 @@ import { useDispatch } from "react-redux";
 import DeleteModal from "../modal/DeleteModal";
 import EditModal from "../modal/EditModal";
 import UserProfileModal from "../../pages/UserProfile";
+import { getAuth } from "firebase/auth";
 
-export default function CommentItem({ comment, ref }: { comment: Comment; ref: (node?: Element) => void }) {
-  const [isOpenProfileModal, setOpenProfileModal] = useState<boolean>(false);
+export default function CommentItem({ comment }) {
   const [editText, setEditText] = useState("");
-  const [editComments, setEditComments] = useState<Comment>({
+  const [isOpenProfileModal, setOpenProfileModal] = useState < boolean > false;
+  const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
     postId: comment.postId,
@@ -40,8 +41,10 @@ export default function CommentItem({ comment, ref }: { comment: Comment; ref: (
     nickName: comment.nickName,
     createdAt: comment.createdAt,
     isEdit: comment.isEdit,
+    profileImg: comment.profileImg,
   });
-
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
 
   // 모달
@@ -55,16 +58,17 @@ export default function CommentItem({ comment, ref }: { comment: Comment; ref: (
   };
 
   //isEdit true로 바꾸기
-  const onClickIsEditSwitch = (commentid: string) => {
+
+  const onClickIsEditSwitch = (commentid) => {
     setEditComments({ ...editComments, isEdit: true });
   };
 
-  const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const editTextOnChange = (e) => {
     setEditText(e.target.value);
   };
 
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = (commentid: string) => {
+  const cancleEditButton = (commentid) => {
     console.log(commentid);
     setEditComments({ ...editComments, isEdit: false });
   };
@@ -103,14 +107,14 @@ export default function CommentItem({ comment, ref }: { comment: Comment; ref: (
           setEditText={setEditText}
         />
       ) : null}
-      <CommentContentContainer ref={ref}>
+      <CommentContentContainer>
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
             {isOpenProfileModal ? (
               <UserProfileModal setOpenProfileModal={setOpenProfileModal} isOpenProfileModal={isOpenProfileModal} />
             ) : null}
-            <ProfilePhoto onClick={onClickToggleModal} />
+            <ProfilePhoto background={comment.profileImg ?? basicImg} onClick={onClickToggleModal} />
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
@@ -124,7 +128,8 @@ export default function CommentItem({ comment, ref }: { comment: Comment; ref: (
                     취소
                   </CommentButton>
                 </>
-              ) : (
+              ) : uid === comment.userId ? (
+                // 로그인한 uid와 댓글의 uid가 같아야지만 수정,삭제버튼 보이게
                 <>
                   <CommentButton
                     onClick={() => {
@@ -135,7 +140,7 @@ export default function CommentItem({ comment, ref }: { comment: Comment; ref: (
                   </CommentButton>
                   <CommentButton onClick={openDeleteModalClick}>삭제</CommentButton>
                 </>
-              )}
+              ) : null}
             </ButtonContainer>
           </ProfileContainer>
           <Date>{comment.createdAt}</Date>
@@ -173,13 +178,14 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.button`
-  background-image: url(${basicImg});
+  background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`
