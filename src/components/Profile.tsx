@@ -1,7 +1,7 @@
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useAuth, upload, storage, auth } from '../shared/firebase';
+import { storage, auth } from '../shared/firebase';
 import styled from 'styled-components';
 
 export default function Profile() {
@@ -60,7 +60,6 @@ export default function Profile() {
       <button disabled={loading || !photo} onClick={handleClick}>
         Upload
       </button>
-      <button>수정</button>
     </div>
   );
 }

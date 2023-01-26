@@ -6,32 +6,94 @@ import MypageModal from '../components/MypageModal';
 // import { ShowImage } from '../components/ShowImage';
 import UploadImage from '../components/UploadImage';
 import {
+  doc,
+  getDoc,
   addDoc,
   collection,
   onSnapshot,
   orderBy,
   query,
+  where,
 } from 'firebase/firestore';
-import { dbService } from '../shared/firebase';
+import { auth, dbService, authService } from '../shared/firebase';
 import MypageCreate from '../components/MypageCreate';
-import { auth } from '../shared/firebase';
 import Profile from '../components/Profile';
 import { useParams } from 'react-router-dom';
-
-// type ShowImage = {
-//   id: string;
-//   imageUrl: string;
-//   serverTime: string;
-//   nickName: string;
-//   contents: string;
-// };
-// interface Introduce {
-//   introduce: string;
-//   userId: string;
-//   createdAt: any;
-// }
+import MyPost from '../components/MyPost';
+import { identifier } from '@babel/types';
 
 export default function Mypage() {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [profileContents, setProfileContents] = useState<any>('[]');
+
+  // const [nickName, setNickname] = useState('');
+  // const [stack, setStack] = useState('');
+  // const [location, setLocation] = useState('');
+  // const [introduce, setIntroduce] = useState('');
+
+  // const [editProfile, setEditProfile] = useState<any>({
+  //   nickName,
+  //   stack,
+  //   location,
+  //   introduce,
+  //   isEdit: false,
+  // });
+
+  const { id } = useParams();
+
+  const q = query(
+    collection(dbService, 'user'),
+    orderBy('createdAt', 'desc'),
+    where(
+      'userId',
+      '==',
+      !authService.currentUser || authService.currentUser?.uid
+    )
+  );
+
+  // const newEditTexts: any = {
+  //   nickName,
+  //   stack,
+  //   location,
+  //   introduce,
+  //   isEdit: false,
+  // };
+
+  // const isEditChange = () => {
+  //   setEditProfile({ ...editProfile, isEdit: true });
+  // };
+
+  // const editNicknameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNickname(e.target.value);
+  // };
+
+  // const editStackHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setStack(e.target.value);
+  // };
+
+  // const editLocationHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLocation(e.target.value);
+  // };
+
+  const getProfile = () => {
+    onSnapshot(q, snapshot => {
+      const newContents = snapshot.docs.map(doc => {
+        const newContent = {
+          id: doc.id,
+          ...doc.data(),
+        } as any;
+        return newContent;
+      });
+      setProfileContents(newContents);
+    });
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+  console.log('profileContents', profileContents);
+
   return (
     <>
       <Container>
@@ -44,7 +106,55 @@ export default function Mypage() {
                     <Profile />
                   </ProfileWrap>
                 </TopProfilePhoto>
-                <ProfileContents>ProfileContents</ProfileContents>
+                <ProfileContents>
+                  {profileContents.nickname}
+                  {isEdit ? (
+                    <>
+                      <ProfileContentsForm>
+                        <ProfileContentsBox>
+                          <label>
+                            NickName:
+                            <input />
+                          </label>
+                          <LabelNickName>
+                            Stack:
+                            <input />
+                          </LabelNickName>
+                          <label>
+                            Location:
+                            <input />
+                          </label>
+                        </ProfileContentsBox>
+
+                        <ProfileContentsBtnBox>
+                          <button
+                            onClick={() => {
+                              setIsEdit(false);
+                            }}
+                          >
+                            저장
+                          </button>
+                        </ProfileContentsBtnBox>
+                      </ProfileContentsForm>
+                    </>
+                  ) : (
+                    <>
+                      <p>Nickname:</p>
+                      <p>Stack:</p>
+                      <p>Location:</p>
+                      <ProfileContentsBtnBox>
+                        <button
+                          onClick={() => {
+                            setIsEdit(true);
+                          }}
+                        >
+                          편집
+                        </button>
+                      </ProfileContentsBtnBox>
+                    </>
+                  )}
+                </ProfileContents>
+
                 <TopProfileNickName></TopProfileNickName>
               </TopProfileContainer>
               <UploadWrap></UploadWrap>
@@ -66,7 +176,8 @@ export default function Mypage() {
 
           <BottomContainer>
             <MyPostTitle>내가쓴글</MyPostTitle>
-            <Posts>
+            <MyPost />
+            {/* <Posts>
               <PostsTopWrap>
                 <ProfileContainer>
                   <ProfilePhoto />
@@ -81,57 +192,7 @@ export default function Mypage() {
                 <CategoryBtn>FrontEnd</CategoryBtn>
                 <CategoryBtn>Publisher</CategoryBtn>
               </CategoryContainer>
-            </Posts>
-            {/* --test posts --- */}
-            <Posts>
-              <PostsTopWrap>
-                <ProfileContainer>
-                  <ProfilePhoto />
-                  <ProfileNickName>Lee</ProfileNickName>
-                </ProfileContainer>
-                <Datee>0000-00-00</Datee>
-              </PostsTopWrap>
-              <TitleText>제목</TitleText>
-              <ContentText>내용</ContentText>
-              <CategoryContainer>
-                <CategoryBtn>BackEnd</CategoryBtn>
-                <CategoryBtn>FrontEnd</CategoryBtn>
-                <CategoryBtn>Publisher</CategoryBtn>
-              </CategoryContainer>
-            </Posts>
-            <Posts>
-              <PostsTopWrap>
-                <ProfileContainer>
-                  <ProfilePhoto />
-                  <ProfileNickName>Lee</ProfileNickName>
-                </ProfileContainer>
-                <Datee>0000-00-00</Datee>
-              </PostsTopWrap>
-              <TitleText>제목</TitleText>
-              <ContentText>내용</ContentText>
-              <CategoryContainer>
-                <CategoryBtn>BackEnd</CategoryBtn>
-                <CategoryBtn>FrontEnd</CategoryBtn>
-                <CategoryBtn>Publisher</CategoryBtn>
-              </CategoryContainer>
-            </Posts>
-            <Posts>
-              <PostsTopWrap>
-                <ProfileContainer>
-                  <ProfilePhoto />
-                  <ProfileNickName>Lee</ProfileNickName>
-                </ProfileContainer>
-                <Datee>0000-00-00</Datee>
-              </PostsTopWrap>
-              <TitleText>제목</TitleText>
-              <ContentText>내용</ContentText>
-              <CategoryContainer>
-                <CategoryBtn>BackEnd</CategoryBtn>
-                <CategoryBtn>FrontEnd</CategoryBtn>
-                <CategoryBtn>Publisher</CategoryBtn>
-              </CategoryContainer>
-            </Posts>
-            {/* --- test ---- */}
+            </Posts> */}
           </BottomContainer>
         </MypageBox>
       </Container>
@@ -141,7 +202,7 @@ export default function Mypage() {
 
 const Container = styled.div`
   height: 100%;
-  background-color: lightgray;
+  background-color: fffff;
   display: flex;
   justify-content: center;
 `;
@@ -256,7 +317,7 @@ const ProfileContainer = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
-  margin-top: -18px;
+  margin-top: -25px;
 `;
 
 const ProfilePhoto = styled.div`
@@ -281,7 +342,7 @@ const Datee = styled.p`
 `;
 
 const TitleText = styled.h1`
-  margin: 20px 0 20px 40px;
+  margin: 0 0 20px 40px;
   font-size: 25px;
   font-weight: 600;
 `;
@@ -289,12 +350,13 @@ const TitleText = styled.h1`
 const ContentText = styled.p`
   font-size: 16px;
   margin-left: 43px;
+  margin-top: -5px;
 `;
 
 const CategoryContainer = styled.div`
   display: flex;
   gap: 15px;
-  margin: 50px 0 0 40px;
+  margin: 30px 0 0 40px;
 `;
 
 const CategoryBtn = styled.button`
@@ -331,45 +393,8 @@ const TopProfileNickName = styled.p`
   font-weight: 500;
 `;
 
-const DialogButton = styled.div`
-  width: 120px;
-  height: 36px;
-  background-color: #262b7f;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 400;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    /* transform: translateY(-1px); */
-  }
-`;
-
 const ProfileWrap = styled.div`
   /* background-color: red; */
-`;
-
-const ProfileBox = styled.div`
-  /* background-color: blue; */
-  display: flex;
-  width: 300px;
-`;
-
-const Test = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Test1 = styled.div`
-  /* background-color: gray; */
-`;
-
-const Test2 = styled.div`
-  /* background-color: pink; */
 `;
 
 const ProfileContents = styled.div`
@@ -381,4 +406,27 @@ const ProfileContents = styled.div`
   border: 1px solid black;
   border-radius: 20px;
   padding: 30px;
+`;
+
+const ProfileContentsForm = styled.form`
+  /* background-color: red; */
+`;
+
+const ProfileContentsBox = styled.div`
+  /* background-color: blue; */
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  width: 400px;
+  align-items: flex-end;
+`;
+
+const ProfileContentsBtnBox = styled.div`
+  /* background-color: gray; */
+  position: absolute;
+  right: 70px;
+`;
+
+const LabelNickName = styled.label`
+  /* background-color: pink; */
 `;

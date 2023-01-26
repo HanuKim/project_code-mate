@@ -15,8 +15,9 @@ import {
   Timestamp,
   limit,
   QuerySnapshot,
+  where,
 } from 'firebase/firestore';
-import { dbService } from '../shared/firebase';
+import { dbService, authService } from '../shared/firebase';
 import MainCategory from '../components/main/MainCategory';
 import PostList from '../components/main/PostList';
 import { useFirestoreQuery } from '@react-query-firebase/firestore';
@@ -28,8 +29,15 @@ export default function Home() {
   const [category, setCategory] = useState('');
   const navigate = useNavigate();
 
-  // post 데이터에서 createAt을 내림차순으로 정렬
-  const q = query(collection(dbService, 'post'), orderBy('createdAt', 'desc'));
+  const q = query(
+    collection(dbService, 'post'),
+    orderBy('createdAt', 'desc'),
+    where(
+      'userId',
+      '==',
+      !authService.currentUser || authService.currentUser?.uid
+    )
+  );
 
   const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
@@ -59,11 +67,10 @@ export default function Home() {
         console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
-          ...doc.data(), // <- poststate
-          createdAt: getTimegap(doc.data().createdAt), // timestamp로 저장된 데이터 가공
+          ...doc.data(),
+          createdAt: getTimegap(doc.data().createdAt),
         } as PostState;
-        // poststate로 들어올걸 확신해서 as를 사용함
-        // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
+
         console.log('newpost', newPost);
         return newPost;
       });
@@ -71,8 +78,6 @@ export default function Home() {
       console.log('posts2', newPosts);
     });
   };
-
-  // 현재 누른 카테고리를 category 컬렉션에 업데이트
 
   useEffect(() => {
     getPost();
@@ -84,29 +89,15 @@ export default function Home() {
         doc(dbService, 'category', 'currentCategory')
       );
       console.log(snapshot.data());
-      setCategory(snapshot.data().category); // 스냅샷.data() 오류났었는데 tsconfig.json에 "strictNullChecks": false, 추가해줬더니 오류안남. 이렇게 해도 괜찮은건지 확인필요
+      setCategory(snapshot.data().category);
     };
     getCategory();
   }, []);
 
   return (
     <Container>
-      {/* 카테고리 */}
-      {/* Slice로 어떻게 넣지..? */}
       <MainCategory category={category} setCategory={setCategory} />
 
-      {/* 글쓰기 버튼 */}
-      <WriteContainer>
-        <WriteBt
-          onClick={() => {
-            navigate('/createpost');
-          }}
-        >
-          <HiOutlinePencilSquare size={30} />
-        </WriteBt>
-      </WriteContainer>
-
-      {/* 포스트 */}
       <PostList posts={posts} category={category} />
     </Container>
   );
