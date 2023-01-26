@@ -32,7 +32,7 @@ import { getAuth } from "firebase/auth";
 
 export default function CommentItem({ comment }) {
   const [editText, setEditText] = useState("");
-  const [isOpenProfileModal, setOpenProfileModal] = useState < boolean > false;
+  const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
@@ -96,7 +96,12 @@ export default function CommentItem({ comment }) {
 
   return (
     <>
-      {viewDeleteModal ? <DeleteModal setDeleteViewModal={setDeleteViewModal} comment={comment} /> : null}
+      {viewDeleteModal ? (
+        <DeleteModal
+          setDeleteViewModal={setDeleteViewModal}
+          comment={comment}
+        />
+      ) : null}
       {viewEditModal ? (
         <EditModal
           setEditViewModal={setEditViewModal}
@@ -112,14 +117,22 @@ export default function CommentItem({ comment }) {
         <CommentTopContainer>
           <ProfileContainer>
             {isOpenProfileModal ? (
-              <UserProfileModal setOpenProfileModal={setOpenProfileModal} isOpenProfileModal={isOpenProfileModal} />
+              <UserProfileModal
+                setOpenProfileModal={setOpenProfileModal}
+                isOpenProfileModal={isOpenProfileModal}
+              />
             ) : null}
-            <ProfilePhoto background={comment.profileImg ?? basicImg} onClick={onClickToggleModal} />
+            <ProfilePhoto
+              background={comment.profileImg ?? basicImg}
+              onClick={onClickToggleModal}
+            />
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
                 <>
-                  <CommentButton onClick={openEditModalClick}>등록</CommentButton>
+                  <CommentButton onClick={openEditModalClick}>
+                    등록
+                  </CommentButton>
                   <CommentButton
                     onClick={() => {
                       cancleEditButton(comment.id);
@@ -138,7 +151,9 @@ export default function CommentItem({ comment }) {
                   >
                     수정
                   </CommentButton>
-                  <CommentButton onClick={openDeleteModalClick}>삭제</CommentButton>
+                  <CommentButton onClick={openDeleteModalClick}>
+                    삭제
+                  </CommentButton>
                 </>
               ) : null}
             </ButtonContainer>
@@ -148,7 +163,10 @@ export default function CommentItem({ comment }) {
         </CommentTopContainer>
         {/* 수정버튼 누르면 인풋 생기게 */}
         {editComments.isEdit ? (
-          <CommentEditInput defaultValue={comment.commentText} onChange={editTextOnChange} />
+          <CommentEditInput
+            defaultValue={comment.commentText}
+            onChange={editTextOnChange}
+          />
         ) : (
           <ContentText>{comment.commentText}</ContentText>
         )}
