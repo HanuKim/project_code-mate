@@ -1,3 +1,4 @@
+
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -9,14 +10,14 @@ export default function Profile() {
   const [photo, setPhoto] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState(
-    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
   );
 
   function useAuth() {
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
+      const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
       return unsub;
     }, []);
 
@@ -24,7 +25,7 @@ export default function Profile() {
   }
 
   async function upload(file: any, currentUser: any, setLoading: any) {
-    const fileRef = ref(storage, currentUser.uid + '.png');
+    const fileRef = ref(storage, currentUser.uid + ".png");
 
     setLoading(true);
 
@@ -34,7 +35,7 @@ export default function Profile() {
     updateProfile(currentUser, { photoURL });
     setPhotoURL(photoURL);
     setLoading(false);
-    alert('Uploaded file!');
+    alert("Uploaded file!");
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {

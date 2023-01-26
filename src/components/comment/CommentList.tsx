@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import basicImg from '../../img/basicImg.png';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import basicImg from "../../img/basicImg.png";
 import {
   collection,
   onSnapshot,
@@ -16,36 +16,40 @@ import {
   limit,
   QuerySnapshot,
   where,
-} from 'firebase/firestore';
-import {dbService} from '../../shared/firebase';
-import {Comment} from '../../shared/type';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/config/configStore';
-import {async} from '@firebase/util';
-import {useParams} from 'react-router-dom';
-import CommentItem from './CommentItem';
+} from "firebase/firestore";
+import { dbService } from "../../shared/firebase";
+import { Comment } from "../../shared/type";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
+import { async } from "@firebase/util";
+import { useParams } from "react-router-dom";
+import CommentItem from "./CommentItem";
+import { useInView } from 'react-intersection-observer';
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
-  const {id} = useParams();
+  const { id } = useParams();
+
+  const [ref, setRef] = useInView();
+
 
   const q = query(
-    collection(dbService, 'comment'),
-    orderBy('createdAt', 'desc'),
-    where('postId', '==', id)
+    collection(dbService, "comment"),
+    orderBy("createdAt", "desc"),
+    where("postId", "==", id)
     // Where를 만들 때에는 색인을 만들어줘야 한다. 브라우저에서 나오는 에러 링크를 누르면 됨
   );
 
   // 1673928917382
 
   // post 시간 나타내는 함수
-  const getTimegap = (posting: number) => { 
+  const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
     const minutegap = Math.floor(msgap / 60000);
     const hourgap = Math.floor(msgap / 3600000);
     const daygap = Math.floor(msgap / 86400000);
     if (msgap < 0) {
-      return '0분전';
+      return "0분전";
     }
     if (daygap > 7) {
       const time = new Date(posting);
@@ -70,7 +74,7 @@ export default function CommentList() {
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as Comment;
-        console.log('newComment', newComment);
+        console.log("newComment", newComment);
         return newComment;
       });
       setComments(newComments);
@@ -99,13 +103,14 @@ export default function CommentList() {
 }
 
 const Container = styled.div`
-  width: 80%;
+  max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
 `;
 
 const CommentTitle = styled.h1`
-  font-size: 35px;
-  margin: 50px 0;
+  font-size: 28px;
+  margin: 30px 0;
 `;
 
 const CommentsContainer = styled.div`

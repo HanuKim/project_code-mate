@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useEffect, useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
   updateProfile,
-} from 'firebase/auth';
+} from "firebase/auth";
 
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { CONFIG_KEY } from './config';
-import { getStorage } from 'firebase/storage';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { CONFIG_KEY } from "./config";
+import { getStorage } from "firebase/storage";
 
 const {
   apiKey,

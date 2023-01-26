@@ -1,6 +1,8 @@
+
 import styled from 'styled-components';
 import { PostState } from '../../shared/type';
 import Post from './Post';
+
 export default function PostList({
   posts,
   category,
@@ -25,5 +27,5 @@ const PostsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 15px;
+  min-height: 50.26vh;
 `;

@@ -27,10 +27,11 @@ import CheckModal from '../modal/DeleteModal';
 import {useDispatch} from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
+import {getAuth} from 'firebase/auth';
 
-export default function CommentItem({comment}: {comment: Comment}) {
+export default function CommentItem({comment}) {
   const [editText, setEditText] = useState('');
-  const [editComments, setEditComments] = useState<Comment>({
+  const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
     postId: comment.postId,
@@ -38,8 +39,10 @@ export default function CommentItem({comment}: {comment: Comment}) {
     nickName: comment.nickName,
     createdAt: comment.createdAt,
     isEdit: comment.isEdit,
+    profileImg: comment.profileImg,
   });
-
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
 
   // 모달
@@ -53,16 +56,16 @@ export default function CommentItem({comment}: {comment: Comment}) {
   };
 
   //isEdit true로 바꾸기
-  const onClickIsEditSwitch = (commentid: string) => {
+  const onClickIsEditSwitch = (commentid) => {
     setEditComments({...editComments, isEdit: true});
   };
 
-  const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const editTextOnChange = (e) => {
     setEditText(e.target.value);
   };
 
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = (commentid: string) => {
+  const cancleEditButton = (commentid) => {
     console.log(commentid);
     setEditComments({...editComments, isEdit: false});
   };
@@ -79,10 +82,9 @@ export default function CommentItem({comment}: {comment: Comment}) {
     }
   };
 
-  // editComments state가 변경될 때 마다 get해오도록 설정
+  // 리렌더링 일어날 때마다 최초 1번만 getCommet() 실행
   useEffect(() => {
     getComment();
-    console.log('editComments', editComments);
   }, []);
 
   return (
@@ -107,7 +109,8 @@ export default function CommentItem({comment}: {comment: Comment}) {
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
-            <ProfilePhoto />
+            <ProfilePhoto background={comment.profileImg ?? basicImg} />
+            {/*   */}
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
@@ -123,7 +126,8 @@ export default function CommentItem({comment}: {comment: Comment}) {
                     취소
                   </CommentButton>
                 </>
-              ) : (
+              ) : uid === comment.userId ? (
+                // 로그인한 uid와 댓글의 uid가 같아야지만 수정,삭제버튼 보이게
                 <>
                   <CommentButton
                     onClick={() => {
@@ -136,7 +140,7 @@ export default function CommentItem({comment}: {comment: Comment}) {
                     삭제
                   </CommentButton>
                 </>
-              )}
+              ) : null}
             </ButtonContainer>
           </ProfileContainer>
           <Date>{comment.createdAt}</Date>
@@ -156,7 +160,7 @@ export default function CommentItem({comment}: {comment: Comment}) {
   );
 }
 const CommentContentContainer = styled.div`
-  width: 70%;
+  width: 100%;
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px 20px 45px 20px;
@@ -177,13 +181,14 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div`
-  background-image: url(${basicImg});
+  background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`
@@ -221,8 +226,6 @@ const CommentRightButton = styled.button`
   width: 50px;
   height: 30px;
   border-radius: 20px;
-  /* left:-55px;
-  top: -26px; */
   cursor: pointer;
   &:hover {
     background-color: #262b7f;
