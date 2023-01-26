@@ -33,7 +33,8 @@ export default function CommentInput() {
   const [checkViewModal, setCheckViewModal] = useState(false);
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  const displayName = auth.currentUser?.displayName;
+  const displayName = authService.currentUser?.displayName;
+  const photoURL = authService.currentUser?.photoURL;
 
   const newComment = {
     commentText,
@@ -42,7 +43,11 @@ export default function CommentInput() {
     nickName: displayName,
     createdAt: Date.now(),
     isEdit: false,
+    profileImg: photoURL,
   };
+
+  useEffect(()=>{console.log('photoURL', authService?.currentUser);},[])
+  
 
 
   

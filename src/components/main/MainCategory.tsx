@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {doc, updateDoc} from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
+import { useEffect } from 'react';
 
 export default function MainCategory({
   category,
@@ -12,10 +13,9 @@ export default function MainCategory({
 }) {
   const setCat = async (cat: string) => {
     setCategory(cat);
-    // await updateDoc(doc(dbService, 'category', 'currentCategory'), {
-    //   category: cat,
-    // });
   };
+
+
   return (
     <CategoryContainer>
       <CategoryBt

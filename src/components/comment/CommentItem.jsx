@@ -39,6 +39,7 @@ export default function CommentItem({comment}) {
     nickName: comment.nickName,
     createdAt: comment.createdAt,
     isEdit: comment.isEdit,
+    profileImg: comment.profileImg,
   });
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -108,7 +109,8 @@ export default function CommentItem({comment}) {
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
-            <ProfilePhoto />
+            <ProfilePhoto background={comment.profileImg ?? basicImg} />
+            {/*   */}
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
@@ -125,7 +127,7 @@ export default function CommentItem({comment}) {
                   </CommentButton>
                 </>
               ) : uid === comment.userId ? (
-                  // 로그인한 uid와 댓글의 uid가 같아야지만 수정,삭제버튼 보이게
+                // 로그인한 uid와 댓글의 uid가 같아야지만 수정,삭제버튼 보이게
                 <>
                   <CommentButton
                     onClick={() => {
@@ -138,7 +140,7 @@ export default function CommentItem({comment}) {
                     삭제
                   </CommentButton>
                 </>
-                ) : null}
+              ) : null}
             </ButtonContainer>
           </ProfileContainer>
           <Date>{comment.createdAt}</Date>
@@ -179,13 +181,14 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div`
-  background-image: url(${basicImg});
+  background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`

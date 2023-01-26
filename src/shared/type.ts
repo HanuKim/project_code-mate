@@ -18,6 +18,7 @@ export interface Comment {
   nickName: string;
   createdAt: string;
   isEdit: boolean;
+  profileImg: string;
 }
 
 export interface ModalProps {
