@@ -1,9 +1,9 @@
-import {getAuth} from 'firebase/auth';
-import React, {useState, useCallback} from 'react';
-import {useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import CodeMate from '../img/CodeMate.png';
-import Modal from './Modal';
+import { getAuth } from "firebase/auth";
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import CodeMate from "../img/CodeMate.png";
+import Modal from "./Modal";
 
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
@@ -16,32 +16,39 @@ export default function Header() {
 
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
-  }
+  };
 
   const navigate = useNavigate();
-
 
   return (
     <>
       <HeaderContainer>
         <LogoBox
           onClick={() => {
-            navigate('/');
+            navigate("/");
           }}
         />
+
+        {/* Modal On, Off */}
         {isOpenModal ? (
-          <Modal setOpenModal={setOpenModal} isOpenModal={isOpenModal}/>
-        ):null}
-        <LoginBtn onClick={onClickToggleModal}>로그인/회원가입</LoginBtn>
-        {authService.currentUser ? (
-          <LoginBtn
-            onClick={() => {
-              navigate(`/Mypage/${uid}`);
-            }}
-          >
-            마이페이지
-          </LoginBtn>
+          <Modal setOpenModal={setOpenModal} isOpenModal={isOpenModal} />
         ) : null}
+
+        <BtnWrap>
+          {/* 로그인 유무에 따른 버튼 텍스트 변화 */}
+          <LoginBtn onClick={onClickToggleModal}>
+            {uid ? "로그아웃" : "로그인/회원가입"}
+          </LoginBtn>
+
+          {authService.currentUser ? (
+            <LoginBtn
+              onClick={() => {
+                navigate(`/Mypage/${uid}`);
+              }}>
+              마이페이지
+            </LoginBtn>
+          ) : null}
+        </BtnWrap>
       </HeaderContainer>
     </>
   );
@@ -73,7 +80,6 @@ const LogoBox = styled.div`
 const LoginBtn = styled.button`
   width: 160px;
   height: 50px;
-  margin-right: 70px;
   border: 1px solid #eee;
   border-radius: 30px;
   color: #262b7f;
@@ -86,4 +92,15 @@ const LoginBtn = styled.button`
     color: #fff;
     border: 1px solid #262b7f;
   }
+`;
+
+const BtnWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: 360px;
+  width: 100%;
+  height: 100%;
+  gap: 15px;
 `;
