@@ -1,5 +1,6 @@
-import { getAuth } from "firebase/auth";
-import React, { useState, useCallback } from "react";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../shared/firebase";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
@@ -8,11 +9,39 @@ import Modal from "./Modal";
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
 // }
+
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
+  const [authUser, setAuthUser] = useState(null);
+  const [login, setLogin] = useState(false);
 
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+    });
+    return () => {
+      listen();
+    };
+  }, []);
+
+  const logout = () => {
+    if (login === true) {
+      return signOut(auth).then(() => {
+        setLogin(true);
+        alert("로그아웃 성공 !");
+      });
+    } else {
+      return signOut(auth).catch((error) => {
+        alert("로그아웃 실패..");
+      });
+    }
+  };
 
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
@@ -36,9 +65,21 @@ export default function Header() {
 
         <BtnWrap>
           {/* 로그인 유무에 따른 버튼 텍스트 변화 */}
-          <LoginBtn onClick={onClickToggleModal}>
-            {uid ? "로그아웃" : "로그인/회원가입"}
-          </LoginBtn>
+          {authService.currentUser ? (
+            <LoginBtn
+              onClick={() => {
+                logout();
+              }}>
+              로그아웃
+            </LoginBtn>
+          ) : (
+            <LoginBtn
+              onClick={() => {
+                onClickToggleModal();
+              }}>
+              로그인/회원가입
+            </LoginBtn>
+          )}
 
           {authService.currentUser ? (
             <LoginBtn
