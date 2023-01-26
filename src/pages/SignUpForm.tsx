@@ -4,10 +4,9 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../shared/firebase";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
 
-
-function SignUpForm ({
+function SignUpForm({
   setIsNotLogin,
 }: {
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,19 +14,19 @@ function SignUpForm ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //todo 닉네임 상태 관리
-  const [] = useState("");
-  
+  const [nickname, setNickname] = useState("");
+
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
   const 변수 = {
-    introduce: '',
-    location: '',
-    nickname:'',
-    position: '',
-    stack: '',
-    userid : uid,
-  }
+    introduce: "",
+    location: "",
+    nickname: "",
+    position: "",
+    stack: "",
+    userid: uid,
+  };
 
   console.log("email : ", email);
   console.log("PW : ", password);
@@ -42,7 +41,6 @@ function SignUpForm ({
         console.log(error);
       });
   };
-
 
   return (
     <Container>
@@ -67,6 +65,8 @@ function SignUpForm ({
                 name="nickname"
                 id="nickname"
                 placeholder="NickName"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
               />
             </div>
             <div>
@@ -97,10 +97,9 @@ function SignUpForm ({
       </form>
     </Container>
   );
-};
+}
 
 export default SignUpForm;
-
 
 const Container = styled.div`
   margin-top: 40px;
