@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import basicImg from '../../img/basicImg.png';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import basicImg from "../../img/basicImg.png";
 import {
   collection,
   onSnapshot,
@@ -16,26 +16,22 @@ import {
   limit,
   QuerySnapshot,
   where,
-} from 'firebase/firestore';
-import {dbService} from '../../shared/firebase';
-import {Comment} from '../../shared/type';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/config/configStore';
-import {async} from '@firebase/util';
-import {useParams} from 'react-router-dom';
-import CheckModal from '../modal/DeleteModal';
-import {useDispatch} from 'react-redux';
-import DeleteModal from '../modal/DeleteModal';
-import EditModal from '../modal/EditModal';
+} from "firebase/firestore";
+import { dbService } from "../../shared/firebase";
+import { Comment } from "../../shared/type";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
+import { async } from "@firebase/util";
+import { useParams } from "react-router-dom";
+import CheckModal from "../modal/DeleteModal";
+import { useDispatch } from "react-redux";
+import DeleteModal from "../modal/DeleteModal";
+import EditModal from "../modal/EditModal";
+import UserProfileModal from "../../pages/UserProfile";
 
-export default function CommentItem({
-  comment,
-  ref,
-}: {
-  comment: Comment;
-  ref: (node?: Element) => void;
-}) {
-  const [editText, setEditText] = useState('');
+export default function CommentItem({ comment, ref }: { comment: Comment; ref: (node?: Element) => void }) {
+  const [isOpenProfileModal, setOpenProfileModal] = useState<boolean>(false);
+  const [editText, setEditText] = useState("");
   const [editComments, setEditComments] = useState<Comment>({
     id: comment.id,
     commentText: comment.commentText,
@@ -60,7 +56,7 @@ export default function CommentItem({
 
   //isEdit true로 바꾸기
   const onClickIsEditSwitch = (commentid: string) => {
-    setEditComments({...editComments, isEdit: true});
+    setEditComments({ ...editComments, isEdit: true });
   };
 
   const editTextOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -70,12 +66,12 @@ export default function CommentItem({
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
   const cancleEditButton = (commentid: string) => {
     console.log(commentid);
-    setEditComments({...editComments, isEdit: false});
+    setEditComments({ ...editComments, isEdit: false });
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
   const getComment = async () => {
-    const snapshot = await getDoc(doc(dbService, 'comment', comment.id));
+    const snapshot = await getDoc(doc(dbService, "comment", comment.id));
     const data = snapshot.data();
     if (data.id === editComments.id) {
       setEditComments({
@@ -90,14 +86,13 @@ export default function CommentItem({
     getComment();
   }, []);
 
+  const onClickToggleModal = () => {
+    setOpenProfileModal(!isOpenProfileModal);
+  };
+
   return (
     <>
-      {viewDeleteModal ? (
-        <DeleteModal
-          setDeleteViewModal={setDeleteViewModal}
-          comment={comment}
-        />
-      ) : null}
+      {viewDeleteModal ? <DeleteModal setDeleteViewModal={setDeleteViewModal} comment={comment} /> : null}
       {viewEditModal ? (
         <EditModal
           setEditViewModal={setEditViewModal}
@@ -112,14 +107,15 @@ export default function CommentItem({
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
-            <ProfilePhoto />
+            {isOpenProfileModal ? (
+              <UserProfileModal setOpenProfileModal={setOpenProfileModal} isOpenProfileModal={isOpenProfileModal} />
+            ) : null}
+            <ProfilePhoto onClick={onClickToggleModal} />
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
                 <>
-                  <CommentButton onClick={openEditModalClick}>
-                    등록
-                  </CommentButton>
+                  <CommentButton onClick={openEditModalClick}>등록</CommentButton>
                   <CommentButton
                     onClick={() => {
                       cancleEditButton(comment.id);
@@ -137,9 +133,7 @@ export default function CommentItem({
                   >
                     수정
                   </CommentButton>
-                  <CommentButton onClick={openDeleteModalClick}>
-                    삭제
-                  </CommentButton>
+                  <CommentButton onClick={openDeleteModalClick}>삭제</CommentButton>
                 </>
               )}
             </ButtonContainer>
@@ -149,10 +143,7 @@ export default function CommentItem({
         </CommentTopContainer>
         {/* 수정버튼 누르면 인풋 생기게 */}
         {editComments.isEdit ? (
-          <CommentEditInput
-            defaultValue={comment.commentText}
-            onChange={editTextOnChange}
-          />
+          <CommentEditInput defaultValue={comment.commentText} onChange={editTextOnChange} />
         ) : (
           <ContentText>{comment.commentText}</ContentText>
         )}
@@ -181,7 +172,7 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-const ProfilePhoto = styled.div`
+const ProfilePhoto = styled.button`
   background-image: url(${basicImg});
   background-position: center center;
   background-size: contain;
