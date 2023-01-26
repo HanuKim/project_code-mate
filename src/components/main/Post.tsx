@@ -1,13 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import basicImg from '../../img/basicImg.png'
+import basicImg from '../../img/basicImg.png';
 import { PostState } from '../../shared/type';
 
 export default function Post({ post }: { post: PostState }) {
   const navigate = useNavigate();
   return (
-    <Posts onClick={() => { navigate(`/detail/${post.id}`) }}>
+    <Posts
+      onClick={() => {
+        navigate(`/detail/${post.id}`);
+      }}
+    >
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
@@ -51,11 +55,12 @@ export default function Post({ post }: { post: PostState }) {
 const Posts = styled.div`
   background-color: #ffffff;
   width: 100%;
-  min-height: 280px;
-  height: 100%;
+  /* min-height: 280px; */
+  height: 250px;
   border-radius: 30px;
   padding: 40px;
   cursor: pointer;
+  border: 1px solid black;
   &:hover {
     border: 2px solid #262b7f;
   }
@@ -72,6 +77,7 @@ const ProfileContainer = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  margin-bottom: 20px;
 `;
 
 const ProfilePhoto = styled.div`
@@ -95,7 +101,7 @@ const Date = styled.p`
 `;
 
 const TitleText = styled.h1`
-  margin: 30px 0 20px 30px;
+  margin: 10px 0 20px 30px;
   font-size: 25px;
   font-weight: 600;
 `;
@@ -108,7 +114,7 @@ const ContentText = styled.p`
 const BottomCategoryContainer = styled.div`
   display: flex;
   gap: 15px;
-  margin: 50px 0 0 30px;
+  margin: 30px 0 0 30px;
 `;
 
 const BottomCategoryBt = styled.button`
