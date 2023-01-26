@@ -12,9 +12,9 @@ export default function MainCategory({
 }) {
   const setCat = async (cat: string) => {
     setCategory(cat);
-    await updateDoc(doc(dbService, 'category', 'currentCategory'), {
-      category: cat,
-    });
+    // await updateDoc(doc(dbService, 'category', 'currentCategory'), {
+    //   category: cat,
+    // });
   };
   return (
     <CategoryContainer>
