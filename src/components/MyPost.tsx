@@ -32,11 +32,7 @@ export default function Home() {
   const q = query(
     collection(dbService, 'post'),
     orderBy('createdAt', 'desc'),
-    where(
-      'userId',
-      '==',
-      !authService.currentUser || authService.currentUser?.uid
-    )
+    where('userid', '==', authService.currentUser?.uid || '')
   );
 
   const getTimegap = (posting: number) => {
@@ -64,31 +60,31 @@ export default function Home() {
   const getPost = () => {
     onSnapshot(q, snapshot => {
       const newPosts = snapshot.docs.map(doc => {
-        console.log('doc', doc.data());
+        // console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as PostState;
 
-        console.log('newpost', newPost);
+        // console.log('newpost', newPost);
         return newPost;
       });
       setPosts(newPosts);
-      console.log('posts2', newPosts);
+      //   console.log('posts2', newPosts);
     });
   };
 
   useEffect(() => {
     getPost();
-    console.log('posts', posts);
-    console.log('category', category);
+    // console.log('posts', posts);
+    // console.log('category', category);
 
     const getCategory = async () => {
       const snapshot = await getDoc(
         doc(dbService, 'category', 'currentCategory')
       );
-      console.log(snapshot.data());
+      //   console.log(snapshot.data());
       setCategory(snapshot.data().category);
     };
     getCategory();
