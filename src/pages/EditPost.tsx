@@ -5,7 +5,7 @@ import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
@@ -16,7 +16,6 @@ const EditPost = () => {
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
   const [editPost, setEditPost] = useState<any>({});
-  const state = useLocation();
   const authService = getAuth();
   const { id } = useParams();
   const uid = authService.currentUser?.uid;

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { BtnProps } from "../shared/type";
 import { useNavigate } from "react-router-dom";
+import { BtnProps, MixBtnProps } from "../shared/type";
 // 버튼 크기를 props로 내려서 경우에 따라 다르게 적용하고싶은데 어떻게 해야??
 // interface 생성해서.
 
-export default function Button(props: BtnProps) {
-  console.log(props);
+export default function Button(props: MixBtnProps) {
+  console.log("props", props);
   const navigate = useNavigate();
   return (
     <Container>
