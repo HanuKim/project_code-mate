@@ -22,7 +22,6 @@ import MyPost from '../components/MyPost';
 import { identifier } from '@babel/types';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 
-
 export default function Mypage() {
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
@@ -32,7 +31,7 @@ export default function Mypage() {
   const [introduce, setIntroduce] = useState('');
 
   const uid = authService.currentUser?.uid;
-  console.log("authService", authService.currentUser);
+  console.log('authService', authService.currentUser);
 
   const [profileContents, setProfileContents] = useState<any>([]);
 
@@ -50,18 +49,19 @@ export default function Mypage() {
     // where('nickname', '==', authService.currentUser?.displayName || '')
   );
 
-  // const handleUpdate = async (e: any) => {
-  //   e.preventDefault();
-  //   const taskDocRef = doc(dbService, 'user', id);
-  //   try {
-  //     await updateDoc(taskDocRef, {
-  //       nickname: 1,
-  //       stack: 2,
-  //     });
-  //   } catch (err) {
-  //     alert(err);
-  //   }
-  // };
+  const handleUpdate = (e: any) => {
+    e.preventDefault();
+    const docRef = doc(dbService, 'user', id);
+
+    updateDoc(docRef, {
+      stack,
+      location,
+    })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.log(error.message));
+  };
 
   const getProfile = () => {
     onSnapshot(q, snapshot => {
@@ -241,8 +241,6 @@ export default function Mypage() {
               )}
 
               {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
-                <InputBtn type={"submit"}>등록</InputBtn>
-              </InputBtnWrap>
             </InputContainer>
           </TopContainer>
 
@@ -254,7 +252,7 @@ export default function Mypage() {
       </Container>
     </>
   );
-                    }
+}
 
 const Container = styled.div`
   height: 100%;
