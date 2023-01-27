@@ -1,5 +1,4 @@
 // react-icons 다운
-
 import { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import MypageModal from '../components/MypageModal';
@@ -23,16 +22,18 @@ import MyPost from '../components/MyPost';
 import { identifier } from '@babel/types';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 
+
 export default function Mypage() {
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
-
   const [nickName, setnickName] = useState('');
   const [stack, setStack] = useState('');
   const [location, setLocation] = useState('');
   const [introduce, setIntroduce] = useState('');
+  const [profileContents, setProfileContents] = useState<any>("[]");
 
   const uid = authService.currentUser?.uid;
+  console.log("authService", authService.currentUser);
 
   const [profileContents, setProfileContents] = useState<any>([]);
 
@@ -241,6 +242,8 @@ export default function Mypage() {
               )}
 
               {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
+                <InputBtn type={"submit"}>등록</InputBtn>
+              </InputBtnWrap>
             </InputContainer>
           </TopContainer>
 
