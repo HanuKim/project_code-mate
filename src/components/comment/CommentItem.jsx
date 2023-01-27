@@ -46,7 +46,6 @@ export default function CommentItem({ comment }) {
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
-
   // 모달
   const [viewDeleteModal, setDeleteViewModal] = useState(false);
   const [viewEditModal, setEditViewModal] = useState(false);

@@ -12,7 +12,7 @@ const { kakao } = window;
 
 const Map = ({ state, setState }: any) => {
   const [searchAddress, SetSearchAddress] = useState();
-
+  const infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
   //스크립트 파일 읽어오기
   const new_script = (src: string) => {
     return new Promise((resolve: any, reject) => {
@@ -45,7 +45,6 @@ const Map = ({ state, setState }: any) => {
       const marker = new kakao.maps.Marker({
         position: markerPosition,
       });
-
       // 마커를 지도 위에 표시
       marker.setMap(map);
     });
@@ -53,7 +52,12 @@ const Map = ({ state, setState }: any) => {
   // 주소 입력후 검색 클릭 시 원하는 주소로 이동
   const SearchMap = () => {
     const ps = new kakao.maps.services.Places();
-    const placesSearchCB = function (data: any, status: any, pagination: any) {
+    const placesSearchCB = function (
+      data: any,
+      status: any,
+      pagination: any,
+      result: any
+    ) {
       if (status === kakao.maps.services.Status.OK) {
         const newSearch = data[0];
         setState({

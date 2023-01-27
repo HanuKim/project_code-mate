@@ -24,14 +24,13 @@ import { RootState } from "../../redux/config/configStore";
 import { async } from "@firebase/util";
 import { useParams } from "react-router-dom";
 import CommentItem from "./CommentItem";
-import { useInView } from 'react-intersection-observer';
+import { useInView } from "react-intersection-observer";
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
   const { id } = useParams();
 
   const [ref, setRef] = useInView();
-
 
   const q = query(
     collection(dbService, "comment"),
@@ -83,7 +82,6 @@ export default function CommentList() {
 
   useEffect(() => {
     getComment();
-    console.log(comments);
   }, []);
 
   return (
