@@ -26,8 +26,8 @@ function SignUpForm({
 }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [nickname, setNickname] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [modal, setModal] = useState(false);
 
   const authService = getAuth();
@@ -88,9 +88,8 @@ function SignUpForm({
           displayName: nickname,
         });
          addDoc(collection(dbService, 'user'), userInfo);
-        
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -114,6 +113,7 @@ function SignUpForm({
                 id='email'
                 placeholder='Email'
                 value={email}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -123,7 +123,7 @@ function SignUpForm({
                 id='nickname'
                 placeholder='Nick name'
                 value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                onChange={e => setNickname(e.target.value)}
               />
             </div>
             <div>
@@ -257,19 +257,19 @@ const JoinBtn = styled.button`
 `;
 
 // Firestore DB 연결 Code
-const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
+const db = collection(dbService, 'user'); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
 const data = {
-  introduce: "",
-  location: "",
-  nickname: "",
-  position: "",
-  stack: "",
-  userid: "",
+  introduce: '',
+  location: '',
+  nickname: '',
+  position: '',
+  stack: '',
+  userid: '',
 };
 addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then((db) => {
-    console.log("Document has been added successfully");
+  .then(db => {
+    console.log('Document has been added successfully');
   })
-  .catch((error) => {
+  .catch(error => {
     console.log(error);
   });

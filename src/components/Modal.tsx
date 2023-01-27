@@ -4,6 +4,7 @@ import LoginForm from "../pages/LoginForm";
 import SignUpForm from "../pages/SignUpForm";
 import { useNavigate } from "react-router-dom";
 
+
 function Modal({
   setOpenModal,
   isOpenModal,
@@ -71,8 +72,8 @@ const ContainerBg = styled.div`
 `;
 
 const Container = styled.div<ModalProps>`
-  width: ${(props) => props.modalWidth + "px"};
-  height: ${(props) => props.modalHeight + "px"};
+  width: ${props => props.modalWidth + 'px'};
+  height: ${props => props.modalHeight + 'px'};
   border: 1px solid #aaa;
   border-radius: 15px;
   position: absolute;
