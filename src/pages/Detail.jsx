@@ -10,6 +10,7 @@ import Comments from "../components/comment/Comments";
 import CommentInput from "../components/comment/CommentInput";
 import CommentList from "../components/comment/CommentList";
 import basicImg from "../img/basicImg.png";
+import { useLocation } from "react-router-dom";
 import {
   collection,
   addDoc,
@@ -29,21 +30,23 @@ import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
 
 export default function Detail() {
-  const [setDetail, setGetDetail] = useState("[]");
+  const [setDetail, getSetDetail] = useState("");
+  // const state = useLocation();
+  // console.log("state : ", state);
 
   let { id } = useParams();
   console.log("params : ", id);
 
-  const q = query(
-    collection(dbService, "post"),
-    // orderBy('createdAt', 'desc')
-    where("id", "==", id)
-  );
+  // const q = query(
+  //   collection(dbService, "post"),
+  //   // orderBy('createdAt', 'desc')
+  //   where("id", "==", id)
+  // );
 
   const getDetail = async () => {
     const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
-    setGetDetail(data);
+    getSetDetail(data);
     console.log("data : ", data);
   };
 
@@ -51,17 +54,13 @@ export default function Detail() {
     getDetail();
   }, []);
 
-  function profile(): void {
-    console.log();
-  }
-
   return (
     <>
       <Container>
         <InnerWidth>
-          <div className="map">
-            <MapContainer />
-          </div>
+          {setDetail === "" ? null : (
+            <MapContainer location={setDetail.coord} />
+          )}
           <ContentsContainer>
             <ProfileContainer>
               <ProfileWrap>
