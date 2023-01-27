@@ -1,38 +1,26 @@
 // react-icons 다운
 
-import { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
-import MypageModal from '../components/MypageModal';
+import { useState, useCallback, useEffect } from "react";
+import styled from "styled-components";
+import MypageModal from "../components/MypageModal";
 // import { ShowImage } from '../components/ShowImage';
-import UploadImage from '../components/UploadImage';
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-
-} from 'firebase/firestore';
-import { auth, dbService, authService } from '../shared/firebase';
-import Profile from '../components/Profile';
-import { useParams } from 'react-router-dom';
-import MyPost from '../components/MyPost';
-import { identifier } from '@babel/types';
-import { getAuth } from '@firebase/auth';
+import UploadImage from "../components/UploadImage";
+import { doc, getDoc, addDoc, collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { auth, dbService, authService } from "../shared/firebase";
+import Profile from "../components/Profile";
+import { useParams } from "react-router-dom";
+import MyPost from "../components/MyPost";
+import { identifier } from "@babel/types";
+import { getAuth } from "@firebase/auth";
 
 export default function Mypage() {
   const [isEdit, setIsEdit] = useState(false);
 
-const uid = authService.currentUser?.uid;
-  console.log(uid);
   const [profileContents, setProfileContents] = useState<any>("[]");
 
   // const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  console.log('authService', authService.currentUser);
+  console.log("authService", authService.currentUser);
 
   // const [nickName, setNickname] = useState('');
   // const [stack, setStack] = useState('');
@@ -50,11 +38,9 @@ const uid = authService.currentUser?.uid;
   const { id } = useParams();
 
   const q = query(
-
-    collection(dbService, 'user'),
+    collection(dbService, "user"),
     // orderBy('createdAt', 'desc')
-    where('userid', '==', authService.currentUser?.uid || '')
-
+    where("userid", "==", authService.currentUser?.uid || "")
   );
 
   // const newEditTexts: any = {
@@ -182,7 +168,7 @@ const uid = authService.currentUser?.uid;
                   </MypageModal>
                 )}
                 <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
-                <InputBtn type={'submit'}>등록</InputBtn>
+                <InputBtn type={"submit"}>등록</InputBtn>
               </InputBtnWrap>
             </InputContainer>
           </TopContainer>

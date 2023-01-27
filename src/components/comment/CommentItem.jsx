@@ -32,7 +32,7 @@ import { getAuth } from "firebase/auth";
 
 export default function CommentItem({ comment }) {
   const [editText, setEditText] = useState("");
-  const [isOpenProfileModal, setOpenProfileModal] = useState < boolean > false;
+  const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
