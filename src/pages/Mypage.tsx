@@ -30,7 +30,6 @@ export default function Mypage() {
   const [stack, setStack] = useState('');
   const [location, setLocation] = useState('');
   const [introduce, setIntroduce] = useState('');
-  const [profileContents, setProfileContents] = useState<any>("[]");
 
   const uid = authService.currentUser?.uid;
   console.log("authService", authService.currentUser);
@@ -255,7 +254,7 @@ export default function Mypage() {
       </Container>
     </>
   );
-}
+                    }
 
 const Container = styled.div`
   height: 100%;
