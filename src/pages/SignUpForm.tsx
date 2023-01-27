@@ -24,10 +24,10 @@ function SignUpForm({
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
   const [modal, setModal] = useState(false);
 
   const authService = getAuth();
@@ -42,53 +42,52 @@ function SignUpForm({
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
 
-  console.log('nickname', nickname);
+  console.log("nickname", nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      console.log('비밀번호 형식을 확인해주세요');
+      console.log("비밀번호 형식을 확인해주세요");
       return;
     } else {
       // 맞을 경우 출력
-      console.log('비밀번호 형식이 맞아요');
+      console.log("비밀번호 형식이 맞아요");
     }
   };
   const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
     if (password !== passwordConfirm) {
-      console.log('비밀번호가 다릅니다.');
+      console.log("비밀번호가 다릅니다.");
       return;
     } else {
-      console.log('비밀번호가 동일합니다.');
+      console.log("비밀번호가 동일합니다.");
     }
   };
 
   const displayName = auth.currentUser?.displayName;
-  console.log('displayName', displayName);
+  console.log("displayName", displayName);
   const userInfo = {
-    introduce: '',
-    location: '',
+    introduce: "",
+    location: "",
     nickname: nickname,
-    position: '',
-    stack: '',
+    position: "",
+    stack: "",
     userid: uid,
   };
 
-  console.log('email : ', email);
-  console.log('PW : ', password);
+  console.log("email : ", email);
+  console.log("PW : ", password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(async(userCredential) => {
-        console.log('회원가입 성공 ! :', userCredential);
-        console.log('디스플레이네임', authService.currentUser.displayName);
+      .then(async (userCredential) => {
+        console.log("회원가입 성공 ! :", userCredential);
+        console.log("디스플레이네임", authService.currentUser.displayName);
         setIsNotLogin(false);
         setOpenModal(false);
-         await updateProfile(authService?.currentUser, {
+        await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-         addDoc(collection(dbService, 'user'), userInfo);
-        
+        addDoc(collection(dbService, "user"), userInfo);
       })
       .catch((error) => {
         console.log(error);
@@ -98,7 +97,7 @@ function SignUpForm({
   return (
     <Container>
       <form onSubmit={signUpForm}>
-        <div className='form-inner'>
+        <div className="form-inner">
           <CloseButton onClick={() => setModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
@@ -109,29 +108,29 @@ function SignUpForm({
                   setEmail(e.target.value);
                   emailCheck(e.target.value);
                 }}
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
                 value={email}
               />
             </div>
             <div>
               <NickNameInput
-                type='nickname'
-                name='nickname'
-                id='nickname'
-                placeholder='Nick name'
+                type="nickname"
+                name="nickname"
+                id="nickname"
+                placeholder="Nick name"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
               />
             </div>
             <div>
               <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -141,10 +140,10 @@ function SignUpForm({
             </div>
             <div>
               <PwChekckInput
-                type='password'
-                name='passwordConfirm'
-                id='passwordConfirm'
-                placeholder='Password Confirm'
+                type="password"
+                name="passwordConfirm"
+                id="passwordConfirm"
+                placeholder="Password Confirm"
                 value={passwordConfirm}
                 onChange={(e) => {
                   setPasswordConfirm(e.target.value);
@@ -155,7 +154,7 @@ function SignUpForm({
             <Text>
               비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.
             </Text>
-            <JoinBtn type='submit' onClick={() => {}}>
+            <JoinBtn type="submit" onClick={() => {}}>
               회원가입
             </JoinBtn>
           </SignUpFormContainer>
@@ -255,21 +254,3 @@ const JoinBtn = styled.button`
     color: #262b7f;
   }
 `;
-
-// Firestore DB 연결 Code
-const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
-const data = {
-  introduce: "",
-  location: "",
-  nickname: "",
-  position: "",
-  stack: "",
-  userid: "",
-};
-addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then((db) => {
-    console.log("Document has been added successfully");
-  })
-  .catch((error) => {
-    console.log(error);
-  });

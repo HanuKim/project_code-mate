@@ -69,11 +69,6 @@ const Map = ({ state, setState }: any) => {
     SetSearchAddress(e.target.value);
   };
 
-  // DB에 Map 좌표 저장
-  addDoc(collection(dbService, "detail"), {
-    center: state.center,
-  });
-
   return (
     <>
       <div
