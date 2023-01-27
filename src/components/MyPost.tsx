@@ -22,18 +22,25 @@ import MainCategory from '../components/main/MainCategory';
 import PostList from '../components/main/PostList';
 import { useFirestoreQuery } from '@react-query-firebase/firestore';
 import { PostState } from '../shared/type';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function Home() {
+export default function MyPost() {
   const [posts, setPosts] = useState<PostState[]>([]);
   const [category, setCategory] = useState('');
   const navigate = useNavigate();
 
+  const id = useParams();
+
+  const uid =
+    authService.currentUser?.uid || window.localStorage.getItem('userid');
+
   const q = query(
     collection(dbService, 'post'),
     orderBy('createdAt', 'desc'),
-    where('userid', '==', authService.currentUser?.uid || '')
+    where('userId', '==', useParams().id)
   );
+  // console.log('Mypost uid', authService.currentUser);
+  // console.log('mypostid', useParams());
 
   const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
@@ -70,6 +77,7 @@ export default function Home() {
         // console.log('newpost', newPost);
         return newPost;
       });
+      // console.log('newPosts:', newPosts);
       setPosts(newPosts);
       //   console.log('posts2', newPosts);
     });

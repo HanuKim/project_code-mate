@@ -1,10 +1,10 @@
 // import Modal from "../components/Modal";
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {auth, dbService} from '../shared/firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth, dbService } from '../shared/firebase';
 import { getAuth } from 'firebase/auth';
 import {
   collection,
@@ -21,12 +21,14 @@ import {
 
 function SignUpForm({
   setIsNotLogin,
+  setOpenModal,
 }: {
-  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNotLogin: any;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -42,21 +44,23 @@ function SignUpForm({
     userid: uid,
   };
 
-  console.log("email : ", email);
-  console.log("PW : ", password);
+  console.log('email : ', email);
+  console.log('PW : ', password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
+      .then(async userCredential => {
         console.log('회원가입 성공 ! :', userCredential);
-        await addDoc(collection(dbService, 'user'), userInfo);
+        console.log('디스플레이네임', authService.currentUser.displayName);
         setIsNotLogin(false);
-        updateProfile(authService.currentUser, {
+        setOpenModal(false);
+        await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
+        addDoc(collection(dbService, 'user'), userInfo);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -75,7 +79,7 @@ function SignUpForm({
                 id="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -85,8 +89,7 @@ function SignUpForm({
                 id="nickname"
                 placeholder="NickName"
                 value={nickname}
-                onChange={(e)=> setNickname(e.target.value)}
-
+                onChange={e => setNickname(e.target.value)}
               />
             </div>
             <div>
@@ -96,7 +99,7 @@ function SignUpForm({
                 id="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
             <div>
@@ -106,7 +109,7 @@ function SignUpForm({
                 id="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
             <JoinBtn type="submit" onClick={() => {}}>
@@ -186,19 +189,19 @@ const JoinBtn = styled.button`
 `;
 
 // Firestore DB 연결 Code
-const db = collection(dbService, "user"); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
+const db = collection(dbService, 'user'); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
 const data = {
-  introduce: "",
-  location: "",
-  nickname: "",
-  position: "",
-  stack: "",
-  userid: "",
+  introduce: '',
+  location: '',
+  nickname: '',
+  position: '',
+  stack: '',
+  userid: '',
 };
 addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then((db) => {
-    console.log("Document has been added successfully");
+  .then(db => {
+    console.log('Document has been added successfully');
   })
-  .catch((error) => {
+  .catch(error => {
     console.log(error);
   });

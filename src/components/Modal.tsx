@@ -1,17 +1,14 @@
-
-import React, {useState, PropsWithChildren, useEffect} from 'react';
+import React, { useState, PropsWithChildren, useEffect } from 'react';
 import styled from 'styled-components';
 import LoginForm from '../pages/LoginForm';
 import SignUpForm from '../pages/SignUpForm';
-import {useNavigate} from 'react-router-dom';
-
-
+import { useNavigate } from 'react-router-dom';
 
 function Modal({
   setOpenModal,
   isOpenModal,
 }: {
-  isOpenModal:boolean;
+  isOpenModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [isNotLogin, setIsNotLogin] = useState(false);
@@ -34,7 +31,10 @@ function Modal({
       <Container modalWidth={350} modalHeight={400}>
         {/* isNotLogin이 true이면 회원가입 모달으로 / false면 로그인 모달으로 */}
         {isNotLogin ? (
-          <SignUpForm setIsNotLogin={setIsNotLogin} />
+          <SignUpForm
+            setOpenModal={setOpenModal}
+            setIsNotLogin={setIsNotLogin}
+          />
         ) : (
           <LoginForm
             setIsNotLogin={setIsNotLogin}
@@ -71,8 +71,8 @@ const ContainerBg = styled.div`
 `;
 
 const Container = styled.div<ModalProps>`
-  width: ${(props) => props.modalWidth + "px"};
-  height: ${(props) => props.modalHeight + "px"};
+  width: ${props => props.modalWidth + 'px'};
+  height: ${props => props.modalHeight + 'px'};
   border: 1px solid #aaa;
   border-radius: 15px;
   position: absolute;
@@ -84,5 +84,3 @@ const Container = styled.div<ModalProps>`
   align-items: center;
   z-index: 2;
 `;
-
-

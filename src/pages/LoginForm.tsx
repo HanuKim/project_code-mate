@@ -1,20 +1,19 @@
-
-import React, {PropsWithChildren, useState} from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import Modal from '../components/Modal';
 import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom';
-import {signInWithEmailAndPassword, getAuth} from 'firebase/auth';
-import {auth} from '../shared/firebase';
+import { useNavigate, useParams } from 'react-router-dom';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { auth } from '../shared/firebase';
 // React.Dispatch<React.SetStateAction<boolean>>
 
-
-function LoginForm ({
+function LoginForm({
   setIsNotLogin,
   setOpenModal,
 }: {
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { id } = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState('');
@@ -22,45 +21,49 @@ function LoginForm ({
 
   console.log('email : ', email);
   console.log('PW : ', password);
+  console.log(uid);
 
   const signIn = (e: any) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(userCredential => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
-        console.log(uid)
+
+        console.log('useparams:', useParams());
+        console.log('uid확인1', uid);
       })
-      .catch((error) => {
+      .catch(error => {
         // console.log(error);
       });
   };
-
+  console.log('useparams:', useParams());
+  console.log('uid확인2', uid);
   return (
     <Container>
       <form onSubmit={signIn}>
-        <div className='form-inner'>
+        <div className="form-inner">
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
             <div>
               <EmailInput
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div>
               <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
             <SignUpBtn
@@ -76,7 +79,7 @@ function LoginForm ({
       </form>
     </Container>
   );
-};
+}
 export default LoginForm;
 const Container = styled.div`
   margin-top: 40px;

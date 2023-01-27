@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import basicImg from '../../img/basicImg.png';
 import {
@@ -17,19 +17,19 @@ import {
   QuerySnapshot,
   where,
 } from 'firebase/firestore';
-import {dbService} from '../../shared/firebase';
-import {Comment} from '../../shared/type';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/config/configStore';
-import {async} from '@firebase/util';
-import {useParams} from 'react-router-dom';
+import { dbService } from '../../shared/firebase';
+import { Comment } from '../../shared/type';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
+import { async } from '@firebase/util';
+import { useParams } from 'react-router-dom';
 import CheckModal from '../modal/DeleteModal';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
-import {getAuth} from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
-export default function CommentItem({comment}) {
+export default function CommentItem({ comment }) {
   const [editText, setEditText] = useState('');
   const [editComments, setEditComments] = useState({
     id: comment.id,
@@ -56,18 +56,18 @@ export default function CommentItem({comment}) {
   };
 
   //isEdit true로 바꾸기
-  const onClickIsEditSwitch = (commentid) => {
-    setEditComments({...editComments, isEdit: true});
+  const onClickIsEditSwitch = commentid => {
+    setEditComments({ ...editComments, isEdit: true });
   };
 
-  const editTextOnChange = (e) => {
+  const editTextOnChange = e => {
     setEditText(e.target.value);
   };
 
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = (commentid) => {
+  const cancleEditButton = commentid => {
     console.log(commentid);
-    setEditComments({...editComments, isEdit: false});
+    setEditComments({ ...editComments, isEdit: false });
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
@@ -181,7 +181,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div`
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
