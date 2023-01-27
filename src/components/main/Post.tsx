@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import basicImg from "../../img/basicImg.png";
 import { PostState } from "../../shared/type";
@@ -10,7 +10,8 @@ export default function Post({ post }: { post: PostState }) {
   return (
     <Posts
       onClick={() => {
-        navigate(`/detail/${post.id}`, { state: { ...post } });
+        navigate(`/detail/${post.id}`);
+        // navigate(`/detail/${post.id}`, { state: { ...post } });
       }}>
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>

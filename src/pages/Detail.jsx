@@ -31,8 +31,8 @@ import { useParams } from "react-router-dom";
 
 export default function Detail() {
   const [setDetail, getSetDetail] = useState("");
-  const state = useLocation();
-  console.log("state : ", state);
+  // const state = useLocation();
+  // console.log("state : ", state);
 
   let { id } = useParams();
   console.log("params : ", id);
