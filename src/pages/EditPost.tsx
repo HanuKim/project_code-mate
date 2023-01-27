@@ -3,92 +3,71 @@ import styled from "styled-components";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
-const CreatePost = () => {
+const EditPost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState(""); //제목
-  const [content, setContent]: any = useState(""); //내용
-  const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
-  const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory] = useState(["all"]); //카테고리
-  //map
-  const [state, setState] = useState<MapProps>({
-    // 지도의 초기 위치
-    center: { lat: 37.50233764246866, lng: 127.04445691495785 },
-    // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
-    isPanto: true,
-  });
-  //로그인 관련
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [correcttitle, setCorrectTitle] = useState(true);
+  const [correctcontent, setCorrectContent] = useState(true);
+  const [editPost, setEditPost] = useState<any>({});
   const authService = getAuth();
+  const { id } = useParams();
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
-
-  addDoc(collection(dbService, "detail"), {
-    title: title,
-    content: content,
-  });
-
-  //add
-  const newPost = {
-    title,
-    content,
-    category,
-    userId: uid,
-    nickName: displayName,
-    createdAt: Date.now(),
-    isEdit: false,
-    profileImg: photoURL,
-    coord: state.center,
-  };
-  //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(e.target.value);
+    setEditTitle(e.target.value);
   };
-  //내용 값
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
+    setEditContent(e.target.value);
   };
-  const handleSubmitButtonClick = async () => {
-    // 유효성검사용
-    if (!newPost.title || title === null) {
-      setCorrectTitle(true);
-      return;
-    }
-    if (!content.trim() || content === null) {
-      setCorrectContent(true);
-      return;
-    } else {
-      await addDoc(collection(dbService, "post"), newPost);
-      setTitle("");
-      setContent("");
-      navigate(`/`);
-    }
+
+  //post의 doc.id 가져오기(params이용)
+  const getPost = async () => {
+    const snapshot = await getDoc(doc(dbService, "post", id));
+    const data = snapshot.data(); // 가져온 doc의 객체 내용
+    setEditPost(data);
+  };
+  // 리렌더링 일어날 때마다 최초 1번만 실행
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const handleEditButton = () => {
+    setEditPost({
+      ...editPost,
+      title: editPost.title,
+      category: editPost.category,
+      content: editPost.content,
+      coord: editPost.coord,
+    });
+    updateDoc(doc(dbService, "post", id), editPost);
+    //alert("수정");
+    navigate(`/comment/:id`);
   };
 
   return (
     <Container>
       <CommentForm>
-        {/* Map 컴포넌트 */}
-        <Map state={state} setState={setState} />
+        <Map location={editPost.coord} />
         <PostsTopContainer>
           <ProfileContainer>
             <ProfilePhoto background={photoURL ?? "black"} />
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
-        <CreateCategory category={category} setCategory={setCategory} />
+        <CreateCategory />
         <CommentLabel>
-          {/* 제목,내용 input */}
           <Postitle
-            placeholder="제목을 입력 해주세요."
+            defaultValue={editPost.title}
             onChange={handleChangeTitle}
-            value={title}
+            value={editTitle}
             cols={10}
             wrap="hard"
           />
@@ -96,24 +75,31 @@ const CreatePost = () => {
             <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
           )}
           <PostText
-            placeholder="내용을 입력 해주세요."
+            defaultValue={editPost.content}
             onChange={handleChangeContent}
-            value={content}
+            value={editContent}
             cols={30}
             wrap="hard"
           />
           {correctcontent && (
             <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
           )}
-          <CommentSubmitButton onClick={handleSubmitButtonClick}>
+          <CommentSubmitButton onClick={handleEditButton}>
             등록
+          </CommentSubmitButton>
+          <CommentSubmitButton
+            onClick={() => {
+              navigate("/comment/:id");
+            }}
+          >
+            취소
           </CommentSubmitButton>
         </CommentLabel>
       </CommentForm>
     </Container>
   );
 };
-export default CreatePost;
+export default EditPost;
 
 const PostsTopContainer = styled.div`
   display: flex;

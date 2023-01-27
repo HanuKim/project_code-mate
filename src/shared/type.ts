@@ -12,6 +12,7 @@ export interface PostState {
   profileImg: string;
 }
 
+
 export interface UserInfo {
   introduce: string;
   gitAddress: string;
@@ -19,6 +20,7 @@ export interface UserInfo {
   stack: string;
   userid: string;
 }
+
 export interface MapProps {
   center?: { lat: number; lng: number };
   isPanto?: boolean;
@@ -45,3 +47,12 @@ export interface BtnProps {
   delete?: string;
   edit?: string;
 }
+
+export interface Mapprops {
+  location: {
+    lng: string;
+    lat: string;
+  };
+}
+
+export interface MixBtnProps extends BtnProps, Mapprops {}
