@@ -34,6 +34,8 @@ const CreatePost = () => {
     content: content,
   });
 
+console.log('displayName', displayName);
+
   //add
   const newPost = {
     title,

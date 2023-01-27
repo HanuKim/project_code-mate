@@ -1,6 +1,6 @@
 // import Modal from "../components/Modal";
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, Dispatch } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
@@ -16,12 +16,13 @@ import {
   QuerySnapshot,
   serverTimestamp,
 } from "firebase/firestore";
+import { useDispatch } from "react-redux";
 
 function SignUpForm({
   setIsNotLogin,
   setOpenModal,
 }: {
-  setIsNotLogin: any;
+  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [email, setEmail] = useState("");
@@ -62,6 +63,26 @@ function SignUpForm({
     }
   };
 
+  const onSubmitHandler = (event: any) => {
+    event.preventDefault();
+
+    if (email.match(emailRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("이메일 형식을 확인해주세요.");
+    }
+
+    if (password.match(passwordRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("비밀번호 형식을 확인해주세요.");
+    }
+
+    if (password !== passwordConfirm) {
+      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+    } else {
+      alert("회원가입 완료! 🎉");
+    }
+  }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
+
   const displayName = auth.currentUser?.displayName;
   console.log("displayName", displayName);
   const userInfo = {
@@ -89,16 +110,16 @@ function SignUpForm({
         });
         addDoc(collection(dbService, "user"), userInfo);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
 
   return (
-    <Container>
-      <form onSubmit={signUpForm}>
+    <Container onSubmit={signUpForm}>
+      <form onSubmit={onSubmitHandler}>
         <div className="form-inner">
-          <CloseButton onClick={() => setModal(false)}>x</CloseButton>
+          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
           <SignUpFormContainer>
@@ -113,6 +134,7 @@ function SignUpForm({
                 id="email"
                 placeholder="Email"
                 value={email}
+                required
               />
             </div>
             <div>
@@ -123,6 +145,7 @@ function SignUpForm({
                 placeholder="Nick name"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -136,6 +159,7 @@ function SignUpForm({
                   setPassword(e.target.value);
                   passwordCheck(e.target.value);
                 }}
+                required
               />
             </div>
             <div>
@@ -149,14 +173,20 @@ function SignUpForm({
                   setPasswordConfirm(e.target.value);
                   passwordDoubleCheck(password, e.target.value);
                 }}
+                required
               />
             </div>
-            <Text>
-              비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.
-            </Text>
+            <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
             <JoinBtn type="submit" onClick={() => {}}>
               회원가입
             </JoinBtn>
+            <LoginBtn
+              onClick={() => {
+                setIsNotLogin(false);
+              }}
+            >
+              로그인 화면으로
+            </LoginBtn>
           </SignUpFormContainer>
         </div>
       </form>
@@ -174,7 +204,6 @@ const CloseButton = styled.button`
   width: 18px;
   height: 18px;
   margin-left: 310px;
-  margin-bottom: 10px;
   border-radius: 100px;
   border: none;
   background-color: black;
@@ -189,12 +218,12 @@ const CloseButton = styled.button`
 
 const SignUpFormContainer = styled.div`
   margin-left: 38px;
-  margin-top: 10px;
 `;
 
 const TitleText = styled.h2`
   font-size: 20px;
   margin-left: 40px;
+  margin-top: 3px;
 `;
 
 const EmailInput = styled.input`
@@ -239,7 +268,6 @@ const JoinBtn = styled.button`
   border-radius: 5px;
   padding: 8px;
   width: 86%;
-  margin: 20px;
   margin-left: 0px;
   margin-top: 10px;
   position: flex;
@@ -252,5 +280,20 @@ const JoinBtn = styled.button`
     border: 1px solid #262b7f;
     box-shadow: 1px 1px 1px 1px #262b7f;
     color: #262b7f;
+    transition: 0.3s;
+  }
+`;
+
+const LoginBtn = styled.button`
+  border: none;
+  width: 50%;
+  margin-bottom: 10px;
+  margin-left: 55px;
+  margin-top: 15px;
+  cursor: pointer;
+  color: #a29f9f;
+  &:hover {
+    color: #262b7f;
+    transition: 0.3s;
   }
 `;
