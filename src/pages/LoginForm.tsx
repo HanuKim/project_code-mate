@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from "react";
 import Modal from "../components/Modal";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../shared/firebase";
 // React.Dispatch<React.SetStateAction<boolean>>
@@ -48,7 +48,6 @@ function LoginForm({
       .then(userCredential => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
-        console.log('useparams:', useParams());
         console.log('uid확인1', uid);
       })
       .catch(error => {
