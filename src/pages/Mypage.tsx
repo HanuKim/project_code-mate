@@ -5,16 +5,7 @@ import styled from "styled-components";
 import MypageModal from "../components/MypageModal";
 // import { ShowImage } from '../components/ShowImage';
 import UploadImage from "../components/UploadImage";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { auth, dbService, authService } from "../shared/firebase";
 import Profile from "../components/Profile";
 import { useParams } from "react-router-dom";

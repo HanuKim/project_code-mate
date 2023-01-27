@@ -3,9 +3,9 @@ import styled from "styled-components";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
-import { collection, where, doc, getDoc } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
@@ -15,21 +15,17 @@ const EditPost = () => {
   const [editContent, setEditContent] = useState("");
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
-  const [category, setCategory] = useState(["all"]);
+  const [editPost, setEditPost] = useState<any>({});
+  const [editSubmitPost, setEditSubmitEditPost] = useState({});
+  const [state, setState] = useState<MapProps>({
+    center: { lat: 37, lng: 37 },
+    isPanto: true,
+  });
   const authService = getAuth();
+  const { id } = useParams();
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
-  const [state, setState] = useState<MapProps>({
-    // 지도의 초기 위치
-    center: { lat: 37.49676871972202, lng: 127.02474726969814 },
-    // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
-    isPanto: true,
-  });
-  const post: any = collection(dbService, "post");
-
-  console.log(post);
-  const [editPost, setEditPost] = useState({});
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditTitle(e.target.value);
@@ -38,28 +34,48 @@ const EditPost = () => {
     setEditContent(e.target.value);
   };
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
+  // const getPost = async () => {
+  //   const snapshot = await getDoc(doc(dbService, "post", post.id));
+  //   console.log("snapshot", snapshot);
+  //   const data = snapshot.data();
+  // if (data.id === editPost) {
+  //   setEditPost({
+  //     ...editPost,
+  //     title: data.title,
+  //     category: data.category,
+  //     content: data.content,
+  //     coord: data.coord,
+  //   }) as any;
+  // }
+  // };
+  //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
-    const snapshot = await getDoc(doc(dbService, "post", post.id));
-    const data = snapshot.data();
-    if (data.id === editPost) {
-      setEditPost({
-        ...editPost,
-        title: data.title,
-        category: data.category,
-        content: data.content,
-        coord: data.coord,
-      });
-    }
+    const snapshot = await getDoc(doc(dbService, "post", id));
+    const data = snapshot.data(); // 가져온 doc의 객체 내용
+    setEditPost(data);
   };
-
   // 리렌더링 일어날 때마다 최초 1번만 getCommet() 실행
   useEffect(() => {
     getPost();
   }, []);
 
+  const handleEditButton = () => {
+    console.log(editPost);
+    setEditPost({
+      ...editPost,
+      title: editPost.title,
+      category: editPost.category,
+      content: editPost.content,
+      coord: state.center,
+    });
+    updateDoc(doc(dbService, "post", id), editPost);
+    //alert("수정");
+    navigate(`/comment/:id`);
+  };
+
   return (
     <Container>
-      <CommentForm onSubmit={getPost}>
+      <CommentForm>
         <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
@@ -67,10 +83,10 @@ const EditPost = () => {
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
-        <CreateCategory category={category} setCategory={setCategory} />
+        <CreateCategory />
         <CommentLabel>
           <Postitle
-            defaultValue={post.title}
+            defaultValue={editPost.title}
             onChange={handleChangeTitle}
             cols={10}
             wrap="hard"
@@ -79,7 +95,7 @@ const EditPost = () => {
             <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
           )}
           <PostText
-            defaultValue={post.content}
+            defaultValue={editPost.content}
             onChange={handleChangeContent}
             cols={30}
             wrap="hard"
@@ -87,7 +103,9 @@ const EditPost = () => {
           {correctcontent && (
             <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
           )}
-          <CommentSubmitButton>등록</CommentSubmitButton>
+          <CommentSubmitButton onClick={handleEditButton}>
+            등록
+          </CommentSubmitButton>
           <CommentSubmitButton
             onClick={() => {
               navigate("/comment/:id");
@@ -135,7 +153,7 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const CommentForm = styled.form``;
+const CommentForm = styled.div``;
 
 const CommentLabel = styled.label`
   position: relative;
