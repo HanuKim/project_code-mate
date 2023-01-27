@@ -15,6 +15,23 @@ export default function Header() {
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
+  // login, logout 상태 변화 감지
+  const [authUser, setAuthUser] = useState(null);
+  const [login, setLogin] = useState(false);
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+    });
+    return () => {
+      listen();
+    };
+  }, []);
+  // ----------------------
 
   const logout = () => {
     signOut(auth)

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -6,32 +6,76 @@ import Button from "../components/Button";
 import MapContainer from "../components/MapContainer";
 import JobCategory from "../components/JobCategory";
 import CodeMate from "../img/CodeMate.png";
-import Comments from '../components/comment/Comments';
-import CommentInput from '../components/comment/CommentInput';
-import CommentList from '../components/comment/CommentList';
+import Comments from "../components/comment/Comments";
+import CommentInput from "../components/comment/CommentInput";
+import CommentList from "../components/comment/CommentList";
+import basicImg from "../img/basicImg.png";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  query,
+  orderBy,
+  where,
+  onSnapshot,
+  setDoc,
+  getDocs,
+} from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import { getAuth } from "firebase/auth";
+// 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
+// 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
+import { useParams } from "react-router-dom";
+
 export default function Detail() {
+  const [setDetail, setGetDetail] = useState("[]");
+
+  let { id } = useParams();
+  console.log("params : ", id);
+
+  const q = query(
+    collection(dbService, "post"),
+    // orderBy('createdAt', 'desc')
+    where("id", "==", id)
+  );
+
+  const getDetail = async () => {
+    const snapshot = await getDoc(doc(dbService, "post", id));
+    const data = snapshot.data(); // 가져온 doc의 객체 내용
+    setGetDetail(data);
+    console.log("data : ", data);
+  };
+
+  useEffect(() => {
+    getDetail();
+  }, []);
+
+  function profile(): void {
+    console.log();
+  }
+
   return (
     <>
       <Container>
         <InnerWidth>
-          <div className='map'>
+          <div className="map">
             <MapContainer />
           </div>
           <ContentsContainer>
             <ProfileContainer>
               <ProfileWrap>
-                <ProfilePic></ProfilePic>
-                <ProfileName>7전8기</ProfileName>
+                <ProfilePic profile={setDetail.profileImg ?? basicImg} />
+                <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
               <Button
-                delete='삭제'
-                edit='수정'
+                delete="삭제"
+                edit="수정"
                 btnWidth={80}
-                btnHeight={40}
-              ></Button>
+                btnHeight={40}></Button>
             </ProfileContainer>
-            <Title>CodeMate 토이 프로젝트 하실 분 구합니다.</Title>
-            <Contents>여기엔 내용이 들어갑니다.</Contents>
+            <Title>{setDetail.title}</Title>
+            <Contents>{setDetail.content}</Contents>
             <JobCategory></JobCategory>
           </ContentsContainer>
         </InnerWidth>
@@ -104,12 +148,13 @@ const ProfilePic = styled.div`
   max-height: 64px;
   width: 100%;
   height: 100%;
-  background-image: url(${CodeMate});
+  background-image: url(${(props) => props.profile});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   border: 1px solid #d0d0d0;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const ProfileName = styled.div`
@@ -158,22 +203,6 @@ const Input = styled.textarea`
   }
 `;
 
-// const CommentEditBtn = styled.button`
-// position : absolute;
-// right : 0;
-//   width: 60px;
-//   height: 40px;
-//   border: 1px solid #d0d0d0;
-//   border-radius: 10px;
-//   cursor: pointer;
-//   transition-duration : .3s;
-//   :hover {
-//     color: #f2f2f2;
-//     background-color #262b7f;
-//     border: 1px solid #262b7f;
-//   };
-// `;
-
 const CommentContainer = styled.div`
   max-width: 1100px;
   width: 100%;
@@ -207,5 +236,3 @@ const CommentWriter = styled.div`
   font-size: 14px;
   font-weight: 500;
 `;
-
-// 댓글 수정 삭제버튼..

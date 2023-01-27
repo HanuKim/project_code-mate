@@ -35,7 +35,8 @@ function SignUpForm({
   const uid = authService.currentUser?.uid;
 
   // email, password 정규식
-  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
 
   const emailCheck = (email: any) => {
@@ -296,21 +297,3 @@ const LoginBtn = styled.button`
     transition: 0.3s;
   }
 `;
-
-// Firestore DB 연결 Code
-const db = collection(dbService, 'user'); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
-const data = {
-  introduce: '',
-  location: '',
-  nickname: '',
-  position: '',
-  stack: '',
-  userid: '',
-};
-addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then(db => {
-    console.log('Document has been added successfully');
-  })
-  .catch(error => {
-    console.log(error);
-  });
