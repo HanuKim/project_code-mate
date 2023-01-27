@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import basicImg from "../../img/basicImg.png";
+
+import PaginationItem from './Paging';
 import {
   collection,
   onSnapshot,
@@ -25,23 +27,40 @@ import { async } from "@firebase/util";
 import { useParams } from "react-router-dom";
 import CommentItem from "./CommentItem";
 import { useInView } from 'react-intersection-observer';
+import Paging from './Paging';
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
-  const { id } = useParams();
-
-  const [ref, setRef] = useInView();
-
+  const {id} = useParams();
 
   const q = query(
-    collection(dbService, "comment"),
-    orderBy("createdAt", "desc"),
-    where("postId", "==", id)
+    collection(dbService, 'comment'),
+    orderBy('createdAt', 'desc'),
+    where('postId', '==', id)
     // Where를 만들 때에는 색인을 만들어줘야 한다. 브라우저에서 나오는 에러 링크를 누르면 됨
   );
 
-  // 1673928917382
+  // 댓글 페이지네이션
+  const [count, setCount] = useState(0); //아이템 총 개수
+  const [currentpage, setCurrentpage] = useState(1); //현재페이지
+  const [postPerPage] = useState(7); //페이지당 아이템 개수
 
+  const [indexOfLastPost, setIndexOfLastPost] = useState(0);
+  const [indexOfFirstPost, setIndexOfFirstPost] = useState(0);
+  const [currentPosts, setCurrentPosts] = useState<Comment[]>([]);
+  
+  React.useEffect(() => {
+    setCount(comments.length);
+    setIndexOfLastPost(currentpage * postPerPage);
+    setIndexOfFirstPost(indexOfLastPost - postPerPage);
+    setCurrentPosts(comments.slice(indexOfFirstPost, indexOfLastPost));
+  }, [currentpage, indexOfFirstPost, indexOfLastPost, comments, postPerPage]);
+
+  const setPage = (e:number) => {
+    setCurrentpage(e);
+  };
+///////////////////////여기까지 댓글 페이지네이션
+  
   // post 시간 나타내는 함수
   const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
@@ -49,7 +68,7 @@ export default function CommentList() {
     const hourgap = Math.floor(msgap / 3600000);
     const daygap = Math.floor(msgap / 86400000);
     if (msgap < 0) {
-      return "0분전";
+      return '0분전';
     }
     if (daygap > 7) {
       const time = new Date(posting);
@@ -65,7 +84,6 @@ export default function CommentList() {
       return <p>{minutegap}분 전</p>;
     }
   };
-
   const getComment = () => {
     onSnapshot(q, (snapshot) => {
       const newComments = snapshot.docs.map((doc) => {
@@ -74,9 +92,10 @@ export default function CommentList() {
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as Comment;
-        console.log("newComment", newComment);
+        console.log('newComment', newComment);
         return newComment;
       });
+      console.log('Comments', comments);
       setComments(newComments);
     });
   };
@@ -91,12 +110,17 @@ export default function CommentList() {
       <CommentTitle>Comment</CommentTitle>
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
-        {comments.map((comment) => {
+        {currentPosts && comments.length > 0 ? (
+          currentPosts.map((comment) => {
+            return <CommentItem comment={comment} />;
+          })
+        ) : (
+          <div>Not Comment</div>
+        )}
+        {/* {comments.map((comment) => {
           return <CommentItem comment={comment} />;
-          {
-            /* 댓글1개 */
-          }
-        })}
+          })} */}
+        <Paging page={currentpage} count={count} setPage={setPage} />
       </CommentsContainer>
     </Container>
   );
