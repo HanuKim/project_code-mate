@@ -85,15 +85,6 @@ function SignUpForm({
 
   const displayName = auth.currentUser?.displayName;
   console.log("displayName", displayName);
-  const userInfo = {
-    introduce: "",
-    location: "",
-    nickname: nickname,
-    position: "",
-    stack: "",
-    userid: uid,
-  };
-
   console.log("email : ", email);
   console.log("PW : ", password);
 
@@ -108,7 +99,6 @@ function SignUpForm({
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-        addDoc(collection(dbService, "user"), userInfo);
       })
       .catch(error => {
         console.log(error);
