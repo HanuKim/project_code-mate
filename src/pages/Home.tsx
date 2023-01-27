@@ -56,9 +56,9 @@ export default function Home() {
     }
   };
   const getPost = () => {
-    onSnapshot(q, (snapshot) => {
-      const newPosts = snapshot.docs.map((doc) => {
-        // console.log("doc", doc.data());
+    onSnapshot(q, snapshot => {
+      const newPosts = snapshot.docs.map(doc => {
+        // console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
           ...doc.data(), // <- poststate

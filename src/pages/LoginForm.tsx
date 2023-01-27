@@ -13,6 +13,7 @@ function LoginForm({
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { id } = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState("");
@@ -44,16 +45,18 @@ function LoginForm({
   const signIn = (e: any) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(userCredential => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
-        console.log(uid);
+        console.log('useparams:', useParams());
+        console.log('uid확인1', uid);
       })
-      .catch((error) => {
+      .catch(error => {
         // console.log(error);
       });
   };
-
+  console.log('useparams:', useParams());
+  console.log('uid확인2', uid);
   return (
     <Container onSubmit={signIn}>
       <form onSubmit={onSubmitHandler}>
