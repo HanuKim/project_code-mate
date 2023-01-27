@@ -11,6 +11,7 @@ export interface PostState {
   coord: string;
   profileImg: string;
 }
+
 export interface MapProps {
   center?: { lat: number; lng: number };
   isPanto?: boolean;

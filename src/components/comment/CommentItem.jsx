@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import basicImg from '../../img/basicImg.png';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import basicImg from "../../img/basicImg.png";
 import {
   collection,
   onSnapshot,
@@ -16,22 +16,22 @@ import {
   limit,
   QuerySnapshot,
   where,
-} from 'firebase/firestore';
-import { dbService } from '../../shared/firebase';
-import { Comment } from '../../shared/type';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/config/configStore';
-import { async } from '@firebase/util';
-import { useParams } from 'react-router-dom';
-import CheckModal from '../modal/DeleteModal';
-import { useDispatch } from 'react-redux';
-import DeleteModal from '../modal/DeleteModal';
-import EditModal from '../modal/EditModal';
-import UserProfileModal from '../../pages/UserProfile';
-import {getAuth} from 'firebase/auth';
+} from "firebase/firestore";
+import { dbService } from "../../shared/firebase";
+import { Comment } from "../../shared/type";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
+import { async } from "@firebase/util";
+import { useParams } from "react-router-dom";
+import CheckModal from "../modal/DeleteModal";
+import { useDispatch } from "react-redux";
+import DeleteModal from "../modal/DeleteModal";
+import EditModal from "../modal/EditModal";
+import UserProfileModal from "../../pages/UserProfile";
+import { getAuth } from "firebase/auth";
 
 export default function CommentItem({ comment }) {
-  const [editText, setEditText] = useState('');
+  const [editText, setEditText] = useState("");
   const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
@@ -46,8 +46,6 @@ export default function CommentItem({ comment }) {
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
-  console.log('editComments', editComments);
-
   // 모달
   const [viewDeleteModal, setDeleteViewModal] = useState(false);
   const [viewEditModal, setEditViewModal] = useState(false);
@@ -59,24 +57,23 @@ export default function CommentItem({ comment }) {
   };
 
   //isEdit true로 바꾸기
-  const onClickIsEditSwitch = commentid => {
+  const onClickIsEditSwitch = (commentid) => {
     setEditComments({ ...editComments, isEdit: true });
-
   };
 
-  const editTextOnChange = e => {
+  const editTextOnChange = (e) => {
     setEditText(e.target.value);
   };
 
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
-  const cancleEditButton = commentid => {
+  const cancleEditButton = (commentid) => {
     console.log(commentid);
     setEditComments({ ...editComments, isEdit: false });
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
   const getComment = async () => {
-    const snapshot = await getDoc(doc(dbService, 'comment', comment.id));
+    const snapshot = await getDoc(doc(dbService, "comment", comment.id));
     const data = snapshot.data();
     if (data.id === editComments.id) {
       setEditComments({

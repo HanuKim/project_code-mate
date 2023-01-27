@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MapMarker, Map, CustomOverlayMap } from "react-kakao-maps-sdk";
 import { Mapprops } from "../shared/type";
+
 declare global {
   interface Window {
     kakao: any;
@@ -17,7 +18,8 @@ const MapContainer = (props: Mapprops) => {
     <Map
       center={{ lat: lat, lng: lng }}
       style={{ width: "100%", height: "300px" }}
-      level={2}>
+      level={2}
+    >
       <CustomOverlayMap position={{ lat: lat, lng: lng }}>
         <MapMarker position={{ lat: lat, lng: lng }}>
           <InfoWindow>여기!</InfoWindow>
