@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BtnProps, MixBtnProps } from "../shared/type";
+import { doc, getDoc } from "firebase/firestore";
+import { dbService } from "../shared/firebase";
 // 버튼 크기를 props로 내려서 경우에 따라 다르게 적용하고싶은데 어떻게 해야??
 // interface 생성해서.
 
 export default function Button(props: MixBtnProps) {
   console.log("props", props);
-  const navigate = useNavigate();
+
+  let { id } = useParams();
+
+  const [setDetail, getSetDetail] = useState("");
+  const getDetail = async () => {
+    const snapshot = await getDoc(doc(dbService, "post", id));
+    const data = snapshot.data(); // 가져온 doc의 객체 내용
+    // @ts-ignore
+    getSetDetail(data);
+    console.log("data : ", data);
+  };
+  useEffect(() => {
+    getDetail();
+  }, []);
+
+  console.log("setDetail : ", setDetail);
+
   return (
     <Container>
       <DeleteBtn style={{ width: props.btnWidth, height: props.btnHeight }}>
         {props.delete}
       </DeleteBtn>
-      <EditBtn
-        onClick={() => {
-          navigate("edit");
-        }}
-        style={{ width: props.btnWidth, height: props.btnHeight }}
-      >
-        {props.edit}
-      </EditBtn>
+      <Link to={`/edit/${id}`} state={{ setDetail }}>
+        <EditBtn style={{ width: props.btnWidth, height: props.btnHeight }}>
+          {props.edit}
+        </EditBtn>
+      </Link>
     </Container>
   );
 }
