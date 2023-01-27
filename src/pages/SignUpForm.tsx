@@ -27,6 +27,32 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
+  // email, password 정규식
+  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
+
+  const emailCheck = (email: any) => {
+    return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
+  };
+  const passwordCheck = (password: any) => {
+    if (password.match(passwordRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      console.log("비밀번호 형식을 확인해주세요");
+      return;
+    } else {
+      // 맞을 경우 출력
+      console.log("비밀번호 형식이 맞아요");
+    }
+  };
+  const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
+    if (password !== passwordConfirm) {
+      console.log("비밀번호가 다릅니다.");
+      return;
+    } else {
+      console.log("비밀번호가 동일합니다.");
+    }
+  };
+
   const displayName = auth.currentUser?.displayName;
   console.log("displayName", displayName);
   const userInfo = {
@@ -67,12 +93,15 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
           <SignUpFormContainer>
             <div>
               <EmailInput
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  emailCheck(e.target.value);
+                }}
                 type="email"
                 name="email"
                 id="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -90,9 +119,12 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
                 type="password"
                 name="password"
                 id="password"
-                placeholder="Password Confirm"
+                placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  passwordCheck(e.target.value);
+                }}
               />
             </div>
             <div>
@@ -100,11 +132,15 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
                 type="password"
                 name="passwordConfirm"
                 id="passwordConfirm"
-                placeholder="Password"
+                placeholder="Password Confirm"
                 value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
+                onChange={(e) => {
+                  setPasswordConfirm(e.target.value);
+                  passwordDoubleCheck(password, e.target.value);
+                }}
               />
             </div>
+            <Text>비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
             <JoinBtn type="submit" onClick={() => {}}>
               회원가입
             </JoinBtn>
@@ -125,7 +161,7 @@ const CloseButton = styled.button`
   width: 18px;
   height: 18px;
   margin-left: 310px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 100px;
   border: none;
   background-color: black;
@@ -140,7 +176,7 @@ const CloseButton = styled.button`
 
 const SignUpFormContainer = styled.div`
   margin-left: 38px;
-  margin-top: 30px;
+  margin-top: 10px;
 `;
 
 const TitleText = styled.h2`
@@ -150,30 +186,39 @@ const TitleText = styled.h2`
 
 const EmailInput = styled.input`
   margin-bottom: 10px;
-  padding: 8px;
+  padding: 10px;
   width: 86%;
-  color: #d0d0d0;
+  color: #7f7d7d;
+  border: 1px solid #d0d0d0;
 `;
 
 const NickNameInput = styled.input`
   margin-bottom: 10px;
-  padding: 8px;
+  padding: 10px;
   width: 86%;
-  color: #d0d0d0;
+  color: #7f7d7d;
+  border: 1px solid #d0d0d0;
 `;
 
 const PwInput = styled.input`
   margin-bottom: 10px;
-  padding: 8px;
+  padding: 10px;
   width: 86%;
-  color: #d0d0d0;
+  color: #7f7d7d;
+  border: 1px solid #d0d0d0;
 `;
 
-const PwChekckInput = styled.input`
+const Text = styled.text`
+  font-size: 10px;
+  color: #262b7f;
   margin-bottom: 10px;
-  padding: 8px;
+`;
+const PwChekckInput = styled.input`
+  margin-bottom: 2px;
+  padding: 10px;
   width: 86%;
-  color: #d0d0d0;
+  color: #7f7d7d;
+  border: 1px solid #d0d0d0;
 `;
 
 const JoinBtn = styled.button`
