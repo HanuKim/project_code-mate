@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 
 export interface PostState {
   id: string;
-  nickname: string;
+  nickName: string;
   category: string[];
   content: string;
   createdAt: string;

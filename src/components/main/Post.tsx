@@ -16,7 +16,7 @@ export default function Post({post}: {post: PostState}) {
       <PostsTopContainer>
         <ProfileContainer>
           <ProfilePhoto background={post.profileImg ?? basicImg} />
-          <ProfileNickName>{post.nickname}</ProfileNickName>
+          <ProfileNickName>{post.nickName}</ProfileNickName>
         </ProfileContainer>
         <Date>{post.createdAt}</Date>
       </PostsTopContainer>
