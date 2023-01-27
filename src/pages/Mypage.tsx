@@ -44,10 +44,10 @@ export default function Mypage() {
   // console.log('useParams', useParams());
 
   const q = query(
-    collection(dbService, 'user'),
+    collection(dbService, 'user')
     // orderBy('createdAt', 'desc')
     // where('userid', '==', authService.currentUser?.uid || '')
-    where('nickname', '==', authService.currentUser?.displayName)
+    // where('nickname', '==', authService.currentUser?.displayName || '')
   );
 
   // const handleUpdate = async (e: any) => {
