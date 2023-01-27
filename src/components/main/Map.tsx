@@ -50,6 +50,7 @@ const Map = ({ state, setState }: any) => {
       marker.setMap(map);
     });
   }, [state.center.lat, state.center.lng]);
+  // }, [state.center.lat, state.center.lng]);
 
   // 주소 입력후 검색 클릭 시 원하는 주소로 이동
   const SearchMap = () => {

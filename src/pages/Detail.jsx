@@ -71,7 +71,6 @@ export default function Detail() {
                 edit="수정"
                 btnWidth={80}
                 btnHeight={40}
-                location={setDetail.coord}
               ></Button>
             </ProfileContainer>
             <Title>{setDetail.title}</Title>

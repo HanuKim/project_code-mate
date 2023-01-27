@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BtnProps, MixBtnProps } from "../shared/type";
 // 버튼 크기를 props로 내려서 경우에 따라 다르게 적용하고싶은데 어떻게 해야??
 // interface 생성해서.
 
 export default function Button(props: MixBtnProps) {
-  console.log("props", props);
+  const { id } = useParams();
   const navigate = useNavigate();
   return (
     <Container>
@@ -15,7 +15,7 @@ export default function Button(props: MixBtnProps) {
       </DeleteBtn>
       <EditBtn
         onClick={() => {
-          navigate("edit");
+          navigate(`/edit/${id}`);
         }}
         style={{ width: props.btnWidth, height: props.btnHeight }}
       >

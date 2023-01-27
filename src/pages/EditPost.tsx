@@ -3,7 +3,13 @@ import styled from "styled-components";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
-import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  updateDoc,
+  doc,
+  getDoc,
+  DocumentData,
+} from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -13,9 +19,15 @@ const EditPost = () => {
   const navigate = useNavigate();
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-  const [correcttitle, setCorrectTitle] = useState(true);
-  const [correctcontent, setCorrectContent] = useState(true);
-  const [editPost, setEditPost] = useState<any>({});
+  const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
+  const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
+  const [editPost, setEditPost] = useState<DocumentData>({});
+  const [state, setState] = useState<MapProps>({
+    // 지도의 초기 위치
+    center: { lat: 37.50233764246866, lng: 127.04445691495785 },
+    // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
+    isPanto: true,
+  });
   const authService = getAuth();
   const { id } = useParams();
   const uid = authService.currentUser?.uid;
@@ -49,13 +61,13 @@ const EditPost = () => {
     });
     updateDoc(doc(dbService, "post", id), editPost);
     //alert("수정");
-    navigate(`/comment/:id`);
+    navigate(`/comment/${id}`);
   };
 
   return (
     <Container>
       <CommentForm>
-        <Map location={editPost.coord} />
+        <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
             <ProfilePhoto background={photoURL ?? "black"} />
@@ -89,7 +101,7 @@ const EditPost = () => {
           </CommentSubmitButton>
           <CommentSubmitButton
             onClick={() => {
-              navigate("/comment/:id");
+              navigate(`/detail/${id}`);
             }}
           >
             취소
