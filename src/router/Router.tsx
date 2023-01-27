@@ -1,13 +1,14 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Mypage from '../pages/Mypage';
-import Home from '../pages/Home';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import Comment from '../components/comment/Comments';
-import CreatePost from '../pages/CreatePost';
-import Detail from '../pages/Detail';
-import { getAuth } from 'firebase/auth';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Mypage from "../pages/Mypage";
+import Home from "../pages/Home";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Comment from "../components/comment/Comments";
+import CreatePost from "../pages/CreatePost";
+import EditPost from "../pages/EditPost";
+import Detail from "../pages/Detail";
+import { getAuth } from "firebase/auth";
 
 const Router = () => {
   const authService = getAuth();
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/comment/:id" element={<Comment />} />
         <Route path="/createpost" element={<CreatePost />} />
+        <Route path="/detail/:id/edit" element={<EditPost />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/Mypage/:id" element={<Mypage />} />
       </Routes>

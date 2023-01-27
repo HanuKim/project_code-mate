@@ -25,6 +25,7 @@ import {
 } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
+
 // 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
 // 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
 import { useParams } from "react-router-dom";
@@ -33,10 +34,7 @@ export default function Detail() {
   const [setDetail, getSetDetail] = useState("");
   // const state = useLocation();
   // console.log("state : ", state);
-
   let { id } = useParams();
-  console.log("params : ", id);
-
   // const q = query(
   //   collection(dbService, "post"),
   //   // orderBy('createdAt', 'desc')
@@ -71,7 +69,9 @@ export default function Detail() {
                 delete="삭제"
                 edit="수정"
                 btnWidth={80}
-                btnHeight={40}></Button>
+                btnHeight={40}
+                location={setDetail.coord}
+              ></Button>
             </ProfileContainer>
             <Title>{setDetail.title}</Title>
             <Contents>{setDetail.content}</Contents>

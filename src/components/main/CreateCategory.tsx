@@ -9,22 +9,17 @@ export default function CreateCategory({ category, setCategory }: any) {
   const [isClickPul, setIsClickPul] = useState(false);
   const [isClickPm, setIsClickPm] = useState(false);
 
-  const setCat = useCallback(
-    (e: any) => {
-      const cat = e.target.value;
-      const setCate = category.filter((current: string) => current !== cat);
-      console.log("current", current !== cat);
-      if (cat) {
-        setCate.push(cat);
-      } else {
-        return;
-      }
-      setCategory(setCate);
-      console.log("setCate = ", setCate);
-    },
-    [category]
-  );
-
+  const setCat = (e: any) => {
+    //console.log("setCat!!!!!");
+    const cat = e.target.value;
+    const setCate = category.filter((prev: string) => prev !== cat);
+    if (setCate.includes(cat) === true) {
+      setCate.filter((prev: any) => prev !== cat);
+    } else {
+      setCate.push(cat);
+    }
+    setCategory(setCate);
+  };
   return (
     <CategoryContainer>
       <CategoryBt
