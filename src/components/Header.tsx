@@ -14,16 +14,33 @@ export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
+  const [authUser, setAuthUser] = useState(null);
+  const [login, setLogin] = useState(false);
 
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+    });
+    return () => {
+      listen();
+    };
+  }, []);
 
   const logout = () => {
-    signOut(auth)
-      .then(() => {
+    if (login === true) {
+      return signOut(auth).then(() => {
+        setLogin(true);
         alert("로그아웃 성공 !");
-      })
-      .catch((error) => {
+      });
+    } else {
+      return signOut(auth).catch((error) => {
         alert("로그아웃 실패..");
       });
+    }
   };
 
   const onClickToggleModal = () => {

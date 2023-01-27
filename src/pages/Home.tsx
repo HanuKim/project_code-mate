@@ -49,7 +49,7 @@ export default function Home() {
     if (hourgap > 24) {
       return <p>{daygap}일 전</p>;
     }
-    if (minutegap > 59) {
+    if (minutegap > 60) {
       return <p>{hourgap}시간 전</p>;
     } else {
       return <p>{minutegap}분 전</p>;
