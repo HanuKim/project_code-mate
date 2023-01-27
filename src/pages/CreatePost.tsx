@@ -11,19 +11,19 @@ import basicImg from "../../img/basicImg.png";
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [content, setContent]: any = useState("");
-  const [correcttitle, setCorrectTitle] = useState(true);
-  const [correctcontent, setCorrectContent] = useState(true);
-  const [category, setCategory] = useState(["all"]);
-
+  const [title, setTitle] = useState(""); //제목
+  const [content, setContent]: any = useState(""); //내용
+  const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
+  const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
+  const [category, setCategory] = useState(["all"]); //카테고리
+  //map
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
     center: { lat: 37.49676871972202, lng: 127.02474726969814 },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
-
+  //로그인 관련
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
@@ -33,8 +33,6 @@ const CreatePost = () => {
     title: title,
     content: content,
   });
-
-  console.log("displayName", displayName);
 
   //add
   const newPost = {
@@ -48,26 +46,22 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
-
+  //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
   };
-
+  //내용 값
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
   const handleSubmitButtonClick = async () => {
-    // 내용
+    // 유효성검사용
     if (!newPost.title || title === null) {
       setCorrectTitle(true);
       return;
     }
     if (!content.trim() || content === null) {
       setCorrectContent(true);
-      return;
-    }
-    if (newPost == null) {
-      console.log("빈값있음");
       return;
     } else {
       await addDoc(collection(dbService, "post"), newPost);
@@ -80,6 +74,7 @@ const CreatePost = () => {
   return (
     <Container>
       <CommentForm>
+        {/* Map 컴포넌트 */}
         <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
@@ -89,6 +84,7 @@ const CreatePost = () => {
         </PostsTopContainer>
         <CreateCategory category={category} setCategory={setCategory} />
         <CommentLabel>
+          {/* 제목,내용 input */}
           <Postitle
             placeholder="제목을 입력 해주세요."
             onChange={handleChangeTitle}

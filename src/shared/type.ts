@@ -12,7 +12,7 @@ export interface PostState {
   profileImg: string;
 }
 export interface MapProps {
-  center?: { lat: number; lng: number };
+  center?: { lat: number | string; lng: number | string };
   isPanto?: boolean;
 }
 export interface Comment {

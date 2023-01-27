@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Comment from "../components/comment/Comments";
 import CreatePost from "../pages/CreatePost";
+import EditPost from "../pages/EditPost";
 import Detail from "../pages/Detail";
 import { getAuth } from "firebase/auth";
 

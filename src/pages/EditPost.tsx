@@ -5,7 +5,7 @@ import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
@@ -16,57 +16,37 @@ const EditPost = () => {
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
   const [editPost, setEditPost] = useState<any>({});
-  const [editSubmitPost, setEditSubmitEditPost] = useState({});
-  const [state, setState] = useState<MapProps>({
-    center: { lat: 37, lng: 37 },
-    isPanto: true,
-  });
+  const state = useLocation();
   const authService = getAuth();
   const { id } = useParams();
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
-
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditTitle(e.target.value);
   };
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditContent(e.target.value);
   };
-  //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
-  // const getPost = async () => {
-  //   const snapshot = await getDoc(doc(dbService, "post", post.id));
-  //   console.log("snapshot", snapshot);
-  //   const data = snapshot.data();
-  // if (data.id === editPost) {
-  //   setEditPost({
-  //     ...editPost,
-  //     title: data.title,
-  //     category: data.category,
-  //     content: data.content,
-  //     coord: data.coord,
-  //   }) as any;
-  // }
-  // };
+
   //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
     const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setEditPost(data);
   };
-  // 리렌더링 일어날 때마다 최초 1번만 getCommet() 실행
+  // 리렌더링 일어날 때마다 최초 1번만 실행
   useEffect(() => {
     getPost();
   }, []);
 
   const handleEditButton = () => {
-    console.log(editPost);
     setEditPost({
       ...editPost,
       title: editPost.title,
       category: editPost.category,
       content: editPost.content,
-      coord: state.center,
+      coord: editPost.coord,
     });
     updateDoc(doc(dbService, "post", id), editPost);
     //alert("수정");
@@ -76,7 +56,7 @@ const EditPost = () => {
   return (
     <Container>
       <CommentForm>
-        <Map state={state} setState={setState} />
+        <Map location={editPost.coord} />
         <PostsTopContainer>
           <ProfileContainer>
             <ProfilePhoto background={photoURL ?? "black"} />
@@ -88,6 +68,7 @@ const EditPost = () => {
           <Postitle
             defaultValue={editPost.title}
             onChange={handleChangeTitle}
+            value={editTitle}
             cols={10}
             wrap="hard"
           />
@@ -97,6 +78,7 @@ const EditPost = () => {
           <PostText
             defaultValue={editPost.content}
             onChange={handleChangeContent}
+            value={editContent}
             cols={30}
             wrap="hard"
           />

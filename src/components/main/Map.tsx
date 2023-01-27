@@ -13,8 +13,7 @@ declare global {
 const { kakao } = window;
 
 const Map = ({ state, setState }: any) => {
-  const [searchAddress, SetSearchAddress] = useState();
-  const infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
+  const [searchAddress, SetSearchAddress] = useState(); //서치검색어를 담은 상수
   //스크립트 파일 읽어오기
   const new_script = (src: string) => {
     return new Promise((resolve: any, reject) => {
@@ -29,13 +28,13 @@ const Map = ({ state, setState }: any) => {
       document.head.appendChild(script);
     });
   };
-
+  //maps의 좌표가 변경될 때마다 실행되지 않도록 useffect사용
   useEffect(() => {
     kakao.maps.load(() => {
       const mapContainer = document.getElementById("map") as HTMLElement;
       const options = {
-        center: new kakao.maps.LatLng(state.center.lat, state.center.lng),
-        level: 3,
+        center: new kakao.maps.LatLng(state.center.lat, state.center.lng), //좌표 state 를 props로 받아옴
+        level: 3, //확대
       };
       const map = new kakao.maps.Map(mapContainer, options);
       //마커가 표시 될 위치
@@ -51,8 +50,10 @@ const Map = ({ state, setState }: any) => {
       marker.setMap(map);
     });
   }, [state.center.lat, state.center.lng]);
+
   // 주소 입력후 검색 클릭 시 원하는 주소로 이동
   const SearchMap = () => {
+    //카카오 키워드 검색 라이브러리
     const ps = new kakao.maps.services.Places();
     const placesSearchCB = function (
       data: any,
@@ -75,6 +76,7 @@ const Map = ({ state, setState }: any) => {
 
   return (
     <>
+      {/* 맵 컨테이너 */}
       <div
         id="map"
         style={{
@@ -86,11 +88,12 @@ const Map = ({ state, setState }: any) => {
         }}
       />
       <div>
+        {/* 주소창 */}
         <MapInput
           placeholder="주소를 입력해주세요."
           onChange={handleSearchAddress}
         />
-        {/* ✅ 이 버튼은 어떤 역할을 하는건지 */}
+        {/* onclick시 검색한 키워드의 지도 좌표를 띄움 */}
         <MapSummitButton onClick={SearchMap}>확인</MapSummitButton>
       </div>
     </>

@@ -12,14 +12,14 @@ export default function CreateCategory({ category, setCategory }: any) {
   const setCat = (e: any) => {
     //console.log("setCat!!!!!");
     const cat = e.target.value;
-    const setCate = category.filter((current: string) => current !== cat);
-
-    if (cat) {
+    const setCate = category.filter((prev: string) => prev !== cat);
+    if (setCate.includes(cat) === true) {
+      setCate.filter((prev: any) => prev !== cat);
+    } else {
       setCate.push(cat);
     }
     setCategory(setCate);
   };
-
   return (
     <CategoryContainer>
       <CategoryBt
