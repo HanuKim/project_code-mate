@@ -107,7 +107,7 @@ export default function CommentList() {
 
   return (
     <Container>
-      <CommentTitle>Comment</CommentTitle>
+      <CommentTitle>Comment({comments.length})</CommentTitle>
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
         {currentPosts && comments.length > 0 ? (
