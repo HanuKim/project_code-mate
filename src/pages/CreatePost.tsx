@@ -11,21 +11,28 @@ import basicImg from "../../img/basicImg.png";
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle]: any = useState("");
+  const [title, setTitle] = useState("");
   const [content, setContent]: any = useState("");
   const [correcttitle, setCorrectTitle] = useState(true);
   const [correctcontent, setCorrectContent] = useState(true);
   const [category, setCategory] = useState(["all"]);
+
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
     center: { lat: 37.49676871972202, lng: 127.02474726969814 },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
+
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
+
+  addDoc(collection(dbService, "detail"), {
+    title: title,
+    content: content,
+  });
 
   //add
   const newPost = {
@@ -39,9 +46,11 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
+
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
   };
+
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };

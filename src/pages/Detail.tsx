@@ -6,15 +6,20 @@ import Button from "../components/Button";
 import MapContainer from "../components/MapContainer";
 import JobCategory from "../components/JobCategory";
 import CodeMate from "../img/CodeMate.png";
-import Comments from '../components/comment/Comments';
-import CommentInput from '../components/comment/CommentInput';
-import CommentList from '../components/comment/CommentList';
+import Comments from "../components/comment/Comments";
+import CommentInput from "../components/comment/CommentInput";
+import CommentList from "../components/comment/CommentList";
+import basicImg from "../../img/basicImg.png";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import { getAuth } from "firebase/auth";
+
 export default function Detail() {
   return (
     <>
       <Container>
         <InnerWidth>
-          <div className='map'>
+          <div className="map">
             <MapContainer />
           </div>
           <ContentsContainer>
@@ -24,11 +29,10 @@ export default function Detail() {
                 <ProfileName>7전8기</ProfileName>
               </ProfileWrap>
               <Button
-                delete='삭제'
-                edit='수정'
+                delete="삭제"
+                edit="수정"
                 btnWidth={80}
-                btnHeight={40}
-              ></Button>
+                btnHeight={40}></Button>
             </ProfileContainer>
             <Title>CodeMate 토이 프로젝트 하실 분 구합니다.</Title>
             <Contents>여기엔 내용이 들어갑니다.</Contents>
