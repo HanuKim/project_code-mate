@@ -1,97 +1,95 @@
 // react-icons 다운
-
-import { useState, useCallback, useEffect } from "react";
-import styled from "styled-components";
-import MypageModal from "../components/MypageModal";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import MypageModal from '../components/MypageModal';
 // import { ShowImage } from '../components/ShowImage';
-import UploadImage from "../components/UploadImage";
-import { doc, getDoc, addDoc, collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { auth, dbService, authService } from "../shared/firebase";
-import Profile from "../components/Profile";
-import { useParams } from "react-router-dom";
-import MyPost from "../components/MyPost";
-import { identifier } from "@babel/types";
-import { getAuth } from "@firebase/auth";
+import UploadImage from '../components/UploadImage';
+import {
+  doc,
+  getDoc,
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+  updateDoc,
+} from 'firebase/firestore';
+import { auth, dbService, authService } from '../shared/firebase';
+import Profile from '../components/Profile';
+import { useParams } from 'react-router-dom';
+import MyPost from '../components/MyPost';
+import { identifier } from '@babel/types';
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+
 
 export default function Mypage() {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEditProfile, setIsEditProfile] = useState(false);
+  const [isEditIntroduce, setIsEditIntroduce] = useState(false);
+  const [nickName, setnickName] = useState('');
+  const [stack, setStack] = useState('');
+  const [location, setLocation] = useState('');
+  const [introduce, setIntroduce] = useState('');
 
-  const [profileContents, setProfileContents] = useState<any>("[]");
 
-  // const authService = getAuth();
   const uid = authService.currentUser?.uid;
   console.log("authService", authService.currentUser);
 
-  // const [nickName, setNickname] = useState('');
-  // const [stack, setStack] = useState('');
-  // const [location, setLocation] = useState('');
-  // const [introduce, setIntroduce] = useState('');
+  const [profileContents, setProfileContents] = useState<any>([]);
 
-  // const [editProfile, setEditProfile] = useState<any>({
-  //   nickName,
-  //   stack,
-  //   location,
-  //   introduce,
-  //   isEdit: false,
-  // });
+  // const authService = getAuth();
+
+  console.log('authService:', auth.currentUser?.displayName);
 
   const { id } = useParams();
+  // console.log('useParams', useParams());
 
   const q = query(
-    collection(dbService, "user"),
+    collection(dbService, 'user'),
     // orderBy('createdAt', 'desc')
-    where("userid", "==", authService.currentUser?.uid || "")
+    // where('userid', '==', authService.currentUser?.uid || '')
+    where('nickname', '==', authService.currentUser?.displayName)
   );
 
-  // const newEditTexts: any = {
-  //   nickName,
-  //   stack,
-  //   location,
-  //   introduce,
-  //   isEdit: false,
-  // };
-
-  // const isEditChange = () => {
-  //   setEditProfile({ ...editProfile, isEdit: true });
-  // };
-
-  // const editNicknameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setNickname(e.target.value);
-  // };
-
-  // const editStackHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setStack(e.target.value);
-  // };
-
-  // const editLocationHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setLocation(e.target.value);
+  // const handleUpdate = async (e: any) => {
+  //   e.preventDefault();
+  //   const taskDocRef = doc(dbService, 'user', id);
+  //   try {
+  //     await updateDoc(taskDocRef, {
+  //       nickname: 1,
+  //       stack: 2,
+  //     });
+  //   } catch (err) {
+  //     alert(err);
+  //   }
   // };
 
   const getProfile = () => {
-    onSnapshot(q, (snapshot) => {
-      const newContents = snapshot.docs.map((doc) => {
+    onSnapshot(q, snapshot => {
+      const newContents = snapshot.docs.map(doc => {
         const newContent = {
           id: doc.id,
           ...doc.data(),
         } as any;
         return newContent;
       });
-      console.log(newContents);
+      // console.log('newContents:', newContents);
       setProfileContents(newContents);
     });
   };
 
-  // const getContents = async () => {
-  //   // getDocs로 컬렉션안에 데이터 가져오기
-  //   const data = await getDoc(collection(dbService, 'user'));
-  //   // users에 data안의 자료 추가. 객체에 id 덮어씌우는거
-  //   setProfileContents(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-  // };
+  // useEffect(() => {
+  //   (async function fetchData() {
+  //     const detailRef = doc(dbService, 'users', id);
+  //     const res = await getDoc(detailRef);
+  //     setProfileContents(res.data());
+  //   })();
+  // }, []);
 
   useEffect(() => {
     getProfile();
   }, []);
-  console.log("profileContents", profileContents);
+  console.log('profileContents', profileContents);
 
   return (
     <>
@@ -106,44 +104,83 @@ export default function Mypage() {
                   </ProfileWrap>
                 </TopProfilePhoto>
                 <ProfileContents>
-                  {isEdit ? (
+                  {isEditProfile ? (
                     <>
                       <ProfileContentsForm>
                         <ProfileContentsBox>
                           <label>
                             NickName:
-                            <input />
+                            <input
+                              type="text"
+                              defaultValue={
+                                profileContents.length === 0
+                                  ? null
+                                  : profileContents[0].nickname
+                              }
+                              onChange={e => setnickName(e.target.value)}
+                            />
                           </label>
                           <LabelNickName>
                             Stack:
-                            <input />
+                            <input
+                              type="text"
+                              defaultValue={
+                                profileContents.length === 0
+                                  ? null
+                                  : profileContents[0].stack
+                              }
+                              onChange={e => setStack(e.target.value)}
+                            />
                           </LabelNickName>
                           <label>
                             Location:
-                            <input />
+                            <input
+                              type="text"
+                              defaultValue={
+                                profileContents.length === 0
+                                  ? null
+                                  : profileContents[0].location
+                              }
+                              onChange={e => setLocation(e.target.value)}
+                            />
                           </label>
                         </ProfileContentsBox>
-
-                        <ProfileContentsBtnBox>
-                          <button
-                            onClick={() => {
-                              setIsEdit(false);
-                            }}
-                          >
-                            저장
-                          </button>
-                        </ProfileContentsBtnBox>
                       </ProfileContentsForm>
-                    </>
-                  ) : (
-                    <>
-                      <p>Nickname:</p>
-                      <p>Stack:</p>
-                      <p>Location:</p>
+
                       <ProfileContentsBtnBox>
                         <button
                           onClick={() => {
-                            setIsEdit(true);
+                            setIsEditProfile(false);
+                          }}
+                        >
+                          저장
+                        </button>
+                      </ProfileContentsBtnBox>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        Nickname:
+                        {profileContents.length === 0
+                          ? null
+                          : profileContents[0].nickname}
+                      </p>
+                      <p>
+                        Stack:
+                        {profileContents.length === 0
+                          ? null
+                          : profileContents[0].stack}
+                      </p>
+                      <p>
+                        Location:
+                        {profileContents.length === 0
+                          ? null
+                          : profileContents[0].location}
+                      </p>
+                      <ProfileContentsBtnBox>
+                        <button
+                          onClick={() => {
+                            setIsEditProfile(true);
                           }}
                         >
                           편집
@@ -159,39 +196,58 @@ export default function Mypage() {
             </ProfileTitle>
 
             <InputContainer>
-              <InputBox></InputBox>
-              {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
-              <InputBtnWrap>
-                {/* {isOpenModall && (
+              {/* {isOpenModall && (
                   <MypageModal onClickToggleModal={onClickToggleModall}>
                     <MypageCreate />
                   </MypageModal>
                 )}
                 <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
-                <InputBtn type={"submit"}>등록</InputBtn>
-              </InputBtnWrap>
+              {isEditIntroduce ? (
+                <>
+                  <InputBox
+                    defaultValue={
+                      profileContents.length === 0
+                        ? null
+                        : profileContents[0].introduce
+                    }
+                  />
+
+                  <InputBtnWrap>
+                    <InputBtn
+                      onClick={() => {
+                        setIsEditIntroduce(false);
+                      }}
+                    >
+                      완료
+                    </InputBtn>
+                  </InputBtnWrap>
+                </>
+              ) : (
+                <>
+                  <IntroduceBox>
+                    {profileContents.length === 0
+                      ? null
+                      : profileContents[0].introduce}
+                  </IntroduceBox>
+                  <InputBtnWrap>
+                    <InputBtn
+                      onClick={() => {
+                        setIsEditIntroduce(true);
+                      }}
+                    >
+                      편집
+                    </InputBtn>
+                  </InputBtnWrap>
+                </>
+              )}
+
+              {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
             </InputContainer>
           </TopContainer>
 
           <BottomContainer>
             <MyPostTitle>내가쓴글</MyPostTitle>
             <MyPost />
-            {/* <Posts>
-              <PostsTopWrap>
-                <ProfileContainer>
-                  <ProfilePhoto />
-                  <ProfileNickName>Lee</ProfileNickName>
-                </ProfileContainer>
-                <Datee>0000-00-00</Datee>
-              </PostsTopWrap>
-              <TitleText>제목</TitleText>
-              <ContentText>내용</ContentText>
-              <CategoryContainer>
-                <CategoryBtn>BackEnd</CategoryBtn>
-                <CategoryBtn>FrontEnd</CategoryBtn>
-                <CategoryBtn>Publisher</CategoryBtn>
-              </CategoryContainer>
-            </Posts> */}
           </BottomContainer>
         </MypageBox>
       </Container>
@@ -240,12 +296,22 @@ const UploadWrap = styled.div`
   left: 50px;
 `;
 
-const InputContainer = styled.form`
+const InputContainer = styled.div`
   /* background-color: skyblue; */
   /* position: relative; */
 `;
 
-const InputBox = styled.div`
+const InputBox = styled.textarea`
+  /* background-color: red; */
+  height: 560px;
+  width: 100%;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid black;
+  resize: none;
+`;
+
+const IntroduceBox = styled.div`
   /* background-color: red; */
   height: 560px;
   width: 100%;
@@ -255,9 +321,10 @@ const InputBox = styled.div`
 `;
 
 const InputBtnWrap = styled.div`
-  /* background-color: red; */
-  position: flex;
-  margin-left: 800px;
+  background-color: red;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: 775px;
 `;
 
 const InputBtn = styled.button`
@@ -421,7 +488,7 @@ const ProfileContentsBox = styled.div`
 `;
 
 const ProfileContentsBtnBox = styled.div`
-  /* background-color: gray; */
+  background-color: gray;
   position: absolute;
   right: 70px;
 `;

@@ -57,7 +57,6 @@ export default function CommentItem({ comment }) {
   };
 
   //isEdit true로 바꾸기
-
   const onClickIsEditSwitch = (commentid) => {
     setEditComments({ ...editComments, isEdit: true });
   };
