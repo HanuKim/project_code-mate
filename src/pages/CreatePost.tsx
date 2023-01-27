@@ -26,7 +26,7 @@ const CreatePost = () => {
   const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
-
+console.log('displayName', displayName);
   //add
   const newPost = {
     title,

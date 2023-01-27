@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import { HiOutlinePencilSquare } from 'react-icons/hi2';
-
+import {HiOutlinePencilSquare} from 'react-icons/hi2';
+import Pagination from '../components/comment/Paging';
 import {
   collection,
   onSnapshot,
@@ -18,12 +18,12 @@ import {
   QuerySnapshot,
   getFirestore,
 } from 'firebase/firestore';
-import { dbService } from '../shared/firebase';
+import {dbService} from '../shared/firebase';
 import MainCategory from '../components/main/MainCategory';
 import PostList from '../components/main/PostList';
-import { useFirestoreQuery } from '@react-query-firebase/firestore';
-import { PostState } from '../shared/type';
-import { useNavigate } from 'react-router-dom';
+import {useFirestoreQuery} from '@react-query-firebase/firestore';
+import {PostState} from '../shared/type';
+import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
   const [posts, setPosts] = useState<PostState[]>([]);
@@ -56,8 +56,8 @@ export default function Home() {
     }
   };
   const getPost = () => {
-    onSnapshot(q, snapshot => {
-      const newPosts = snapshot.docs.map(doc => {
+    onSnapshot(q, (snapshot) => {
+      const newPosts = snapshot.docs.map((doc) => {
         // console.log("doc", doc.data());
         const newPost = {
           id: doc.id,
