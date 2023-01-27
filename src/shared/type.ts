@@ -38,10 +38,12 @@ export interface BtnProps {
   delete?: string;
   edit?: string;
 }
+
 export interface Mapprops {
   location: {
     lng: string;
     lat: string;
   };
 }
+
 export interface MixBtnProps extends BtnProps, Mapprops {}

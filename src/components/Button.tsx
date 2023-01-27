@@ -34,7 +34,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const DeleteBtn = styled.div<BtnProps>`
+const DeleteBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,15 +45,15 @@ const DeleteBtn = styled.div<BtnProps>`
   color: #262b7f;
   font-size: 14px;
   cursor: pointer;
-  transition-duration : .3s;
+  transition-duration: 0.3s;
   :hover {
     color: #f2f2f2;
-    background-color #262b7f;
+    background-color: #262b7f;
     border: 1px solid #262b7f;
-  };
+  }
 `;
 
-const EditBtn = styled.div<BtnProps>`  
+const EditBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,10 +65,10 @@ const EditBtn = styled.div<BtnProps>`
   font-size: 14px;
   cursor: pointer;
 
-  transition-duration : .3s;
+  transition-duration: 0.3s;
   :hover {
     color: #f2f2f2;
-    background-color #262b7f;
+    background-color: #262b7f;
     border: 1px solid #262b7f;
-  };
+  }
 `;

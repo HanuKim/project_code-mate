@@ -66,6 +66,7 @@ export default function Detail() {
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
               <Button
+                location={setDetail.coord}
                 delete="삭제"
                 edit="수정"
                 btnWidth={80}
