@@ -27,10 +27,12 @@ import CheckModal from '../modal/DeleteModal';
 import { useDispatch } from 'react-redux';
 import DeleteModal from '../modal/DeleteModal';
 import EditModal from '../modal/EditModal';
-import { getAuth } from 'firebase/auth';
+import UserProfileModal from '../../pages/UserProfile';
+import {getAuth} from 'firebase/auth';
 
 export default function CommentItem({ comment }) {
   const [editText, setEditText] = useState('');
+  const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
     commentText: comment.commentText,
@@ -44,6 +46,7 @@ export default function CommentItem({ comment }) {
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const dispatch = useDispatch();
+  console.log('editComments', editComments);
 
   // 모달
   const [viewDeleteModal, setDeleteViewModal] = useState(false);
@@ -58,6 +61,7 @@ export default function CommentItem({ comment }) {
   //isEdit true로 바꾸기
   const onClickIsEditSwitch = commentid => {
     setEditComments({ ...editComments, isEdit: true });
+
   };
 
   const editTextOnChange = e => {
@@ -87,6 +91,10 @@ export default function CommentItem({ comment }) {
     getComment();
   }, []);
 
+  const onClickToggleModal = () => {
+    setOpenProfileModal(!isOpenProfileModal);
+  };
+
   return (
     <>
       {viewDeleteModal ? (
@@ -109,8 +117,16 @@ export default function CommentItem({ comment }) {
         {/* 댓글쓴이+날짜 */}
         <CommentTopContainer>
           <ProfileContainer>
-            <ProfilePhoto background={comment.profileImg ?? basicImg} />
-            {/*   */}
+            {isOpenProfileModal ? (
+              <UserProfileModal
+                setOpenProfileModal={setOpenProfileModal}
+                isOpenProfileModal={isOpenProfileModal}
+              />
+            ) : null}
+            <ProfilePhoto
+              background={comment.profileImg ?? basicImg}
+              onClick={onClickToggleModal}
+            />
             <ProfileNickName>{comment.nickName}</ProfileNickName>
             <ButtonContainer>
               {editComments.isEdit ? (
@@ -180,8 +196,8 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-const ProfilePhoto = styled.div`
-  background-image: url(${props => props.background});
+const ProfilePhoto = styled.button`
+  background-image: url(${(props) => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

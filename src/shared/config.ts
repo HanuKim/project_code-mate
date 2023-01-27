@@ -1,11 +1,4 @@
 export const CONFIG_KEY = {
-  // apiKey: 'AIzaSyCpP5HnS7AO4uQwEWy5swkRvrAlFv9adWY',
-  // authDomain: 'test-a238c.firebaseapp.com',
-  // projectId: 'test-a238c',
-  // storageBucket: 'test-a238c.appspot.com',
-  // messagingSenderId: '500361258899',
-  // appId: '1:500361258899:web:e39b80cf161ae0b61eaa66',
-  // measurementId: 'G-X5212L6HB0',
   apiKey: 'AIzaSyAxdMVm_wvVlPoWIjZZ7v3Ogs2xXVtXz98',
   authDomain: 'ts-project-d8443.firebaseapp.com',
   projectId: 'ts-project-d8443',

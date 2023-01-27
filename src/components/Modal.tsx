@@ -1,8 +1,9 @@
-import React, { useState, PropsWithChildren, useEffect } from 'react';
-import styled from 'styled-components';
-import LoginForm from '../pages/LoginForm';
-import SignUpForm from '../pages/SignUpForm';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, PropsWithChildren, useEffect } from "react";
+import styled from "styled-components";
+import LoginForm from "../pages/LoginForm";
+import SignUpForm from "../pages/SignUpForm";
+import { useNavigate } from "react-router-dom";
+
 
 function Modal({
   setOpenModal,
@@ -21,8 +22,8 @@ function Modal({
       width: 100%;`;
     return () => {
       const scrollY = document.body.style.top;
-      document.body.style.cssText = '';
-      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      document.body.style.cssText = "";
+      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
     };
   }, []);
 
@@ -32,8 +33,8 @@ function Modal({
         {/* isNotLogin이 true이면 회원가입 모달으로 / false면 로그인 모달으로 */}
         {isNotLogin ? (
           <SignUpForm
-            setOpenModal={setOpenModal}
             setIsNotLogin={setIsNotLogin}
+            setOpenModal={setOpenModal}
           />
         ) : (
           <LoginForm

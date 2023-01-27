@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useState } from 'react';
-import Modal from '../components/Modal';
-import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
-import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
-import { auth } from '../shared/firebase';
+import React, { PropsWithChildren, useState } from "react";
+import Modal from "../components/Modal";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { auth } from "../shared/firebase";
 // React.Dispatch<React.SetStateAction<boolean>>
 
 function LoginForm({
@@ -16,12 +16,11 @@ function LoginForm({
   const { id } = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  console.log('email : ', email);
-  console.log('PW : ', password);
-  console.log(uid);
+  console.log("email : ", email);
+  console.log("PW : ", password);
 
   const signIn = (e: any) => {
     e.preventDefault();
@@ -43,6 +42,7 @@ function LoginForm({
     <Container>
       <form onSubmit={signIn}>
         <div className="form-inner">
+          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
@@ -82,7 +82,24 @@ function LoginForm({
 }
 export default LoginForm;
 const Container = styled.div`
-  margin-top: 40px;
+  margin-top: 18px;
+`;
+
+const CloseButton = styled.button`
+  width: 18px;
+  height: 18px;
+  margin-left: 310px;
+  margin-bottom: 20px;
+  border-radius: 100px;
+  border: none;
+  background-color: black;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    background-color: #262b7f;
+    box-shadow: 2px 4px 3px -3px black;
+    transition: 0.3s;
+  }
 `;
 
 const LoginFormContainer = styled.div`
@@ -93,7 +110,7 @@ const LoginFormContainer = styled.div`
 const TitleText = styled.h2`
   font-size: 20px;
   margin-left: 40px;
-  margin-top: 60px;
+  margin-top: 10px;
 `;
 
 const EmailInput = styled.input`
@@ -121,6 +138,7 @@ const SignUpBtn = styled.button`
   color: #a29f9f;
   &:hover {
     color: #262b7f;
+    transition: 0.3s;
   }
 `;
 
@@ -142,5 +160,6 @@ const LoginBtn = styled.button`
     border: 1px solid #262b7f;
     box-shadow: 1px 1px 1px 1px #262b7f;
     color: #262b7f;
+    transition: 0.3s;
   }
 `;
