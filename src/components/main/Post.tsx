@@ -1,17 +1,17 @@
-import React from 'react';
-import {useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import basicImg from '../../img/basicImg.png';
-import {PostState} from '../../shared/type';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import basicImg from "../../img/basicImg.png";
+import { PostState } from "../../shared/type";
 
-export default function Post({post}: {post: PostState}) {
+export default function Post({ post }: { post: PostState }) {
   const navigate = useNavigate();
+
   return (
     <Posts
       onClick={() => {
-        navigate(`/detail/${post.id}`);
-      }}
-    >
+        navigate(`/detail/${post.id}`, { state: { ...post } });
+      }}>
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
@@ -27,23 +27,23 @@ export default function Post({post}: {post: PostState}) {
       <BottomCategoryContainer>
         {post.category.map((item: string) => {
           // 카테고리가 all이면 버튼보이지않게
-          if (item === 'all') {
+          if (item === "all") {
             return;
           } else {
             return (
               // BottomCategoryBt에 key 지정해줘야 함.
               <BottomCategoryBt>
-                {item === 'front'
-                  ? '프론트엔드'
-                  : item === 'back'
-                  ? '백엔드'
-                  : item === 'design'
-                  ? '디자이너'
-                  : item === 'publ'
-                  ? '퍼블리셔'
-                  : item === 'pm'
-                  ? 'PM'
-                  : ''}
+                {item === "front"
+                  ? "프론트엔드"
+                  : item === "back"
+                  ? "백엔드"
+                  : item === "design"
+                  ? "디자이너"
+                  : item === "publ"
+                  ? "퍼블리셔"
+                  : item === "pm"
+                  ? "PM"
+                  : ""}
               </BottomCategoryBt>
             );
           }
@@ -80,7 +80,7 @@ const ProfileContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const ProfilePhoto = styled.div<{background:any}>`
+const ProfilePhoto = styled.div<{ background: any }>`
   background-image: url(${(props) => props.background});
   background-position: center center;
   background-size: cover;
