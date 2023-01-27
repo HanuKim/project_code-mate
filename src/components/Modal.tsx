@@ -31,9 +31,15 @@ function Modal({
       <Container modalWidth={350} modalHeight={400}>
         {/* isNotLogin이 true이면 회원가입 모달으로 / false면 로그인 모달으로 */}
         {isNotLogin ? (
-          <SignUpForm setIsNotLogin={setIsNotLogin} />
+          <SignUpForm
+            setIsNotLogin={setIsNotLogin}
+            setOpenModal={setOpenModal}
+          />
         ) : (
-          <LoginForm setIsNotLogin={setIsNotLogin} setOpenModal={setOpenModal} />
+          <LoginForm
+            setIsNotLogin={setIsNotLogin}
+            setOpenModal={setOpenModal}
+          />
         )}
       </Container>
       <ContainerBg

@@ -17,66 +17,78 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [nickname, setNickname] = useState("");
+function SignUpForm({
+  setIsNotLogin,
+  setOpenModal,
+}: {
+  setIsNotLogin: any;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [nickname, setNickname] = useState('');
   const [modal, setModal] = useState(false);
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
   // email, password 정규식
-  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
 
   const emailCheck = (email: any) => {
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
+
+  console.log('nickname', nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      console.log("비밀번호 형식을 확인해주세요");
+      console.log('비밀번호 형식을 확인해주세요');
       return;
     } else {
       // 맞을 경우 출력
-      console.log("비밀번호 형식이 맞아요");
+      console.log('비밀번호 형식이 맞아요');
     }
   };
   const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
     if (password !== passwordConfirm) {
-      console.log("비밀번호가 다릅니다.");
+      console.log('비밀번호가 다릅니다.');
       return;
     } else {
-      console.log("비밀번호가 동일합니다.");
+      console.log('비밀번호가 동일합니다.');
     }
   };
 
   const displayName = auth.currentUser?.displayName;
-  console.log("displayName", displayName);
+  console.log('displayName', displayName);
   const userInfo = {
-    introduce: "",
-    location: "",
+    introduce: '',
+    location: '',
     nickname: nickname,
-    position: "",
-    stack: "",
+    position: '',
+    stack: '',
     userid: uid,
   };
 
-  console.log("email : ", email);
-  console.log("PW : ", password);
+  console.log('email : ', email);
+  console.log('PW : ', password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        console.log("회원가입 성공 ! :", userCredential);
-        await addDoc(collection(dbService, "user"), userInfo);
+      .then(async(userCredential) => {
+        console.log('회원가입 성공 ! :', userCredential);
+        console.log('디스플레이네임', authService.currentUser.displayName);
         setIsNotLogin(false);
-        updateProfile(authService.currentUser, {
+        setOpenModal(false);
+         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
+         addDoc(collection(dbService, 'user'), userInfo);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -86,7 +98,7 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
   return (
     <Container>
       <form onSubmit={signUpForm}>
-        <div className="form-inner">
+        <div className='form-inner'>
           <CloseButton onClick={() => setModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
@@ -97,29 +109,29 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
                   setEmail(e.target.value);
                   emailCheck(e.target.value);
                 }}
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
                 value={email}
               />
             </div>
             <div>
               <NickNameInput
-                type="nickname"
-                name="nickname"
-                id="nickname"
-                placeholder="Nick name"
+                type='nickname'
+                name='nickname'
+                id='nickname'
+                placeholder='Nick name'
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
               />
             </div>
             <div>
               <PwInput
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -129,10 +141,10 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
             </div>
             <div>
               <PwChekckInput
-                type="password"
-                name="passwordConfirm"
-                id="passwordConfirm"
-                placeholder="Password Confirm"
+                type='password'
+                name='passwordConfirm'
+                id='passwordConfirm'
+                placeholder='Password Confirm'
                 value={passwordConfirm}
                 onChange={(e) => {
                   setPasswordConfirm(e.target.value);
@@ -140,8 +152,10 @@ function SignUpForm({ setIsNotLogin }: { setIsNotLogin: React.Dispatch<React.Set
                 }}
               />
             </div>
-            <Text>비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
-            <JoinBtn type="submit" onClick={() => {}}>
+            <Text>
+              비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.
+            </Text>
+            <JoinBtn type='submit' onClick={() => {}}>
               회원가입
             </JoinBtn>
           </SignUpFormContainer>
@@ -208,10 +222,10 @@ const PwInput = styled.input`
   border: 1px solid #d0d0d0;
 `;
 
-const Text = styled.text`
+const Text = styled.p`
   font-size: 10px;
   color: #262b7f;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 `;
 const PwChekckInput = styled.input`
   margin-bottom: 2px;
