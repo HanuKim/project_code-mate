@@ -22,13 +22,32 @@ function LoginForm({
   console.log("email : ", email);
   console.log("PW : ", password);
 
+  // email, password 정규식
+  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
+
+  const onSubmitHandler = (event: any) => {
+    event.preventDefault();
+
+    if (email.match(emailRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("올바른 이메일 형식이 아닙니다.");
+    }
+
+    if (password.match(passwordRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.");
+    } else {
+      alert("로그인 성공! 🎉");
+    }
+  }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
+
   const signIn = (e: any) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
-
         console.log('useparams:', useParams());
         console.log('uid확인1', uid);
       })
@@ -39,8 +58,8 @@ function LoginForm({
   console.log('useparams:', useParams());
   console.log('uid확인2', uid);
   return (
-    <Container>
-      <form onSubmit={signIn}>
+    <Container onSubmit={signIn}>
+      <form onSubmit={onSubmitHandler}>
         <div className="form-inner">
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>로그인</TitleText>
@@ -53,7 +72,8 @@ function LoginForm({
                 id="email"
                 placeholder="Email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -63,7 +83,8 @@ function LoginForm({
                 id="password"
                 placeholder="Password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <SignUpBtn

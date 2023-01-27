@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { MapProps } from "../..//shared/type";
 import styled from "styled-components";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { dbService, authService } from "../../shared/firebase";
 
 declare global {
   interface Window {
@@ -84,6 +86,7 @@ const Map = ({ state, setState }: any) => {
           placeholder="주소를 입력해주세요."
           onChange={handleSearchAddress}
         />
+        {/* ✅ 이 버튼은 어떤 역할을 하는건지 */}
         <MapSummitButton onClick={SearchMap}>확인</MapSummitButton>
       </div>
     </>

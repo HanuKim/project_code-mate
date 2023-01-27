@@ -1,6 +1,6 @@
 // import Modal from "../components/Modal";
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, Dispatch } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
@@ -16,18 +16,19 @@ import {
   QuerySnapshot,
   serverTimestamp,
 } from "firebase/firestore";
+import { useDispatch } from "react-redux";
 
 function SignUpForm({
   setIsNotLogin,
   setOpenModal,
 }: {
-  setIsNotLogin: any;
+  setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
   const [modal, setModal] = useState(false);
 
   const authService = getAuth();
@@ -42,52 +43,72 @@ function SignUpForm({
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
 
-  console.log('nickname', nickname);
+  console.log("nickname", nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      console.log('비밀번호 형식을 확인해주세요');
+      console.log("비밀번호 형식을 확인해주세요");
       return;
     } else {
       // 맞을 경우 출력
-      console.log('비밀번호 형식이 맞아요');
+      console.log("비밀번호 형식이 맞아요");
     }
   };
   const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
     if (password !== passwordConfirm) {
-      console.log('비밀번호가 다릅니다.');
+      console.log("비밀번호가 다릅니다.");
       return;
     } else {
-      console.log('비밀번호가 동일합니다.');
+      console.log("비밀번호가 동일합니다.");
     }
   };
 
+  const onSubmitHandler = (event: any) => {
+    event.preventDefault();
+
+    if (email.match(emailRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("이메일 형식을 확인해주세요.");
+    }
+
+    if (password.match(passwordRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("비밀번호 형식을 확인해주세요.");
+    }
+
+    if (password !== passwordConfirm) {
+      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+    } else {
+      alert("회원가입 완료! 🎉");
+    }
+  }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
+
   const displayName = auth.currentUser?.displayName;
-  console.log('displayName', displayName);
+  console.log("displayName", displayName);
   const userInfo = {
-    introduce: '',
-    location: '',
+    introduce: "",
+    location: "",
     nickname: nickname,
-    position: '',
-    stack: '',
+    position: "",
+    stack: "",
     userid: uid,
   };
 
-  console.log('email : ', email);
-  console.log('PW : ', password);
+  console.log("email : ", email);
+  console.log("PW : ", password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(async(userCredential) => {
-        console.log('회원가입 성공 ! :', userCredential);
-        console.log('디스플레이네임', authService.currentUser.displayName);
+      .then(async (userCredential) => {
+        console.log("회원가입 성공 ! :", userCredential);
+        console.log("디스플레이네임", authService.currentUser.displayName);
         setIsNotLogin(false);
         setOpenModal(false);
-         await updateProfile(authService?.currentUser, {
+        await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-         addDoc(collection(dbService, 'user'), userInfo);
+        addDoc(collection(dbService, "user"), userInfo);
       })
       .catch(error => {
         console.log(error);
@@ -95,10 +116,10 @@ function SignUpForm({
   };
 
   return (
-    <Container>
-      <form onSubmit={signUpForm}>
-        <div className='form-inner'>
-          <CloseButton onClick={() => setModal(false)}>x</CloseButton>
+    <Container onSubmit={signUpForm}>
+      <form onSubmit={onSubmitHandler}>
+        <div className="form-inner">
+          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
           <SignUpFormContainer>
@@ -108,56 +129,64 @@ function SignUpForm({
                   setEmail(e.target.value);
                   emailCheck(e.target.value);
                 }}
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                required
               />
             </div>
             <div>
               <NickNameInput
-                type='nickname'
-                name='nickname'
-                id='nickname'
-                placeholder='Nick name'
+                type="nickname"
+                name="nickname"
+                id="nickname"
+                placeholder="Nick name"
                 value={nickname}
-                onChange={e => setNickname(e.target.value)}
+                onChange={(e) => setNickname(e.target.value)}
+                required
               />
             </div>
             <div>
               <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   passwordCheck(e.target.value);
                 }}
+                required
               />
             </div>
             <div>
               <PwChekckInput
-                type='password'
-                name='passwordConfirm'
-                id='passwordConfirm'
-                placeholder='Password Confirm'
+                type="password"
+                name="passwordConfirm"
+                id="passwordConfirm"
+                placeholder="Password Confirm"
                 value={passwordConfirm}
                 onChange={(e) => {
                   setPasswordConfirm(e.target.value);
                   passwordDoubleCheck(password, e.target.value);
                 }}
+                required
               />
             </div>
-            <Text>
-              비밀번호는 영문 대소문자, 숫자를 혼합하여 8~20자를 입력해주세요.
-            </Text>
-            <JoinBtn type='submit' onClick={() => {}}>
+            <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
+            <JoinBtn type="submit" onClick={() => {}}>
               회원가입
             </JoinBtn>
+            <LoginBtn
+              onClick={() => {
+                setIsNotLogin(false);
+              }}
+            >
+              로그인 화면으로
+            </LoginBtn>
           </SignUpFormContainer>
         </div>
       </form>
@@ -175,7 +204,6 @@ const CloseButton = styled.button`
   width: 18px;
   height: 18px;
   margin-left: 310px;
-  margin-bottom: 10px;
   border-radius: 100px;
   border: none;
   background-color: black;
@@ -190,12 +218,12 @@ const CloseButton = styled.button`
 
 const SignUpFormContainer = styled.div`
   margin-left: 38px;
-  margin-top: 10px;
 `;
 
 const TitleText = styled.h2`
   font-size: 20px;
   margin-left: 40px;
+  margin-top: 3px;
 `;
 
 const EmailInput = styled.input`
@@ -240,7 +268,6 @@ const JoinBtn = styled.button`
   border-radius: 5px;
   padding: 8px;
   width: 86%;
-  margin: 20px;
   margin-left: 0px;
   margin-top: 10px;
   position: flex;
@@ -253,23 +280,20 @@ const JoinBtn = styled.button`
     border: 1px solid #262b7f;
     box-shadow: 1px 1px 1px 1px #262b7f;
     color: #262b7f;
+    transition: 0.3s;
   }
 `;
 
-// Firestore DB 연결 Code
-const db = collection(dbService, 'user'); // (참조할 데이터베이스, 그 데이터베이스의 컬렉션 이름)
-const data = {
-  introduce: '',
-  location: '',
-  nickname: '',
-  position: '',
-  stack: '',
-  userid: '',
-};
-addDoc(db, data) // (들어갈 db, 넣을 데이터)
-  .then(db => {
-    console.log('Document has been added successfully');
-  })
-  .catch(error => {
-    console.log(error);
-  });
+const LoginBtn = styled.button`
+  border: none;
+  width: 50%;
+  margin-bottom: 10px;
+  margin-left: 55px;
+  margin-top: 15px;
+  cursor: pointer;
+  color: #a29f9f;
+  &:hover {
+    color: #262b7f;
+    transition: 0.3s;
+  }
+`;
