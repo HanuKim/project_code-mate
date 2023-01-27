@@ -27,6 +27,7 @@ import {getAuth, onAuthStateChanged, updateProfile} from '@firebase/auth';
 import {UserInfo} from '../shared/type';
 import MyInfo from '../components/MyInfo';
 import EditInfo from '../components/EditInfo';
+import userEvent from '@testing-library/user-event';
 
 export default function Mypage() {
   const [isEditProfile, setIsEditProfile] = useState(false);
@@ -36,16 +37,18 @@ export default function Mypage() {
   const [introduce, setIntroduce] = useState('');
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
-  const {id} = useParams();
+  const { id } = useParams();
+  const displayName = authService.currentUser?.displayName
   console.log(stack);
   const [formData, setFormData] = useState<DocumentData>({
-    nickName: '',
+    nickName: displayName,
     stack: stack,
     gitAddress: '',
     introduce: '',
     userid: uid,
   });
-  console.log(formData);
+
+  console.log('formData', formData);
 
   const handleChange = (e: any) => {
     console.log(e.target.value);
@@ -73,19 +76,22 @@ export default function Mypage() {
   const onSubmitMyInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
     e.preventDefault();
-    await setDoc(doc(dbService, 'user', uid), {
-      gitAddress: formData.gitAddress,
-      nickName: formData.nickName,
-      introduce: formData.introduce,
-      stack: formData.stack,
+
+    await updateDoc(doc(dbService, 'user', id), {
+      gitAddress: formData?.gitAddress ?? '',
+      nickName: formData?.nickName ,
+      introduce: formData?.introduce ,
+      stack: formData?.stack ,
       userid: uid,
     });
     await updateProfile(authService?.currentUser, {
-      displayName: formData.nickName,
+      displayName: formData?.nickName,
     });
     getMyInfo();
     setIsEditProfile(false);
   };
+
+
 
   const getMyInfo: any = async () => {
     const snapshot = await getDoc(doc(dbService, 'user', id));
