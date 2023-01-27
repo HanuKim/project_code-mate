@@ -5,11 +5,24 @@ import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
 const EditPost = () => {
+  const location = useLocation();
+  const {
+    category,
+    content,
+    coord: { lat, lng },
+    createdAt,
+    isEdit,
+    nickName,
+    profileImg,
+    title,
+    userId,
+  } = location.state.setDetail;
+
   const navigate = useNavigate();
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
@@ -27,6 +40,13 @@ const EditPost = () => {
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditContent(e.target.value);
   };
+
+  const [state, setState] = useState<MapProps>({
+    // 지도의 초기 위치
+    center: { lat, lng },
+    // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
+    isPanto: true,
+  });
 
   //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
@@ -55,7 +75,7 @@ const EditPost = () => {
   return (
     <Container>
       <CommentForm>
-        <Map location={editPost.coord} />
+        <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
             <ProfilePhoto background={photoURL ?? "black"} />
@@ -90,8 +110,7 @@ const EditPost = () => {
           <CommentSubmitButton
             onClick={() => {
               navigate("/comment/:id");
-            }}
-          >
+            }}>
             취소
           </CommentSubmitButton>
         </CommentLabel>
