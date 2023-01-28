@@ -29,13 +29,6 @@ const CreatePost = () => {
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
 
-  useEffect(() => {
-    addDoc(collection(dbService, "detail"), {
-      title: title,
-      content: content,
-    });
-  }, []);
-
   // 카테고리 함수
   const handleCategory = (e: any) => {
     const checkCat = category.includes(e.target.value);
