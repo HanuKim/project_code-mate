@@ -42,7 +42,6 @@ const CreatePost = () => {
     userId: uid,
     nickName: displayName,
     createdAt: Date.now(),
-    isEdit: false,
     profileImg: photoURL,
     coord: state.center,
   };

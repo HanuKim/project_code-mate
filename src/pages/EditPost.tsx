@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
@@ -11,34 +11,54 @@ import {
   DocumentData,
 } from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import basicImg from "../../img/basicImg.png";
 
 const EditPost = () => {
+  const location = useLocation();
+  const {
+    content,
+    coord: { lat, lng },
+    createdAt,
+    isEdit,
+    nickName,
+    profileImg,
+    title,
+    userId,
+  } = location.state.setDetail;
+
   const navigate = useNavigate();
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [editPost, setEditPost] = useState<DocumentData>({});
+  const [category, setCategory] = useState([]); //카테고리
+  const [editPost, setEditPost] = useState<DocumentData>({
+    title: "",
+    category: category,
+    content: "",
+    coord: { lat, lng },
+  });
+  const ref = useRef(null);
+  console.log("editPost", editPost);
+  const authService = getAuth();
+  const { id } = useParams();
+  const displayName = authService.currentUser?.displayName;
+  const photoURL = authService.currentUser?.photoURL;
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditTitle(e.target.value);
+  };
+  const handleChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditContent(e.target.value);
+  };
+
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
-    center: { lat: 37.50233764246866, lng: 127.04445691495785 },
+    center: { lat, lng },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
-  const authService = getAuth();
-  const { id } = useParams();
-  const uid = authService.currentUser?.uid;
-  const displayName = authService.currentUser?.displayName;
-  const photoURL = authService.currentUser?.photoURL;
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditTitle(e.target.value);
-  };
-  const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditContent(e.target.value);
-  };
 
   //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
@@ -51,17 +71,21 @@ const EditPost = () => {
     getPost();
   }, []);
 
-  const handleEditButton = () => {
-    setEditPost({
-      ...editPost,
-      title: editPost.title,
-      category: editPost.category,
-      content: editPost.content,
-      coord: editPost.coord,
+  const handleEditButton = async () => {
+    // setEditPost({
+    //   title: editPost.title,
+    //   category: editPost.category,
+    //   content: editPost.content,
+    //   coord: editPost.coord,
+    // });
+    await updateDoc(doc(dbService, "post", id), {
+      title: editTitle,
+      category: category,
+      content: editContent,
+      coord: state.center,
     });
-    updateDoc(doc(dbService, "post", id), editPost);
     //alert("수정");
-    navigate(`/comment/${id}`);
+    navigate(`/detail/${id}`);
   };
 
   return (
@@ -79,9 +103,9 @@ const EditPost = () => {
           <Postitle
             defaultValue={editPost.title}
             onChange={handleChangeTitle}
-            value={editTitle}
-            cols={10}
-            wrap="hard"
+            id="title"
+            name="title"
+            ref={ref}
           />
           {correcttitle && (
             <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
@@ -89,9 +113,9 @@ const EditPost = () => {
           <PostText
             defaultValue={editPost.content}
             onChange={handleChangeContent}
-            value={editContent}
-            cols={30}
-            wrap="hard"
+            id="content"
+            name="content"
+            ref={ref}
           />
           {correctcontent && (
             <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
@@ -152,7 +176,7 @@ const CommentLabel = styled.label`
   position: relative;
 `;
 
-const Postitle = styled.textarea`
+const Postitle = styled.input`
   width: 100%;
   height: 100px;
   border-radius: 10px;
@@ -166,7 +190,7 @@ const TitleErrorText = styled.p`
   padding: 10px 0;
 `;
 
-const PostText = styled.textarea`
+const PostText = styled.input`
   width: 100%;
   height: 150px;
   border-radius: 10px;
