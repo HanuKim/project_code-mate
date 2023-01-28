@@ -78,7 +78,7 @@ export default function Mypage() {
     e.preventDefault();
 
     await updateDoc(doc(dbService, 'user', id), {
-      gitAddress: formData?.gitAddress ?? '',
+      gitAddress: formData?.gitAddress,
       nickName: formData?.nickName ,
       introduce: formData?.introduce ,
       stack: formData?.stack ,
