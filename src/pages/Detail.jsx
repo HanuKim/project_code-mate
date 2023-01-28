@@ -70,7 +70,8 @@ export default function Detail() {
                 delete="삭제"
                 edit="수정"
                 btnWidth={80}
-                btnHeight={40}></Button>
+                btnHeight={40}
+              ></Button>
             </ProfileContainer>
             <Title>{setDetail.title}</Title>
             <Contents>{setDetail.content}</Contents>

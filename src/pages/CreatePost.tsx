@@ -1,25 +1,25 @@
-import React, {FC, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import Map from '../components/main/Map';
-import CreateCategory from '../components/main/CreateCategory';
-import {PostState, MapProps} from '../shared/type';
-import {collection, addDoc, doc, getDoc} from 'firebase/firestore';
-import {dbService, authService} from '../shared/firebase';
-import {useNavigate} from 'react-router-dom';
-import {getAuth} from 'firebase/auth';
-import basicImg from '../../img/basicImg.png';
+import React, { FC, useState, useEffect } from "react";
+import styled from "styled-components";
+import Map from "../components/main/Map";
+import CreateCategory from "../components/main/CreateCategory";
+import { PostState, MapProps } from "../shared/type";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import basicImg from "../../img/basicImg.png";
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState(''); //제목
-  const [content, setContent]: any = useState(''); //내용
+  const [title, setTitle] = useState(""); //제목
+  const [content, setContent]: any = useState(""); //내용
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory]:any = useState(['all']); //카테고리
+  const [category, setCategory]: any = useState(["all"]); //카테고리
   //map
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
-    center: {lat: 37.50233764246866, lng: 127.04445691495785},
+    center: { lat: 37.50233764246866, lng: 127.04445691495785 },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
@@ -29,26 +29,18 @@ const CreatePost = () => {
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
 
-  addDoc(collection(dbService, 'detail'), {
+  addDoc(collection(dbService, "detail"), {
     title: title,
     content: content,
   });
-// (prevCategory:any) => {
-//         return {
-//           ...prevCategory,
-//           [e.target.name]: 
   // 카테고리 함수
   const handleCategory = (e: any) => {
     const checkCat = category.includes(e.target.value);
-    console.log(checkCat)
-    console.log('2', e.target.value)
     if (checkCat) {
       setCategory(category.filter((prev: any) => prev !== e.target.value));
     } else {
-      
       setCategory((prev: any) => [...prev, e.target.value]);
     }
-    console.log(category)
   };
   //add
   const newPost = {
@@ -58,7 +50,6 @@ const CreatePost = () => {
     userId: uid,
     nickName: displayName,
     createdAt: Date.now(),
-    isEdit: false,
     profileImg: photoURL,
     coord: state.center,
   };
@@ -80,9 +71,9 @@ const CreatePost = () => {
       setCorrectContent(true);
       return;
     } else {
-      await addDoc(collection(dbService, 'post'), newPost);
-      setTitle('');
-      setContent('');
+      await addDoc(collection(dbService, "post"), newPost);
+      setTitle("");
+      setContent("");
       navigate(`/`);
     }
   };
@@ -92,12 +83,10 @@ const CreatePost = () => {
       <CommentForm>
         {/* Map 컴포넌트 */}
         <Map state={state} setState={setState} />
-        <PostsTopContainer>
-          <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? 'black'} />
-            <ProfileNickName>{displayName}</ProfileNickName>
-          </ProfileContainer>
-        </PostsTopContainer>
+        <ProfileContainer>
+          <ProfilePhoto background={photoURL ?? "black"} />
+          <ProfileNickName>{displayName}</ProfileNickName>
+        </ProfileContainer>
         <CreateCategory
           category={category}
           setCategory={setCategory}
@@ -106,21 +95,21 @@ const CreatePost = () => {
         <CommentLabel>
           {/* 제목,내용 input */}
           <Postitle
-            placeholder='제목을 입력 해주세요.'
+            placeholder="제목을 입력 해주세요."
             onChange={handleChangeTitle}
             value={title}
             cols={10}
-            wrap='hard'
+            wrap="hard"
           />
           {correcttitle && (
             <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
           )}
           <PostText
-            placeholder='내용을 입력 해주세요.'
+            placeholder="내용을 입력 해주세요."
             onChange={handleChangeContent}
             value={content}
             cols={30}
-            wrap='hard'
+            wrap="hard"
           />
           {correctcontent && (
             <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
@@ -135,18 +124,14 @@ const CreatePost = () => {
 };
 export default CreatePost;
 
-const PostsTopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const ProfileContainer = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  margin: 0 0 10px;
 `;
 
-const ProfilePhoto = styled.div<{background: any}>`
+const ProfilePhoto = styled.div<{ background: any }>`
   background-image: url(${(props) => props.background});
   background-position: center center;
   background-size: cover;
