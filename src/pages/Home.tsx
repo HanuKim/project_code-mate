@@ -126,12 +126,12 @@ const WriteContainer = styled.div`
 `;
 
 const WriteBt = styled.button`
-  background-color: none;
-  border: none;
-  border-radius: 50%;
   width: 52px;
   height: 52px;
   margin: 40px 0 20px 0;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  background-color: #f2f2f2;
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

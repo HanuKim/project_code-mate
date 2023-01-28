@@ -39,9 +39,9 @@ const JobBar = styled.div`
   font-size: 14px;
 
   cursor: pointer;
-  transition-duration : .3s;
+  transition-duration: 0.3s;
   &:hover {
     color: #f2f2f2;
-    background-color #262b7f;
-  };
+    background-color: #262b7f;
+  }
 `;

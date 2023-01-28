@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { HiOutlinePencilSquare } from 'react-icons/hi2';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 import {
   collection,
   onSnapshot,
@@ -16,29 +16,29 @@ import {
   limit,
   QuerySnapshot,
   where,
-} from 'firebase/firestore';
-import { dbService, authService } from '../shared/firebase';
-import MainCategory from '../components/main/MainCategory';
-import { useFirestoreQuery } from '@react-query-firebase/firestore';
-import { PostState } from '../shared/type';
-import { useNavigate, useParams } from 'react-router-dom';
-import MyPostCategory from './main/MyPostCategory';
-import MyPostList from './main/MyPostList';
+} from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import MainCategory from "../components/main/MainCategory";
+import { useFirestoreQuery } from "@react-query-firebase/firestore";
+import { PostState } from "../shared/type";
+import { useNavigate, useParams } from "react-router-dom";
+import MyPostCategory from "./main/MyPostCategory";
+import MyPostList from "./main/MyPostList";
 
 export default function MyPost() {
   const [posts, setPosts] = useState<PostState[]>([]);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
 
   const id = useParams();
 
   const uid =
-    authService.currentUser?.uid || window.localStorage.getItem('userid');
+    authService.currentUser?.uid || window.localStorage.getItem("userid");
 
   const q = query(
-    collection(dbService, 'post'),
-    orderBy('createdAt', 'desc'),
-    where('userId', '==', useParams().id)
+    collection(dbService, "post"),
+    orderBy("createdAt", "desc"),
+    where("userId", "==", useParams().id)
   );
   // console.log('Mypost uid', authService.currentUser);
   // console.log('mypostid', useParams());
@@ -49,7 +49,7 @@ export default function MyPost() {
     const hourgap = Math.floor(msgap / 3600000);
     const daygap = Math.floor(msgap / 86400000);
     if (msgap < 0) {
-      return '0분전';
+      return "0분전";
     }
     if (daygap > 7) {
       const time = new Date(posting);
@@ -66,8 +66,8 @@ export default function MyPost() {
     }
   };
   const getPost = () => {
-    onSnapshot(q, snapshot => {
-      const newPosts = snapshot.docs.map(doc => {
+    onSnapshot(q, (snapshot) => {
+      const newPosts = snapshot.docs.map((doc) => {
         // console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
@@ -91,7 +91,7 @@ export default function MyPost() {
 
     const getCategory = async () => {
       const snapshot = await getDoc(
-        doc(dbService, 'category', 'currentCategory')
+        doc(dbService, "category", "currentCategory")
       );
       //   console.log(snapshot.data());
       setCategory(snapshot.data().category);
@@ -108,8 +108,8 @@ export default function MyPost() {
   );
 }
 const Container = styled.div`
-  max-width: 1440px;
-  width: 80%;
+  max-width: 1200px;
+  width: 100%;
   margin: 20px auto;
 `;
 

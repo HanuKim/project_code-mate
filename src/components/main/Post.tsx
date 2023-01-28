@@ -129,8 +129,6 @@ const BottomCategoryBt = styled.button`
 
   font-size: 12px;
   font-weight: bold;
-  color: #efefef;
+  color: #f2f2f2;
   background-color: #262b7f;
-
-  filter: drop-shadow(1px 2px 3px #818181);
 `;
