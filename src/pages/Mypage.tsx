@@ -74,21 +74,39 @@ export default function Mypage() {
   };
 
   const onSubmitMyInfo = async (e: React.FormEvent<HTMLFormElement>) => {
-    // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
     e.preventDefault();
-
-    await updateDoc(doc(dbService, 'user', id), {
-      gitAddress: formData?.gitAddress,
-      nickName: formData?.nickName ,
-      introduce: formData?.introduce ,
-      stack: formData?.stack ,
-      userid: uid,
-    });
-    await updateProfile(authService?.currentUser, {
-      displayName: formData?.nickName,
-    });
-    getMyInfo();
-    setIsEditProfile(false);
+    let reg_url =
+      /^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))*\/?$/;
+    // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
+    if (formData?.nickName.replace(/ /g, '') === '') {
+      alert('nickname을 입력해주세요');
+      return;
+    } else if (formData?.stack.replace(/ /g, '') === '') {
+      alert('stack을 입력해주세요');
+      return;
+    } else if (formData?.gitAddress.replace(/ /g, '') === '') {
+      alert('gitAddress을 입력해주세요');
+      return;
+    } else if (!reg_url.test(formData?.gitAddress)) {
+      alert('URL 형식에 맞게 입력해주세요!');
+      return;
+    } else if (formData?.introduce.replace(/ /g, '') === '') {
+      alert('gitAddress을 입력해주세요');
+      return;
+    } else {
+      await updateDoc(doc(dbService, 'user', id), {
+        gitAddress: formData?.gitAddress,
+        nickName: formData?.nickName,
+        introduce: formData?.introduce,
+        stack: formData?.stack,
+        userid: uid,
+      });
+      await updateProfile(authService?.currentUser, {
+        displayName: formData?.nickName,
+      });
+      getMyInfo();
+      setIsEditProfile(false);
+    }
   };
 
   const getMyInfo: any = async () => {
