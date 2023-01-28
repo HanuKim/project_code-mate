@@ -260,7 +260,7 @@ const ButtonContainer = styled.div`
 `;
 const CommentButton = styled.span`
   font-size: 12px;
-  color: #aaaaaa;
+  color: #aaa;
   cursor: pointer;
   &:hover {
     color: #000000;

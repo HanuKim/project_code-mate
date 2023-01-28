@@ -79,5 +79,9 @@ const JobBar = styled.div`
   color: #f2f2f2;
   font-size: 14px;
   cursor: pointer;
-
+  transition-duration: 0.3s;
+  &:hover {
+    color: #f2f2f2;
+    background-color: #262b7f;
+  }
 `;

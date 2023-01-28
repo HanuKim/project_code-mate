@@ -69,7 +69,6 @@ const CategoryContainer = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  /* background-color: green; */
 `;
 const CategoryBt = styled.button`
   height: 52px;
