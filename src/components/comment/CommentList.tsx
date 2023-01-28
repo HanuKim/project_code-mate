@@ -94,10 +94,8 @@ export default function CommentList() {
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as Comment;
-        console.log("newComment", newComment);
         return newComment;
       });
-      console.log("Comments", comments);
       setComments(newComments);
     });
   };

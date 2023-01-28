@@ -20,7 +20,6 @@ export default function JobCategory() {
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setCategoryPost(data);
   };
-  console.log(categorypost.category);
   useEffect(() => {
     getPost();
   }, []);

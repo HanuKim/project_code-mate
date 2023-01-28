@@ -39,9 +39,7 @@ export default function Detail() {
     const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     getSetDetail(data);
-    console.log("data : ", data);
   };
-
   useEffect(() => {
     getDetail();
   }, []);
@@ -62,6 +60,7 @@ export default function Detail() {
               {uid === setDetail.userId ? (
                 <Button
                   location={setDetail.coord}
+                  id={id}
                   delete="삭제"
                   edit="수정"
                   btnWidth={80}
