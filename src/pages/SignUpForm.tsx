@@ -37,8 +37,7 @@ function SignUpForm({
   const uid = authService.currentUser?.uid;
 
   // email, password 정규식
-  const emailRegEx =
-    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
 
   const emailCheck = (email: any) => {
@@ -82,7 +81,6 @@ function SignUpForm({
       return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
     } else {
       alert("회원가입 완료! 🎉");
-      
     }
   }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
 
@@ -93,6 +91,21 @@ function SignUpForm({
 
   const signUpForm = (e: any) => {
     e.preventDefault();
+    if (email.match(emailRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("이메일 형식을 확인해주세요.");
+    }
+
+    if (password.match(passwordRegEx) === null) {
+      //형식에 맞지 않을 경우 아래 alert 출력
+      return alert("비밀번호 형식을 확인해주세요.");
+    }
+
+    if (password !== passwordConfirm) {
+      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+    } else {
+      alert("회원가입 완료! 🎉");
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         console.log("회원가입 성공 ! :", userCredential);
@@ -102,17 +115,17 @@ function SignUpForm({
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-        await setDoc(doc(dbService, 'user', uid), {
+        await setDoc(doc(dbService, "user", uid), {
           userid: uid,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
 
   return (
-    <Container onSubmit={signUpForm}>
+    <Container>
       <form onSubmit={onSubmitHandler}>
         <div className="form-inner">
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
@@ -173,7 +186,7 @@ function SignUpForm({
               />
             </div>
             <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
-            <JoinBtn type="submit" onClick={() => {}}>
+            <JoinBtn type="submit" onClick={signUpForm}>
               회원가입
             </JoinBtn>
             <LoginBtn
