@@ -15,7 +15,7 @@ const CreatePost = () => {
   const [content, setContent]: any = useState(""); //내용
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory] = useState(["all"]); //카테고리
+  const [category, setCategory]: any = useState(["all"]); //카테고리
   //map
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
@@ -33,7 +33,15 @@ const CreatePost = () => {
     title: title,
     content: content,
   });
-
+  // 카테고리 함수
+  const handleCategory = (e: any) => {
+    const checkCat = category.includes(e.target.value);
+    if (checkCat) {
+      setCategory(category.filter((prev: any) => prev !== e.target.value));
+    } else {
+      setCategory((prev: any) => [...prev, e.target.value]);
+    }
+  };
   //add
   const newPost = {
     title,
@@ -75,13 +83,15 @@ const CreatePost = () => {
       <CommentForm>
         {/* Map 컴포넌트 */}
         <Map state={state} setState={setState} />
-        <PostsTopContainer>
-          <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? "black"} />
-            <ProfileNickName>{displayName}</ProfileNickName>
-          </ProfileContainer>
-        </PostsTopContainer>
-        <CreateCategory category={category} setCategory={setCategory} />
+        <ProfileContainer>
+          <ProfilePhoto background={photoURL ?? "black"} />
+          <ProfileNickName>{displayName}</ProfileNickName>
+        </ProfileContainer>
+        <CreateCategory
+          category={category}
+          setCategory={setCategory}
+          handleCategory={handleCategory}
+        />
         <CommentLabel>
           {/* 제목,내용 input */}
           <Postitle
@@ -114,15 +124,11 @@ const CreatePost = () => {
 };
 export default CreatePost;
 
-const PostsTopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const ProfileContainer = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  margin: 0 0 10px;
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`

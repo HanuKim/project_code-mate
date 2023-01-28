@@ -88,7 +88,7 @@ const Map = ({ state, setState }: any) => {
           marginLeft: "auto",
         }}
       />
-      <div>
+      <MapSearchContainer>
         {/* 주소창 */}
         <MapInput
           placeholder="주소를 입력해주세요."
@@ -96,30 +96,35 @@ const Map = ({ state, setState }: any) => {
         />
         {/* onclick시 검색한 키워드의 지도 좌표를 띄움 */}
         <MapSummitButton onClick={SearchMap}>확인</MapSummitButton>
-      </div>
+      </MapSearchContainer>
     </>
   );
 };
 
 export default Map;
 
+const MapSearchContainer = styled.div`
+  width: 100%;
+  margin: 10px 0;
+`;
 const MapInput = styled.input`
   width: 80%;
   height: 80px;
   border-radius: 10px;
+  border: 1px solid #a8a8a8;
   padding: 15px 20px;
   resize: none;
   margin: 10px 0;
-  outline-color: #262b7f;
 `;
 const MapSummitButton = styled.button`
   float: right;
   background-color: #ffffff;
-  border: 1px solid #000000;
-  width: 17%;
+  border: 1px solid #a8a8a8;
+  width: 15%;
   height: 80px;
   border-radius: 10px;
   margin: 10px;
+  font-size: 18px;
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

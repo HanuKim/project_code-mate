@@ -1,81 +1,87 @@
 import { current } from "@reduxjs/toolkit";
-import React, { useCallback, useState } from "react";
+import { addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { dbService } from "../../shared/firebase";
 
-export default function CreateCategory({ category, setCategory }: any) {
+export default function CreateCategory({
+  category,
+  setCategory,
+  handleCategory,
+}: any) {
   const [isClickfront, setIsClickfront] = useState(false);
   const [isClickBack, setIsClickBack] = useState(false);
   const [isClickDesign, setIsClickDesign] = useState(false);
   const [isClickPul, setIsClickPul] = useState(false);
   const [isClickPm, setIsClickPm] = useState(false);
+  const { id } = useParams();
 
-  const setCat = (e: any) => {
-    //console.log("setCat!!!!!");
-    const cat = e.target.value;
-    const setCate = category.filter((prev: any) => prev !== cat);
-    if (setCate.includes(cat) === true) {
-      setCate.filter((prev: any) => prev !== cat);
-    } else {
-      setCate.push(cat);
-    }
-    setCategory(setCate);
-  };
   return (
     <CategoryContainer>
       <CategoryBt
-        value="front"
+        type="button"
+        value={"front"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
-          setCat(e);
+          handleCategory(e);
           setIsClickfront(!isClickfront);
         }}
         style={{
           borderColor: isClickfront ? "#262b7f" : "#a8a8a8",
         }}
-      >
-        프론트엔드
-      </CategoryBt>
+      />
+
       <CategoryBt
-        value="back"
+        type="button"
+        value={"back"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
-          setCat(e);
+          handleCategory(e);
           setIsClickBack(!isClickBack);
         }}
         style={{ borderColor: isClickBack ? "#262b7f" : "#a8a8a8" }}
-      >
-        백엔드
-      </CategoryBt>
+      />
+
       <CategoryBt
-        value="design"
+        type="button"
+        value={"design"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
-          setCat(e);
+          handleCategory(e);
           setIsClickDesign(!isClickDesign);
         }}
         style={{
           borderColor: isClickDesign ? "#262b7f" : "#a8a8a8",
         }}
-      >
-        디자이너
-      </CategoryBt>
+      />
+
       <CategoryBt
-        value="publ"
+        type="button"
+        value={"publ"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
-          setCat(e);
+          handleCategory(e);
           setIsClickPul(!isClickPul);
         }}
         style={{ borderColor: isClickPul ? "#262b7f" : "#a8a8a8" }}
-      >
-        퍼블리셔
-      </CategoryBt>
+      />
+
       <CategoryBt
-        value="pm"
+        type="button"
+        value={"pm"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
-          setCat(e);
+          handleCategory(e);
           setIsClickPm(!isClickPm);
         }}
         style={{ borderColor: isClickPm ? "#262b7f" : "#a8a8a8" }}
-      >
-        PM
-      </CategoryBt>
+      />
     </CategoryContainer>
   );
 }
@@ -85,7 +91,7 @@ const CategoryContainer = styled.div`
   gap: 25px;
   justify-content: center;
 `;
-const CategoryBt = styled.button`
+const CategoryBt = styled.input`
   height: 55px;
   width: 150px;
   border: 1px solid #a8a8a8;

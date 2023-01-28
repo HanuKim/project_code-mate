@@ -8,8 +8,6 @@ import { dbService } from "../shared/firebase";
 // interface 생성해서.
 
 export default function Button(props: MixBtnProps) {
-  console.log("props", props);
-
   let { id } = useParams();
 
   const [setDetail, getSetDetail] = useState("");
@@ -18,13 +16,10 @@ export default function Button(props: MixBtnProps) {
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     // @ts-ignore
     getSetDetail(data);
-    console.log("data : ", data);
   };
   useEffect(() => {
     getDetail();
   }, []);
-
-  console.log("setDetail : ", setDetail);
 
   return (
     <Container>

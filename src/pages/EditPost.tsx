@@ -33,7 +33,7 @@ const EditPost = () => {
   const [editContent, setEditContent] = useState("");
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory] = useState([]); //카테고리
+  const [category, setCategory] = useState(["all"]); //카테고리
   const [editPost, setEditPost] = useState<DocumentData>({
     title: "",
     category: category,
@@ -41,7 +41,6 @@ const EditPost = () => {
     coord: { lat, lng },
   });
   const ref = useRef(null);
-  console.log("editPost", editPost);
   const authService = getAuth();
   const { id } = useParams();
   const displayName = authService.currentUser?.displayName;
@@ -52,7 +51,15 @@ const EditPost = () => {
   const handleChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditContent(e.target.value);
   };
-
+  //카테고리 토글기능..category안에 넣을 수 있는지
+  const handleCategory = (e: any) => {
+    const checkCat = category.includes(e.target.value);
+    if (checkCat) {
+      setCategory(category.filter((prev: any) => prev !== e.target.value));
+    } else {
+      setCategory((prev: any) => [...prev, e.target.value]);
+    }
+  };
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
     center: { lat, lng },
@@ -72,12 +79,6 @@ const EditPost = () => {
   }, []);
 
   const handleEditButton = async () => {
-    // setEditPost({
-    //   title: editPost.title,
-    //   category: editPost.category,
-    //   content: editPost.content,
-    //   coord: editPost.coord,
-    // });
     await updateDoc(doc(dbService, "post", id), {
       title: editTitle,
       category: category,
@@ -87,7 +88,7 @@ const EditPost = () => {
     //alert("수정");
     navigate(`/detail/${id}`);
   };
-
+  console.log("editPost", editPost);
   return (
     <Container>
       <CommentForm>
@@ -98,7 +99,11 @@ const EditPost = () => {
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
-        <CreateCategory />
+        <CreateCategory
+          category={category}
+          setCategory={setCategory}
+          handleCategory={handleCategory}
+        />
         <CommentLabel>
           <Postitle
             defaultValue={editPost.title}
