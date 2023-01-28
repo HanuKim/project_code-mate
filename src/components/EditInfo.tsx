@@ -1,4 +1,4 @@
-import {doc, DocumentData, setDoc} from 'firebase/firestore';
+import { doc, DocumentData, setDoc } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { authService, dbService } from '../shared/firebase';
@@ -13,10 +13,10 @@ export default function EditInfo({
   setIsEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   stack: string;
   formData: DocumentData;
-  }) {
+}) {
   const getProfileName = async () => {
     const displayName = authService.currentUser?.displayName;
-      const uid = authService.currentUser?.uid;
+    const uid = authService.currentUser?.uid;
     await setDoc(doc(dbService, 'user', uid), {
       nickName: displayName,
       stack: '',
@@ -24,38 +24,45 @@ export default function EditInfo({
       introduce: '',
       userid: uid,
     });
-  }
+  };
   useEffect(() => {
-      const displayName = authService.currentUser?.displayName;
-      console.log(displayName);
-  },[])
+    const displayName = authService.currentUser?.displayName;
+    console.log(displayName);
+  }, []);
   const displayName = authService.currentUser?.displayName;
   console.log(displayName);
   return (
     <>
-      <p>Nickname: {displayName}</p>
-      <p>
-        Stack:
-        {formData?.stack ? (
-          <ViewStackButton>{formData?.stack}</ViewStackButton>
-        ) : undefined}
-      </p>
-
-      <p>github_Address:{formData?.gitAddress}</p>
-      <p>introduce:{formData?.introduce}</p>
-      <ProfileContentsBtnBox>
-        <button
-          onClick={() => {
-            setIsEditProfile(true);
-            getProfileName();
-          }}
-        >
-          편집
-        </button>
-      </ProfileContentsBtnBox>
+      <ProfileContainer>
+        <p>Nickname: {displayName}</p>
+        <p>
+          Stack:
+          {formData?.stack ? (
+            <ViewStackButton>{formData?.stack}</ViewStackButton>
+          ) : undefined}
+        </p>
+        <p>github_Address:{formData?.gitAddress}</p>
+        <p>introduce:{formData?.introduce}</p>
+        <ProfileContentsBtnBox>
+          <button
+            onClick={() => {
+              setIsEditProfile(true);
+              getProfileName();
+            }}
+          >
+            편집
+          </button>
+        </ProfileContentsBtnBox>
+      </ProfileContainer>
     </>
   );
 }
+
+const ProfileContainer = styled.div`
+  /* background-color: red; */
+  margin-top: -12px;
+  margin-left: 10px;
+`;
 
 const ViewStackButton = styled.button`
   padding: 0 15px;
@@ -69,7 +76,8 @@ const ViewStackButton = styled.button`
 `;
 
 const ProfileContentsBtnBox = styled.div`
-  background-color: gray;
+  /* background-color: gray; */
   position: absolute;
   right: 70px;
+  top: 215px;
 `;

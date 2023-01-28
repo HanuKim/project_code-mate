@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useState } from "react";
-import Modal from "../components/Modal";
-import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { auth } from "../shared/firebase";
+import React, { PropsWithChildren, useState } from 'react';
+import Modal from '../components/Modal';
+import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { auth } from '../shared/firebase';
 // React.Dispatch<React.SetStateAction<boolean>>
 
 function LoginForm({
@@ -16,14 +16,15 @@ function LoginForm({
   const { id } = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  console.log("email : ", email);
-  console.log("PW : ", password);
+  console.log('email : ', email);
+  console.log('PW : ', password);
 
   // email, password 정규식
-  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
 
   const onSubmitHandler = (event: any) => {
@@ -31,14 +32,14 @@ function LoginForm({
 
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("올바른 이메일 형식이 아닙니다.");
+      return alert('올바른 이메일 형식이 아닙니다.');
     }
 
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.");
+      return alert('비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.');
     } else {
-      alert("로그인 성공! 🎉");
+      alert('로그인 성공! 🎉');
     }
   }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
 
@@ -71,7 +72,7 @@ function LoginForm({
                 id="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -82,7 +83,7 @@ function LoginForm({
                 id="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
               />
             </div>
