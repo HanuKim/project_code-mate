@@ -42,7 +42,9 @@ export default function EditInfo({
           ) : undefined}
         </p>
         <p>github_Address:{formData?.gitAddress}</p>
+
         <p>introduce:{formData?.introduce}</p>
+
         <ProfileContentsBtnBox>
           <button
             onClick={() => {

@@ -36,8 +36,9 @@ export default function Profile() {
     setLoading(false);
     alert('Uploaded file!');
   }
+  console.log('photoURL', photoURL);
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  async function handleChange(e: ChangeEvent<HTMLInputElement>) {
     if (e?.target?.files?.[0]) {
       setPhoto(e?.target?.files?.[0]);
     }
@@ -54,11 +55,10 @@ export default function Profile() {
   }, [currentUser]);
 
   return (
-    <div className="fields">
-      <ProfileImage src={photoURL} width={150} height={130} />
+    <div>
+      <ProfileImage src={photoURL} width={150} height={130}></ProfileImage>
       <ButtonWrap>
         <FileSelectBtn htmlFor="input-file">
-          {' '}
           파일선택
           <input type="file" hidden id="input-file" onChange={handleChange} />
         </FileSelectBtn>
