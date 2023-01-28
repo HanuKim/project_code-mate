@@ -1,9 +1,9 @@
-import React, { Children } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { doc, deleteDoc } from "firebase/firestore";
-import { dbService } from "../../shared/firebase";
-import styled from "styled-components";
-import { Comment } from "../../shared/type";
+import React, { Children } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { dbService } from '../../shared/firebase';
+import styled from 'styled-components';
+import { Comment } from '../../shared/type';
 // import {openModal, closeModal} from '../../redux/modules/modalSlice';
 
 export default function DeleteModal({
@@ -19,12 +19,12 @@ export default function DeleteModal({
     setDeleteViewModal(false);
   };
   const deleteCommentClickButton = async (commentid: string) => {
-    await deleteDoc(doc(dbService, "comment", commentid));
+    await deleteDoc(doc(dbService, 'comment', commentid));
     setDeleteViewModal(false);
   };
 
   const deletePosttClickButton = async (id: string) => {
-    await deleteDoc(doc(dbService, "post", id));
+    await deleteDoc(doc(dbService, 'post', id));
     setDeleteViewModal(false);
     navigate(`/`);
   };
@@ -61,7 +61,7 @@ export const ContainerBg = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 10;

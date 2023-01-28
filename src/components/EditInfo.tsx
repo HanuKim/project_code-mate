@@ -42,9 +42,9 @@ export default function EditInfo({
           ) : undefined}
         </p>
         <p>github_Address:{formData?.gitAddress}</p>
-        <TestBox>
-          <p>introduce:{formData?.introduce}</p>
-        </TestBox>
+
+        <p>introduce:{formData?.introduce}</p>
+
         <ProfileContentsBtnBox>
           <button
             onClick={() => {
@@ -82,8 +82,4 @@ const ProfileContentsBtnBox = styled.div`
   position: absolute;
   right: 70px;
   top: 215px;
-`;
-
-const TestBox = styled.div`
-  background-color: red;
 `;
