@@ -1,7 +1,7 @@
-import {DocumentData} from 'firebase/firestore';
-import React, {useState} from 'react';
+import { DocumentData } from 'firebase/firestore';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {authService} from '../shared/firebase';
+import { authService } from '../shared/firebase';
 
 export default function MyInfo({
   isEditProfile,
@@ -37,22 +37,22 @@ export default function MyInfo({
           <label>
             NickName:
             <input
-              type='text'
+              type="text"
               onChange={handleChange}
               value={formData?.nickName ?? displayName}
-              id='nickName'
-              name='nickName'
+              id="nickName"
+              name="nickName"
             />
           </label>
 
           <StackContainer>
             Stack:
             <StackButton
-              type='button'
+              type="button"
               value={'프론트엔드'}
               onClick={handleChange}
-              id='stack'
-              name='stack'
+              id="stack"
+              name="stack"
               style={{
                 backgroundColor:
                   stackData === '프론트엔드' ? '#262b7f' : '#ffffff',
@@ -60,18 +60,18 @@ export default function MyInfo({
               }}
             />
             <StackButton
-              type='button'
+              type="button"
               value={'백엔드'}
               onClick={handleChange}
               style={{
                 backgroundColor: stackData === '백엔드' ? '#262b7f' : '#ffffff',
                 color: stackData === '백엔드' ? '#ffffff' : '#262b7f',
               }}
-              id='stack'
-              name='stack'
+              id="stack"
+              name="stack"
             />
             <StackButton
-              type='button'
+              type="button"
               value={'디자이너'}
               onClick={handleChange}
               style={{
@@ -79,11 +79,11 @@ export default function MyInfo({
                   stackData === '디자이너' ? '#262b7f' : '#ffffff',
                 color: stackData === '디자이너' ? '#ffffff' : '#262b7f',
               }}
-              id='stack'
-              name='stack'
+              id="stack"
+              name="stack"
             />
             <StackButton
-              type='button'
+              type="button"
               value={'퍼블리셔'}
               onClick={handleChange}
               style={{
@@ -93,36 +93,36 @@ export default function MyInfo({
               }}
             />
             <StackButton
-              type='button'
+              type="button"
               value={'PM'}
               onClick={handleChange}
               style={{
                 backgroundColor: stackData === 'PM' ? '#262b7f' : '#ffffff',
                 color: stackData === 'PM' ? '#ffffff' : '#262b7f',
               }}
-              id='stack'
-              name='stack'
+              id="stack"
+              name="stack"
             />
           </StackContainer>
 
           <label>
             github_Address:
             <input
-              type='text'
+              type="text"
               onChange={handleChange}
               value={formData?.gitAddress}
-              id='gitAddress'
-              name='gitAddress'
+              id="gitAddress"
+              name="gitAddress"
             />
           </label>
           <label>
             introduce:
             <input
-              type='text'
+              type="text"
               onChange={handleChange}
               value={formData?.introduce}
-              id='introduce'
-              name='introduce'
+              id="introduce"
+              name="introduce"
             />
           </label>
         </ProfileContentsBox>
@@ -139,9 +139,11 @@ const EditMyInfoForm = styled.form``;
 const ProfileContentsBox = styled.div`
   /* background-color: blue; */
   display: flex;
-  gap: 30px;
+  gap: 15px;
   flex-direction: column;
   align-items: flex-start;
+  padding: 10px;
+  margin-top: -7px;
 `;
 
 const StackContainer = styled.div`
@@ -164,7 +166,8 @@ const StackButton = styled.input`
 `;
 
 const ProfileContentsBtnBox = styled.div`
-  background-color: gray;
+  /* background-color: gray; */
   position: absolute;
   right: 70px;
+  top: 215px;
 `;

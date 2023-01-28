@@ -1,5 +1,5 @@
 // react-icons 다운
-import {useState, useCallback, useEffect, useRef} from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import MypageModal from '../components/MypageModal';
 // import { ShowImage } from '../components/ShowImage';
@@ -18,13 +18,13 @@ import {
   setDoc,
   DocumentData,
 } from 'firebase/firestore';
-import {auth, dbService, authService} from '../shared/firebase';
+import { auth, dbService, authService } from '../shared/firebase';
 import Profile from '../components/Profile';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import MyPost from '../components/MyPost';
-import {identifier} from '@babel/types';
-import {getAuth, onAuthStateChanged, updateProfile} from '@firebase/auth';
-import {UserInfo} from '../shared/type';
+import { identifier } from '@babel/types';
+import { getAuth, onAuthStateChanged, updateProfile } from '@firebase/auth';
+import { UserInfo } from '../shared/type';
 import MyInfo from '../components/MyInfo';
 import EditInfo from '../components/EditInfo';
 import userEvent from '@testing-library/user-event';
@@ -38,7 +38,7 @@ export default function Mypage() {
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
   const { id } = useParams();
-  const displayName = authService.currentUser?.displayName
+  const displayName = authService.currentUser?.displayName;
   console.log(stack);
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
@@ -52,7 +52,7 @@ export default function Mypage() {
 
   const handleChange = (e: any) => {
     console.log(e.target.value);
-    setFormData((prevFormData) => {
+    setFormData(prevFormData => {
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,
@@ -78,7 +78,7 @@ export default function Mypage() {
     e.preventDefault();
 
     await updateDoc(doc(dbService, 'user', id), {
-      gitAddress: formData?.gitAddress ?? '',
+      gitAddress: formData?.gitAddress,
       nickName: formData?.nickName ,
       introduce: formData?.introduce ,
       stack: formData?.stack ,
@@ -90,8 +90,6 @@ export default function Mypage() {
     getMyInfo();
     setIsEditProfile(false);
   };
-
-
 
   const getMyInfo: any = async () => {
     const snapshot = await getDoc(doc(dbService, 'user', id));
@@ -119,45 +117,35 @@ export default function Mypage() {
                     <Profile />
                   </ProfileWrap>
                 </TopProfilePhoto>
-                <ProfileContents>
-                  {isEditProfile ? (
-                    <MyInfo
-                      isEditProfile={isEditProfile}
-                      onChangeNickName={onChangeNickName}
-                      myInfo={myInfo}
-                      setStack={setStack}
-                      stack={stack}
-                      onChangegitAddress={onChangegitAddress}
-                      onChangeintroduce={onChangeintroduce}
-                      setIsEditProfile={setIsEditProfile}
-                      onSubmitMyInfo={onSubmitMyInfo}
-                      formData={formData}
-                      handleChange={handleChange}
-                    />
-                  ) : (
-                    <EditInfo
-                      myInfo={myInfo}
-                      setIsEditProfile={setIsEditProfile}
-                      stack={stack}
-                      formData={formData}
-                    />
-                  )}
-                </ProfileContents>
+
                 <TopProfileNickName></TopProfileNickName>
               </TopProfileContainer>
               <UploadWrap></UploadWrap>
-            </ProfileTitle>
-
-            <InputContainer>
-              {/* {isOpenModall && (
-                  <MypageModal onClickToggleModal={onClickToggleModall}>
-                    <MypageCreate />
-                  </MypageModal>
+              <ProfileContents>
+                {isEditProfile ? (
+                  <MyInfo
+                    isEditProfile={isEditProfile}
+                    onChangeNickName={onChangeNickName}
+                    myInfo={myInfo}
+                    setStack={setStack}
+                    stack={stack}
+                    onChangegitAddress={onChangegitAddress}
+                    onChangeintroduce={onChangeintroduce}
+                    setIsEditProfile={setIsEditProfile}
+                    onSubmitMyInfo={onSubmitMyInfo}
+                    formData={formData}
+                    handleChange={handleChange}
+                  />
+                ) : (
+                  <EditInfo
+                    myInfo={myInfo}
+                    setIsEditProfile={setIsEditProfile}
+                    stack={stack}
+                    formData={formData}
+                  />
                 )}
-                <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
-
-              {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
-            </InputContainer>
+              </ProfileContents>
+            </ProfileTitle>
           </TopContainer>
 
           <BottomContainer>
@@ -187,26 +175,28 @@ const MypageBox = styled.div`
   width: 1000px;
   height: 100%;
   background-color: white;
-  margin: 120px;
+  margin: 40px;
   border-radius: 10px;
   padding: 30px;
 `;
 
 const TopContainer = styled.div`
   background-color: white;
-  height: 850px;
+  height: 300px;
   margin-top: 50px;
   border: 1px solid black;
   border-radius: 10px;
   padding: 40px;
   position: relative;
+  /* background-color: blue; */
 `;
 
 const ProfileTitle = styled.div`
-  /* background-color: red; */
+  /* background-color: purple; */
   height: 200px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const UploadWrap = styled.div`
@@ -239,14 +229,15 @@ const BottomContainer = styled.div`
 `;
 
 const TopProfileContainer = styled.div`
+  /* background-color: red; */
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
+  margin-top: 50px;
 `;
 
 const TopProfilePhoto = styled.div`
-  /* background-image: url(https://www.pngall.com/wp-content/uploads/5/Profile.png); */
+  /* background-image: blue; */
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -259,19 +250,22 @@ const TopProfilePhoto = styled.div`
 `;
 
 const TopProfileNickName = styled.p`
+  /* background-color: green; */
   font-size: 18px;
   font-weight: 500;
 `;
 
 const ProfileWrap = styled.div`
-  /* background-color: red; */
+  /* background-color: blue; */
 `;
 
 const ProfileContents = styled.div`
   /* background-color: red; */
   width: 680px;
+  height: 220px;
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 60px;
+  margin-bottom: 50px;
   border: 1px solid black;
   border-radius: 20px;
   padding: 30px;
