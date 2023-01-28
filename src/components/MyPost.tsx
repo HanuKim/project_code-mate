@@ -19,10 +19,11 @@ import {
 } from 'firebase/firestore';
 import { dbService, authService } from '../shared/firebase';
 import MainCategory from '../components/main/MainCategory';
-import PostList from '../components/main/PostList';
 import { useFirestoreQuery } from '@react-query-firebase/firestore';
 import { PostState } from '../shared/type';
 import { useNavigate, useParams } from 'react-router-dom';
+import MyPostCategory from './main/MyPostCategory';
+import MyPostList from './main/MyPostList';
 
 export default function MyPost() {
   const [posts, setPosts] = useState<PostState[]>([]);
@@ -100,9 +101,9 @@ export default function MyPost() {
 
   return (
     <Container>
-      <MainCategory category={category} setCategory={setCategory} />
+      <MyPostCategory category={category} setCategory={setCategory} />
 
-      <PostList posts={posts} category={category} />
+      <MyPostList posts={posts} category={category} />
     </Container>
   );
 }
