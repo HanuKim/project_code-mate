@@ -29,10 +29,6 @@ const CreatePost = () => {
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
 
-  addDoc(collection(dbService, "detail"), {
-    title: title,
-    content: content,
-  });
   // 카테고리 함수
   const handleCategory = (e: any) => {
     const checkCat = category.includes(e.target.value);
@@ -42,6 +38,7 @@ const CreatePost = () => {
       setCategory((prev: any) => [...prev, e.target.value]);
     }
   };
+
   //add
   const newPost = {
     title,
@@ -53,6 +50,7 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
+
   //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);

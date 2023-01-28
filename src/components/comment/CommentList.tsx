@@ -134,8 +134,9 @@ const Container = styled.div`
 `;
 
 const CommentTitle = styled.h1`
-  font-size: 28px;
+  font-size: 24px;
   margin: 30px 0;
+  margin-left: 4px;
 `;
 
 const CommentsContainer = styled.div`

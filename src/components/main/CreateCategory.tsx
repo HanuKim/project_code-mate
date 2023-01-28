@@ -87,9 +87,12 @@ export default function CreateCategory({
 }
 
 const CategoryContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  gap: 25px;
   justify-content: center;
+  gap: 25px;
+  background-color: green;
 `;
 const CategoryBt = styled.input`
   height: 55px;

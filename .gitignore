@@ -9,11 +9,10 @@ node_modules
 .pnp.js
 .history
 src/shared/config.ts
-
-.env
 .gitmessage.txt
 
-
+# 환경변수
+.env
 
 # testing
 /coverage
