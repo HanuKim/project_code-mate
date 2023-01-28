@@ -15,6 +15,8 @@ import {
   limit,
   QuerySnapshot,
   serverTimestamp,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 
@@ -80,6 +82,7 @@ function SignUpForm({
       return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
     } else {
       alert("회원가입 완료! 🎉");
+      
     }
   }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
 
@@ -98,6 +101,9 @@ function SignUpForm({
         setOpenModal(false);
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
+        });
+        await setDoc(doc(dbService, 'user', uid), {
+          userid: uid,
         });
       })
       .catch(error => {

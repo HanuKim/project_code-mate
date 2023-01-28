@@ -29,8 +29,7 @@ export default function MyInfo({
   handleChange: (e: any) => void;
 }) {
   const displayName = authService.currentUser?.displayName;
-  console.log('displayName', displayName);
-  const stackData = formData.stack;
+  const stackData = formData?.stack;
   return (
     <>
       <EditMyInfoForm onSubmit={onSubmitMyInfo}>
@@ -40,7 +39,7 @@ export default function MyInfo({
             <input
               type="text"
               onChange={handleChange}
-              value={formData.nickName}
+              value={formData?.nickName ?? displayName}
               id="nickName"
               name="nickName"
             />
@@ -111,7 +110,7 @@ export default function MyInfo({
             <input
               type="text"
               onChange={handleChange}
-              value={formData.gitAddress}
+              value={formData?.gitAddress}
               id="gitAddress"
               name="gitAddress"
             />
@@ -121,7 +120,7 @@ export default function MyInfo({
             <input
               type="text"
               onChange={handleChange}
-              value={formData.introduce}
+              value={formData?.introduce}
               id="introduce"
               name="introduce"
             />
@@ -140,9 +139,11 @@ const EditMyInfoForm = styled.form``;
 const ProfileContentsBox = styled.div`
   /* background-color: blue; */
   display: flex;
-  gap: 30px;
+  gap: 15px;
   flex-direction: column;
   align-items: flex-start;
+  padding: 10px;
+  margin-top: -7px;
 `;
 
 const StackContainer = styled.div`
@@ -165,7 +166,8 @@ const StackButton = styled.input`
 `;
 
 const ProfileContentsBtnBox = styled.div`
-  background-color: gray;
+  /* background-color: gray; */
   position: absolute;
   right: 70px;
+  top: 215px;
 `;

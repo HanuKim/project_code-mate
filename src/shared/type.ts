@@ -22,7 +22,7 @@ export interface UserInfo {
 }
 
 export interface MapProps {
-  center?: { lat: number; lng: number };
+  center: { lat: number; lng: number };
   isPanto?: boolean;
 }
 export interface Comment {

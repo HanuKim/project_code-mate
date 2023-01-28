@@ -1,9 +1,15 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Map from "../components/main/Map";
 import CreateCategory from "../components/main/CreateCategory";
 import { PostState, MapProps } from "../shared/type";
-import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  updateDoc,
+  doc,
+  getDoc,
+  DocumentData,
+} from "firebase/firestore";
 import { dbService, authService } from "../shared/firebase";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -12,7 +18,6 @@ import basicImg from "../../img/basicImg.png";
 const EditPost = () => {
   const location = useLocation();
   const {
-    category,
     content,
     coord: { lat, lng },
     createdAt,
@@ -26,21 +31,35 @@ const EditPost = () => {
   const navigate = useNavigate();
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-  const [correcttitle, setCorrectTitle] = useState(true);
-  const [correctcontent, setCorrectContent] = useState(true);
-  const [editPost, setEditPost] = useState<any>({});
+  const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
+  const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
+  const [category, setCategory] = useState(["all"]); //카테고리
+  const [editPost, setEditPost] = useState<DocumentData>({
+    title: "",
+    category: category,
+    content: "",
+    coord: { lat, lng },
+  });
+  const ref = useRef(null);
   const authService = getAuth();
   const { id } = useParams();
-  const uid = authService.currentUser?.uid;
   const displayName = authService.currentUser?.displayName;
   const photoURL = authService.currentUser?.photoURL;
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditTitle(e.target.value);
   };
-  const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditContent(e.target.value);
   };
-
+  //카테고리 토글기능..category안에 넣을 수 있는지
+  const handleCategory = (e: any) => {
+    const checkCat = category.includes(e.target.value);
+    if (checkCat) {
+      setCategory(category.filter((prev: any) => prev !== e.target.value));
+    } else {
+      setCategory((prev: any) => [...prev, e.target.value]);
+    }
+  };
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
     center: { lat, lng },
@@ -59,19 +78,17 @@ const EditPost = () => {
     getPost();
   }, []);
 
-  const handleEditButton = () => {
-    setEditPost({
-      ...editPost,
-      title: editPost.title,
-      category: editPost.category,
-      content: editPost.content,
-      coord: editPost.coord,
+  const handleEditButton = async () => {
+    await updateDoc(doc(dbService, "post", id), {
+      title: editTitle,
+      category: category,
+      content: editContent,
+      coord: state.center,
     });
-    updateDoc(doc(dbService, "post", id), editPost);
     //alert("수정");
-    navigate(`/comment/:id`);
+    navigate(`/detail/${id}`);
   };
-
+  console.log("editPost", editPost);
   return (
     <Container>
       <CommentForm>
@@ -82,14 +99,18 @@ const EditPost = () => {
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
-        <CreateCategory />
+        <CreateCategory
+          category={category}
+          setCategory={setCategory}
+          handleCategory={handleCategory}
+        />
         <CommentLabel>
           <Postitle
             defaultValue={editPost.title}
             onChange={handleChangeTitle}
-            value={editTitle}
-            cols={10}
-            wrap="hard"
+            id="title"
+            name="title"
+            ref={ref}
           />
           {correcttitle && (
             <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
@@ -97,9 +118,9 @@ const EditPost = () => {
           <PostText
             defaultValue={editPost.content}
             onChange={handleChangeContent}
-            value={editContent}
-            cols={30}
-            wrap="hard"
+            id="content"
+            name="content"
+            ref={ref}
           />
           {correctcontent && (
             <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
@@ -109,8 +130,9 @@ const EditPost = () => {
           </CommentSubmitButton>
           <CommentSubmitButton
             onClick={() => {
-              navigate("/comment/:id");
-            }}>
+              navigate(`/detail/${id}`);
+            }}
+          >
             취소
           </CommentSubmitButton>
         </CommentLabel>
@@ -159,7 +181,7 @@ const CommentLabel = styled.label`
   position: relative;
 `;
 
-const Postitle = styled.textarea`
+const Postitle = styled.input`
   width: 100%;
   height: 100px;
   border-radius: 10px;
@@ -173,7 +195,7 @@ const TitleErrorText = styled.p`
   padding: 10px 0;
 `;
 
-const PostText = styled.textarea`
+const PostText = styled.input`
   width: 100%;
   height: 150px;
   border-radius: 10px;

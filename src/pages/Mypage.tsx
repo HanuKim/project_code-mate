@@ -27,6 +27,7 @@ import { getAuth, onAuthStateChanged, updateProfile } from '@firebase/auth';
 import { UserInfo } from '../shared/type';
 import MyInfo from '../components/MyInfo';
 import EditInfo from '../components/EditInfo';
+import userEvent from '@testing-library/user-event';
 
 export default function Mypage() {
   const [isEditProfile, setIsEditProfile] = useState(false);
@@ -37,15 +38,17 @@ export default function Mypage() {
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
   const { id } = useParams();
+  const displayName = authService.currentUser?.displayName;
   console.log(stack);
   const [formData, setFormData] = useState<DocumentData>({
-    nickName: '',
+    nickName: displayName,
     stack: stack,
     gitAddress: '',
     introduce: '',
     userid: uid,
   });
-  console.log('formData:', formData);
+
+  console.log('formData', formData);
 
   const handleChange = (e: any) => {
     console.log(e.target.value);
@@ -73,15 +76,16 @@ export default function Mypage() {
   const onSubmitMyInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
     e.preventDefault();
-    await setDoc(doc(dbService, 'user', uid), {
-      gitAddress: formData.gitAddress,
-      nickName: formData.nickName,
-      introduce: formData.introduce,
-      stack: formData.stack,
+
+    await updateDoc(doc(dbService, 'user', id), {
+      gitAddress: formData?.gitAddress ?? '',
+      nickName: formData?.nickName,
+      introduce: formData?.introduce,
+      stack: formData?.stack,
       userid: uid,
     });
     await updateProfile(authService?.currentUser, {
-      displayName: formData.nickName,
+      displayName: formData?.nickName,
     });
     getMyInfo();
     setIsEditProfile(false);
@@ -113,45 +117,35 @@ export default function Mypage() {
                     <Profile />
                   </ProfileWrap>
                 </TopProfilePhoto>
-                <ProfileContents>
-                  {isEditProfile ? (
-                    <MyInfo
-                      isEditProfile={isEditProfile}
-                      onChangeNickName={onChangeNickName}
-                      myInfo={myInfo}
-                      setStack={setStack}
-                      stack={stack}
-                      onChangegitAddress={onChangegitAddress}
-                      onChangeintroduce={onChangeintroduce}
-                      setIsEditProfile={setIsEditProfile}
-                      onSubmitMyInfo={onSubmitMyInfo}
-                      formData={formData}
-                      handleChange={handleChange}
-                    />
-                  ) : (
-                    <EditInfo
-                      myInfo={myInfo}
-                      setIsEditProfile={setIsEditProfile}
-                      stack={stack}
-                      formData={formData}
-                    />
-                  )}
-                </ProfileContents>
+
                 <TopProfileNickName></TopProfileNickName>
               </TopProfileContainer>
               <UploadWrap></UploadWrap>
-            </ProfileTitle>
-
-            <InputContainer>
-              {/* {isOpenModall && (
-                  <MypageModal onClickToggleModal={onClickToggleModall}>
-                    <MypageCreate />
-                  </MypageModal>
+              <ProfileContents>
+                {isEditProfile ? (
+                  <MyInfo
+                    isEditProfile={isEditProfile}
+                    onChangeNickName={onChangeNickName}
+                    myInfo={myInfo}
+                    setStack={setStack}
+                    stack={stack}
+                    onChangegitAddress={onChangegitAddress}
+                    onChangeintroduce={onChangeintroduce}
+                    setIsEditProfile={setIsEditProfile}
+                    onSubmitMyInfo={onSubmitMyInfo}
+                    formData={formData}
+                    handleChange={handleChange}
+                  />
+                ) : (
+                  <EditInfo
+                    myInfo={myInfo}
+                    setIsEditProfile={setIsEditProfile}
+                    stack={stack}
+                    formData={formData}
+                  />
                 )}
-                <InputBtn onClick={onClickToggleModall}>등록</InputBtn> */}
-
-              {/* <InputBox placeholder="내용을 입력해주세요" cols={30}></InputBox> */}
-            </InputContainer>
+              </ProfileContents>
+            </ProfileTitle>
           </TopContainer>
 
           <BottomContainer>
@@ -181,26 +175,28 @@ const MypageBox = styled.div`
   width: 1000px;
   height: 100%;
   background-color: white;
-  margin: 120px;
+  margin: 40px;
   border-radius: 10px;
   padding: 30px;
 `;
 
 const TopContainer = styled.div`
   background-color: white;
-  height: 850px;
+  height: 300px;
   margin-top: 50px;
   border: 1px solid black;
   border-radius: 10px;
   padding: 40px;
   position: relative;
+  /* background-color: blue; */
 `;
 
 const ProfileTitle = styled.div`
-  /* background-color: red; */
+  /* background-color: purple; */
   height: 200px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const UploadWrap = styled.div`
@@ -233,14 +229,15 @@ const BottomContainer = styled.div`
 `;
 
 const TopProfileContainer = styled.div`
+  /* background-color: red; */
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
+  margin-top: 50px;
 `;
 
 const TopProfilePhoto = styled.div`
-  /* background-image: url(https://www.pngall.com/wp-content/uploads/5/Profile.png); */
+  /* background-image: blue; */
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -253,19 +250,22 @@ const TopProfilePhoto = styled.div`
 `;
 
 const TopProfileNickName = styled.p`
+  /* background-color: green; */
   font-size: 18px;
   font-weight: 500;
 `;
 
 const ProfileWrap = styled.div`
-  /* background-color: red; */
+  /* background-color: blue; */
 `;
 
 const ProfileContents = styled.div`
   /* background-color: red; */
   width: 680px;
+  height: 220px;
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 60px;
+  margin-bottom: 50px;
   border: 1px solid black;
   border-radius: 20px;
   padding: 30px;
