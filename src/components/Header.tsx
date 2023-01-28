@@ -71,14 +71,17 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 logout();
-              }}>
+                navigate("/");
+              }}
+            >
               로그아웃
             </LoginBtn>
           ) : (
             <LoginBtn
               onClick={() => {
                 onClickToggleModal();
-              }}>
+              }}
+            >
               로그인/회원가입
             </LoginBtn>
           )}
@@ -87,7 +90,8 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 navigate(`/Mypage/${uid}`);
-              }}>
+              }}
+            >
               마이페이지
             </LoginBtn>
           ) : null}

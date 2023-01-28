@@ -42,6 +42,7 @@ export default function MyInfo({
               value={formData?.nickName ?? displayName}
               id="nickName"
               name="nickName"
+              maxLength={10}
             />
           </label>
 
@@ -123,6 +124,7 @@ export default function MyInfo({
               value={formData?.introduce}
               id="introduce"
               name="introduce"
+              maxLength={30}
             />
           </label>
         </ProfileContentsBox>

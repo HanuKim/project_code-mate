@@ -36,8 +36,9 @@ export default function Profile() {
     setLoading(false);
     alert("Uploaded file!");
   }
+  console.log('photoURL', photoURL);
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  async function handleChange(e: ChangeEvent<HTMLInputElement>) {
     if (e?.target?.files?.[0]) {
       setPhoto(e?.target?.files?.[0]);
     }
