@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
+import { MapMarker, Map, CustomOverlayMap } from "react-kakao-maps-sdk";
+import { Mapprops } from "../shared/type";
 
 declare global {
   interface Window {
@@ -6,49 +8,41 @@ declare global {
   }
 }
 
-const Map = () => {
-  const mapContainer = useRef(null);
-  const position = new window.kakao.maps.LatLng(
-    37.50245699481023,
-    127.04453897838009
-  );
-  const mapOptions = {
-    center: position, // 지도의 중심좌표
-    level: 2, // 지도의 확대 레벨
-  };
-
-  useEffect(() => {
-    const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
-    const marker = new window.kakao.maps.Marker({ position }); // 마커 생성
-
-    // 커스텀 오버레이에 표출될 내용
-    const content = `
-  <div class="customoverlay">
-    <span>스파르타 코딩클럽</span>
-  </div>`;
-
-    // 커스텀 오버레이 생성
-    new window.kakao.maps.CustomOverlay({
-      map,
-      position,
-      content,
-    });
-
-    // 마커가 지도 위에 표시되도록 설정
-    marker.setMap(map);
-  }, []);
+const MapContainer = (props: Mapprops) => {
+  const { location } = props;
+  // 문자열로 DB에 들어가기 때문에, Number 형식으로 변환시켜줌.
+  const lat = Number(location.lat);
+  const lng = Number(location.lng);
 
   return (
-    <div
-      id="map"
-      ref={mapContainer}
-      style={{
-        width: "100%",
-        height: "300px",
-        borderTopRightRadius: "10px",
-        borderTopLeftRadius: "10px",
-      }}></div>
+    <Map
+      center={{ lat: lat, lng: lng }}
+      style={{ width: "100%", height: "300px" }}
+      level={2}
+    >
+      <CustomOverlayMap position={{ lat: lat, lng: lng }}>
+        <MapMarker position={{ lat: lat, lng: lng }}>
+          <InfoWindow>여기!</InfoWindow>
+        </MapMarker>
+      </CustomOverlayMap>
+    </Map>
   );
 };
 
-export default Map;
+export default MapContainer;
+
+const InfoWindow = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  color: #f80f64;
+  font-size: 14px;
+  font-weight: bold;
+  transition-duration: 0.3s;
+  :hover {
+    background-color: #262b7f;
+    color: #f2f2f2;
+    transform: scale(1.2);
+    border-radius: 10px;
+  }
+`;
