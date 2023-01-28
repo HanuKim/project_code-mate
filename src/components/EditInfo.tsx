@@ -1,7 +1,7 @@
-import {DocumentData} from 'firebase/firestore';
-import React from 'react';
+import {doc, DocumentData, setDoc} from 'firebase/firestore';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { authService } from '../shared/firebase';
+import { authService, dbService } from '../shared/firebase';
 
 export default function EditInfo({
   myInfo,
@@ -13,7 +13,22 @@ export default function EditInfo({
   setIsEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   stack: string;
   formData: DocumentData;
-}) {
+  }) {
+  const getProfileName = async () => {
+    const displayName = authService.currentUser?.displayName;
+      const uid = authService.currentUser?.uid;
+    await setDoc(doc(dbService, 'user', uid), {
+      nickName: displayName,
+      stack: '',
+      gitAddress: '',
+      introduce: '',
+      userid: uid,
+    });
+  }
+  useEffect(() => {
+      const displayName = authService.currentUser?.displayName;
+      console.log(displayName);
+  },[])
   const displayName = authService.currentUser?.displayName;
   console.log(displayName);
   return (
@@ -32,6 +47,7 @@ export default function EditInfo({
         <button
           onClick={() => {
             setIsEditProfile(true);
+            getProfileName();
           }}
         >
           편집
