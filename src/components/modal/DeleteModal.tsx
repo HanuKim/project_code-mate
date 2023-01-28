@@ -1,24 +1,9 @@
-import React, {Children} from 'react';
-import {useDispatch} from 'react-redux';
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  where,
-} from 'firebase/firestore';
-import {dbService} from '../../shared/firebase';
-import styled from 'styled-components';
-import {Comment} from '../../shared/type';
+import React, { Children } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { doc, deleteDoc } from "firebase/firestore";
+import { dbService } from "../../shared/firebase";
+import styled from "styled-components";
+import { Comment } from "../../shared/type";
 // import {openModal, closeModal} from '../../redux/modules/modalSlice';
 
 export default function DeleteModal({
@@ -28,26 +13,43 @@ export default function DeleteModal({
   setDeleteViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   comment: Comment;
 }) {
+  let { id } = useParams();
+  const navigate = useNavigate();
   const closeModal = () => {
     setDeleteViewModal(false);
   };
-
   const deleteCommentClickButton = async (commentid: string) => {
-    await deleteDoc(doc(dbService, 'comment', commentid));
+    await deleteDoc(doc(dbService, "comment", commentid));
     setDeleteViewModal(false);
+  };
+
+  const deletePosttClickButton = async (id: string) => {
+    await deleteDoc(doc(dbService, "post", id));
+    setDeleteViewModal(false);
+    navigate(`/`);
   };
   return (
     <ContainerBg>
       <Container>
         <TellText>삭제 하시겠습니까?</TellText>
         <CheckButtonContainer>
-          <CheckButton
-            onClick={() => {
-              deleteCommentClickButton(comment.id);
-            }}
-          >
-            확인
-          </CheckButton>
+          {comment ? (
+            <CheckButton
+              onClick={() => {
+                deleteCommentClickButton(comment.id);
+              }}
+            >
+              확인
+            </CheckButton>
+          ) : (
+            <CheckButton
+              onClick={() => {
+                deletePosttClickButton(id);
+              }}
+            >
+              확인
+            </CheckButton>
+          )}
           <CheckButton onClick={closeModal}>취소</CheckButton>
         </CheckButtonContainer>
       </Container>

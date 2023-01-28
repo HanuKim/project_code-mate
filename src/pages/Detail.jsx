@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Button from '../components/Button';
-import MapContainer from '../components/MapContainer';
-import JobCategory from '../components/JobCategory';
-import CodeMate from '../img/CodeMate.png';
-import Comments from '../components/comment/Comments';
-import CommentInput from '../components/comment/CommentInput';
-import CommentList from '../components/comment/CommentList';
-import basicImg from '../img/basicImg.png';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Button from "../components/Button";
+import MapContainer from "../components/MapContainer";
+import JobCategory from "../components/JobCategory";
+import CodeMate from "../img/CodeMate.png";
+import Comments from "../components/comment/Comments";
+import CommentInput from "../components/comment/CommentInput";
+import CommentList from "../components/comment/CommentList";
+import basicImg from "../img/basicImg.png";
+import { useLocation } from "react-router-dom";
 import {
   collection,
   addDoc,
@@ -22,26 +22,24 @@ import {
   onSnapshot,
   setDoc,
   getDocs,
-} from 'firebase/firestore';
-import { dbService, authService } from '../shared/firebase';
-import { getAuth } from 'firebase/auth';
+} from "firebase/firestore";
+import { dbService, authService } from "../shared/firebase";
+import { getAuth } from "firebase/auth";
 
 // 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
 // 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 export default function Detail() {
-  const [setDetail, getSetDetail] = useState('');
+  const [setDetail, getSetDetail] = useState("");
   let { id } = useParams();
   const uid = authService.currentUser?.uid;
 
   const getDetail = async () => {
-    const snapshot = await getDoc(doc(dbService, 'post', id));
+    const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     getSetDetail(data);
-    console.log('data : ', data);
   };
-
   useEffect(() => {
     getDetail();
   }, []);
@@ -50,7 +48,7 @@ export default function Detail() {
     <>
       <Container>
         <InnerWidth>
-          {setDetail === '' ? null : (
+          {setDetail === "" ? null : (
             <MapContainer location={setDetail.coord} />
           )}
           <ContentsContainer>
@@ -62,6 +60,7 @@ export default function Detail() {
               {uid === setDetail.userId ? (
                 <Button
                   location={setDetail.coord}
+                  id={id}
                   delete="삭제"
                   edit="수정"
                   btnWidth={80}
@@ -71,7 +70,7 @@ export default function Detail() {
             </ProfileContainer>
             <Title>{setDetail.title}</Title>
             <Contents>{setDetail.content}</Contents>
-            <JobCategory></JobCategory>
+            <JobCategory />
           </ContentsContainer>
         </InnerWidth>
         <CommentInput />
@@ -139,11 +138,11 @@ const ProfileWrap = styled.div`
 `;
 
 const ProfilePic = styled.div`
-  max-width: 64px;
-  max-height: 64px;
+  max-width: 52px;
+  max-height: 52px;
   width: 100%;
   height: 100%;
-  background-image: url(${props => props.profile});
+  background-image: url(${(props) => props.profile});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -157,77 +156,12 @@ const ProfileName = styled.div`
   font-size: 20px;
 `;
 
-const Title = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+const Title = styled.h1`
+  font-size: 20px;
   margin-bottom: 30px;
 `;
 
 const Contents = styled.div`
   width: 100%;
   height: 100%;
-`;
-
-const CommentEdit = styled.form`
-  position: relative;
-
-  max-width: 1100px;
-  min-height: 130px;
-  width: 100%;
-  height: 100%;
-
-  padding: 15px;
-
-  border: 1px solid #d0d0d0;
-  border-radius: 10px;
-`;
-
-const Input = styled.textarea`
-  max-width: 1060px;
-  width: 100%;
-  height: 80px;
-  margin-bottom: 20px;
-  padding: 15px;
-  border: none;
-  word-wrap: wrap;
-  word-break: break-all;
-  background-color: #f2f2f2;
-  transition-duration: 0.3s;
-  &:focus {
-    box-shadow: 7px 7px 7px #d0d0d0;
-  }
-`;
-
-const CommentContainer = styled.div`
-  max-width: 1100px;
-  width: 100%;
-  height: 100%;
-`;
-
-const CommentTitle = styled.div`
-  padding-left: 5px;
-  margin-top: 32px;
-  margin-bottom: 12px;
-  font-size: 24px;
-  font-weight: bold;
-`;
-
-const CommentWrap = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const Comment = styled.div`
-  display: flex;
-  align-items: center;
-  min-height: 25px;
-  width: 100%;
-
-  margin: 4px 0;
-`;
-
-const CommentWriter = styled.div`
-  margin-left: 12px;
-  font-size: 14px;
-  font-weight: 500;
 `;

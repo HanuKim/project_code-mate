@@ -94,10 +94,8 @@ export default function CommentList() {
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as Comment;
-        console.log("newComment", newComment);
         return newComment;
       });
-      console.log("Comments", comments);
       setComments(newComments);
     });
   };
@@ -134,8 +132,9 @@ const Container = styled.div`
 `;
 
 const CommentTitle = styled.h1`
-  font-size: 28px;
+  font-size: 24px;
   margin: 30px 0;
+  margin-left: 4px;
 `;
 
 const CommentsContainer = styled.div`

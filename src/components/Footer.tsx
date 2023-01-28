@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import basicImg from "../img/CodeMate.png";
 
 export default function Footer() {
   return (
@@ -23,7 +24,10 @@ const Container = styled.div`
 `;
 
 const InfoWrap = styled.div`
-  width: 100%;
-  height: 100%;
-  color: white;
+  width: 160px;
+  height: 80px;
+  background-image: url(${basicImg});
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 `;

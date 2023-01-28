@@ -56,75 +56,81 @@ export default function Post({ post }: { post: PostState }) {
 const Posts = styled.div`
   background-color: #ffffff;
   width: 100%;
-  /* min-height: 280px; */
-  height: 250px;
-  border-radius: 30px;
-  padding: 40px;
+  height: 100%;
+  border-radius: 20px;
+  padding: 0 20px;
+  border: 1px solid #d0d0d0;
   cursor: pointer;
-  border: 1px solid black;
+  transition-duration: 0.3s;
   &:hover {
-    border: 2px solid #262b7f;
+    box-shadow: 5px 5px 5px #666;
   }
 `;
 
 const PostsTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 30px;
   align-items: center;
+  margin: 0 30px;
+  margin-top: 24px;
+
+  /* height: 50px; */
+  /* background-color: red; */
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  gap: 16px;
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
+  width: 48px;
+  height: 48px;
+  border: 1px solid #d0d0d0;
+  border-radius: 100%;
   background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`
   font-size: 18px;
-  font-weight: 500;
 `;
 
 const Date = styled.p`
-  color: #aaaaaa;
-  font-size: 15px;
+  color: #aaa;
+  font-size: 14px;
 `;
 
 const TitleText = styled.h1`
-  margin: 10px 0 20px 30px;
-  font-size: 25px;
-  font-weight: 600;
+  margin: 0px 56px;
+  font-size: 22px;
+  font-weight: bold;
 `;
 
 const ContentText = styled.p`
   font-size: 16px;
-  margin-left: 30px;
+  margin: 24px 56px 58px 58px;
 `;
 
 const BottomCategoryContainer = styled.div`
   display: flex;
-  gap: 15px;
-  margin: 30px 0 0 30px;
+  gap: 16px;
+  margin: 0 54px;
+  margin-bottom: 24px;
 `;
 
 const BottomCategoryBt = styled.button`
-  width: 100px;
-  height: 30px;
-  border: 1px solid #a8a8a8;
-  border-radius: 30px;
+  padding: 10px 12px;
+  border: 1px solid #262b7f;
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: bold;
   color: #efefef;
   background-color: #262b7f;
+
   filter: drop-shadow(1px 2px 3px #818181);
 `;

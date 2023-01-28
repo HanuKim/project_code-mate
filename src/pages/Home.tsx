@@ -115,23 +115,26 @@ export default function Home() {
   );
 }
 const Container = styled.div`
-  max-width: 1440px;
-  width: 80%;
+  max-width: 1280px;
+  width: 100%;
   margin: 20px auto;
 `;
 
 const WriteContainer = styled.div`
+  width: 100%;
   text-align: right;
 `;
+
 const WriteBt = styled.button`
-  background-color: white;
+  background-color: none;
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   margin: 40px 0 20px 0;
   cursor: pointer;
   &:hover {
-    border: 1px solid #262b7f;
+    background-color: #262b7f;
+    color: #f2f2f2;
   }
 `;

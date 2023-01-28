@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from 'styled-components';
-import {RootState} from '../../redux/config/configStore';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
+import { RootState } from "../../redux/config/configStore";
+import { useDispatch, useSelector } from "react-redux";
 import {
   collection,
   addDoc,
@@ -18,18 +18,18 @@ import {
   where,
   doc,
   onSnapshot,
-} from 'firebase/firestore';
-import {auth, dbService} from '../../shared/firebase';
-import {useNavigate, useParams} from 'react-router-dom';
-import CheckModal from '../modal/CheckModal';
-import {getAuth} from 'firebase/auth';
+} from "firebase/firestore";
+import { auth, dbService } from "../../shared/firebase";
+import { useNavigate, useParams } from "react-router-dom";
+import CheckModal from "../modal/CheckModal";
+import { getAuth } from "firebase/auth";
 
 export default function CommentInput() {
   const dispatch = useDispatch();
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [commentText, setCommentText] = useState('');
-  const [nick, setNick]: any = useState('');
+  const [commentText, setCommentText] = useState("");
+  const [nick, setNick]: any = useState("");
   const [checkViewModal, setCheckViewModal] = useState(false);
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -46,11 +46,9 @@ export default function CommentInput() {
     profileImg: photoURL,
   };
 
-  useEffect(()=>{console.log('photoURL', authService?.currentUser);},[])
-  
-
-
-  
+  useEffect(() => {
+    console.log("photoURL", authService?.currentUser);
+  }, []);
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value);
@@ -66,8 +64,8 @@ export default function CommentInput() {
       setCheckViewModal(true);
       return;
     } else {
-      await addDoc(collection(dbService, 'comment'), newComment);
-      setCommentText('');
+      await addDoc(collection(dbService, "comment"), newComment);
+      setCommentText("");
     }
   };
 
@@ -80,11 +78,11 @@ export default function CommentInput() {
         <CommentForm onSubmit={handleSubmitButtonClick}>
           <CommentLabel>
             <CommentText
-              placeholder='댓글을 입력 해주세요.'
+              placeholder="댓글을 입력 해주세요."
               onChange={handleChangeComment}
               value={commentText}
               cols={30}
-              wrap='hard'
+              wrap="hard"
             />
             <CommentSubmitButton>등록</CommentSubmitButton>
           </CommentLabel>

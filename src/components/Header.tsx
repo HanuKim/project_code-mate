@@ -62,6 +62,8 @@ export default function Header() {
         {isOpenModal ? (
           <Modal setOpenModal={setOpenModal} isOpenModal={isOpenModal} />
         ) : null}
+        {/* 여백 emptyBox 공간 */}
+        <EmptyBox></EmptyBox>
 
         <BtnWrap>
           {/* 로그인 유무에 따른 버튼 텍스트 변화 */}
@@ -98,7 +100,6 @@ export default function Header() {
 const HeaderContainer = styled.header`
   width: 100%;
   height: 120px;
-
   margin-bottom: 100px;
   display: flex;
   justify-content: space-between;
@@ -108,9 +109,9 @@ const HeaderContainer = styled.header`
 `;
 
 const LogoBox = styled.div`
-  width: 160px;
+  min-width: 160px;
   height: 80px;
-  margin-left: 70px;
+  margin-left: 40px;
   background-image: url(${CodeMate});
   background-position: center center;
   background-size: contain;
@@ -118,10 +119,27 @@ const LogoBox = styled.div`
   cursor: pointer;
 `;
 
+const BtnWrap = styled.div`
+  max-width: 260px;
+  width: 100%;
+  height: 100%;
+  margin-right: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0 20px;
+`;
+
+const EmptyBox = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const LoginBtn = styled.button`
-  width: 160px;
+  width: 120px;
   height: 50px;
-  border: 1px solid #eee;
+  border: 1px solid #d0d0d0;
   border-radius: 30px;
   color: #262b7f;
   font-weight: bold;
@@ -133,15 +151,4 @@ const LoginBtn = styled.button`
     color: #fff;
     border: 1px solid #262b7f;
   }
-`;
-
-const BtnWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  max-width: 360px;
-  width: 100%;
-  height: 100%;
-  gap: 15px;
 `;
