@@ -32,14 +32,8 @@ import { useParams } from 'react-router-dom';
 
 export default function Detail() {
   const [setDetail, getSetDetail] = useState('');
-  // const state = useLocation();
-  // console.log("state : ", state);
   let { id } = useParams();
-  // const q = query(
-  //   collection(dbService, "post"),
-  //   // orderBy('createdAt', 'desc')
-  //   where("id", "==", id)
-  // );
+  const uid = authService.currentUser?.uid;
 
   const getDetail = async () => {
     const snapshot = await getDoc(doc(dbService, 'post', id));
@@ -65,13 +59,15 @@ export default function Detail() {
                 <ProfilePic profile={setDetail.profileImg ?? basicImg} />
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
-              <Button
-                location={setDetail.coord}
-                delete="삭제"
-                edit="수정"
-                btnWidth={80}
-                btnHeight={40}
-              ></Button>
+              {uid === setDetail.userId ? (
+                <Button
+                  location={setDetail.coord}
+                  delete="삭제"
+                  edit="수정"
+                  btnWidth={80}
+                  btnHeight={40}
+                ></Button>
+              ) : null}
             </ProfileContainer>
             <Title>{setDetail.title}</Title>
             <Contents>{setDetail.content}</Contents>
