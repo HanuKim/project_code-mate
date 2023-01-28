@@ -78,10 +78,10 @@ export default function Mypage() {
     e.preventDefault();
 
     await updateDoc(doc(dbService, 'user', id), {
-      gitAddress: formData?.gitAddress ?? '',
-      nickName: formData?.nickName,
-      introduce: formData?.introduce,
-      stack: formData?.stack,
+      gitAddress: formData?.gitAddress,
+      nickName: formData?.nickName ,
+      introduce: formData?.introduce ,
+      stack: formData?.stack ,
       userid: uid,
     });
     await updateProfile(authService?.currentUser, {
