@@ -134,8 +134,7 @@ export default function CommentItem({ comment }) {
                   <CommentButton
                     onClick={() => {
                       cancleEditButton(comment.id);
-                    }}
-                  >
+                    }}>
                     취소
                   </CommentButton>
                 </>
@@ -145,8 +144,7 @@ export default function CommentItem({ comment }) {
                   <CommentButton
                     onClick={() => {
                       onClickIsEditSwitch(comment.id);
-                    }}
-                  >
+                    }}>
                     수정
                   </CommentButton>
                   <CommentButton onClick={openDeleteModalClick}>
@@ -173,11 +171,12 @@ export default function CommentItem({ comment }) {
   );
 }
 const CommentContentContainer = styled.div`
-  width: 100%;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 20px 20px 45px 20px;
   position: relative;
+  width: 100%;
+  padding: 24px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px #aaa;
 `;
 
 const CommentTopContainer = styled.div`
@@ -189,7 +188,6 @@ const CommentTopContainer = styled.div`
 
 const ProfileContainer = styled.div`
   display: flex;
-  gap: 8px;
   align-items: center;
 `;
 
@@ -199,19 +197,22 @@ const ProfilePhoto = styled.button`
   background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 100%;
 `;
 
 const ProfileNickName = styled.p`
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
+  margin: 0 8px;
+  margin-top: 16px;
 `;
 
-const Date = styled.p`
-  color: #aaaaaa;
-  font-size: 15px;
+const Date = styled.div`
+  color: #aaa;
+  font-size: 12px;
+  height: 100%;
 `;
 
 const ContentText = styled.p`
@@ -254,7 +255,8 @@ const CommentEditInput = styled.textarea`
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 4px;
+  margin-top: 20px;
 `;
 const CommentButton = styled.span`
   font-size: 12px;

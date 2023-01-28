@@ -37,14 +37,15 @@ export default function Button(props: MixBtnProps) {
 
 const Container = styled.div`
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   flex-direction: row;
-  gap: 10px;
-  width: 160px;
+  gap: 12px;
+  width: 200px;
   height: 100%;
 `;
 
-const DeleteBtn = styled.div`
+const DeleteBtn = styled.div<BtnProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,7 +64,7 @@ const DeleteBtn = styled.div`
   }
 `;
 
-const EditBtn = styled.div`
+const EditBtn = styled.div<BtnProps>`
   display: flex;
   justify-content: center;
   align-items: center;

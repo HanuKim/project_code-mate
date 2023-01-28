@@ -38,6 +38,7 @@ const CreatePost = () => {
       setCategory((prev: any) => [...prev, e.target.value]);
     }
   };
+
   //add
   const newPost = {
     title,
@@ -49,6 +50,7 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
+
   //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
