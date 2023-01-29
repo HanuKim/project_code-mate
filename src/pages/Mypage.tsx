@@ -30,7 +30,7 @@ import EditInfo from "../components/EditInfo";
 import userEvent from "@testing-library/user-event";
 
 export default function Mypage() {
-const displayName = authService.currentUser?.displayName;
+  const displayName = authService.currentUser?.displayName;
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [nickName, setnickName] = useState("");
   const [stack, setStack]: any = useState("");
@@ -39,8 +39,6 @@ const displayName = authService.currentUser?.displayName;
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
   const { id } = useParams();
-  const displayName = authService.currentUser?.displayName;
-  console.log(stack);
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
@@ -108,11 +106,11 @@ const displayName = authService.currentUser?.displayName;
       }
     } else {
       //깃 어드레스 내용 없으면
-      await setDoc(doc(dbService, 'user', id), {
-        gitAddress: formData?.gitAddress ?? '',
+      await setDoc(doc(dbService, "user", id), {
+        gitAddress: formData?.gitAddress ?? "",
         nickName: formData?.nickName ?? displayName,
-        introduce: formData?.introduce ?? '인사말을 입력해주세요.',
-        stack: formData?.stack ?? '주 스택을 선택 해주세요.',
+        introduce: formData?.introduce ?? "인사말을 입력해주세요.",
+        stack: formData?.stack ?? "주 스택을 선택 해주세요.",
         userid: uid,
       });
       await updateProfile(authService?.currentUser, {
