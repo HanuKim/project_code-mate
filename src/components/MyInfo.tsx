@@ -118,20 +118,19 @@ export default function MyInfo({
           </label>
           <IntroduceLb>
             introduce:
-            <Introducebox
-              // type="text"
+            <input
+              type="text"
               onChange={handleChange}
               value={formData?.introduce}
               id="introduce"
               name="introduce"
-              maxLength={300}
-              style={{ resize: 'none', width: '100%' }}
+              maxLength={30}
             />
           </IntroduceLb>
+
+          <SaveBtn>저장</SaveBtn>
         </ProfileContentsBox>
-        <ProfileContentsBtnBox>
-          <button>저장</button>
-        </ProfileContentsBtnBox>
+        <ProfileContentsBtnBox></ProfileContentsBtnBox>
       </EditMyInfoForm>
     </>
   );
@@ -188,4 +187,16 @@ const Introducebox = styled.textarea`
   padding: 20px;
   border: 1px solid #d0d0d0;
   border-radius: 10px;
+`;
+const SaveBtn = styled.button`
+  padding: 4px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  color: #262b7f;
+  background-color: #fff;
+  :hover {
+    color: #fff;
+    background-color: #262b7f;
+    border: 1px solid #262b7f;
+  }
 `;
