@@ -1,9 +1,9 @@
 // react-icons 다운
-import { useState, useCallback, useEffect, useRef } from "react";
-import styled from "styled-components";
-import MypageModal from "../components/MypageModal";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import MypageModal from '../components/MypageModal';
 // import { ShowImage } from '../components/ShowImage';
-import UploadImage from "../components/UploadImage";
+import UploadImage from '../components/UploadImage';
 import {
   doc,
   getDoc,
@@ -17,24 +17,24 @@ import {
   Firestore,
   setDoc,
   DocumentData,
-} from "firebase/firestore";
-import { auth, dbService, authService } from "../shared/firebase";
-import Profile from "../components/Profile";
-import { useParams } from "react-router-dom";
-import MyPost from "../components/MyPost";
-import { identifier } from "@babel/types";
-import { getAuth, onAuthStateChanged, updateProfile } from "@firebase/auth";
-import { UserInfo } from "../shared/type";
-import MyInfo from "../components/MyInfo";
-import EditInfo from "../components/EditInfo";
-import userEvent from "@testing-library/user-event";
+} from 'firebase/firestore';
+import { auth, dbService, authService } from '../shared/firebase';
+import Profile from '../components/Profile';
+import { useParams } from 'react-router-dom';
+import MyPost from '../components/MyPost';
+import { identifier } from '@babel/types';
+import { getAuth, onAuthStateChanged, updateProfile } from '@firebase/auth';
+import { UserInfo } from '../shared/type';
+import MyInfo from '../components/MyInfo';
+import EditInfo from '../components/EditInfo';
+import userEvent from '@testing-library/user-event';
 
 export default function Mypage() {
   const [isEditProfile, setIsEditProfile] = useState(false);
-  const [nickName, setnickName] = useState("");
-  const [stack, setStack]: any = useState("");
-  const [gitAddress, setGitAddress] = useState("");
-  const [introduce, setIntroduce] = useState("");
+  const [nickName, setnickName] = useState('');
+  const [stack, setStack]: any = useState('');
+  const [gitAddress, setGitAddress] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
   const { id } = useParams();
@@ -43,16 +43,16 @@ export default function Mypage() {
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
-    gitAddress: "",
-    introduce: "",
+    gitAddress: '',
+    introduce: '',
     userid: uid,
   });
 
-  console.log("formData", formData);
+  console.log('formData', formData);
 
   const handleChange = (e: any) => {
     console.log(e.target.value);
-    setFormData((prevFormData) => {
+    setFormData(prevFormData => {
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,
@@ -82,7 +82,7 @@ export default function Mypage() {
       alert('nickname 을 입력해주세요');
       return;
     } else if (formData?.stack.replace(/ /g, '') === '') {
-      alert('stack 을 입력해주세요');
+      alert('내용을 입력해주세요');
       return;
     } else if (formData?.gitAddress.replace(/ /g, '') === '') {
       alert('Url 을 입력해주세요');
@@ -91,7 +91,7 @@ export default function Mypage() {
       alert('Url 형식에 맞게 입력해주세요!');
       return;
     } else if (formData?.introduce.replace(/ /g, '') === '') {
-      alert('형식에 맞게 입력해주세요');
+      alert('내용을 입력해주세요');
       return;
     } else {
       await updateDoc(doc(dbService, 'user', id), {
@@ -110,7 +110,7 @@ export default function Mypage() {
   };
 
   const getMyInfo: any = async () => {
-    const snapshot = await getDoc(doc(dbService, "user", id));
+    const snapshot = await getDoc(doc(dbService, 'user', id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setFormData(data);
   };
