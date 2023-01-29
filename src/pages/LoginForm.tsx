@@ -85,46 +85,56 @@ function LoginForm({
   };
 
   return (
-    <Form onSubmit={signIn}>
-      <BtnContainer>
-        <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
-      </BtnContainer>
-      <TitleText>로그인</TitleText>
-      {/* Error! */}
-      <LoginFormContainer>
-        <div>
-          <EmailInput
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-        </div>
-        <div>
-          <PwInput
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-        </div>
-        <SignUpBtn
-          onClick={() => {
-            setIsNotLogin(true);
-          }}>
-          Join
-        </SignUpBtn>
-        <LoginBtn>SignIn</LoginBtn>
-      </LoginFormContainer>
-    </Form>
+    <>
+      {alertModal ? (
+        <AlertModal
+          children={AlertMessageText}
+          setAlertModal={setAlertModal}
+          setOpenModal={setOpenModal}
+        />
+      ) : null}
+      <Form onSubmit={signIn}>
+        <BtnContainer>
+          <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
+        </BtnContainer>
+        <TitleText>로그인</TitleText>
+        {/* Error! */}
+        <LoginFormContainer>
+          <div>
+            <EmailInput
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <div>
+            <PwInput
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <SignUpBtn
+            onClick={() => {
+              setIsNotLogin(true);
+            }}
+          >
+            Join
+          </SignUpBtn>
+          <LoginBtn>SignIn</LoginBtn>
+        </LoginFormContainer>
+      </Form>
+    </>
   );
 }
 export default LoginForm;
