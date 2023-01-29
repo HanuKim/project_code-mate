@@ -39,6 +39,8 @@ export default function Detail() {
     const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     getSetDetail(data);
+    console.log("data : ", data);
+
   };
   useEffect(() => {
     getDetail();
@@ -48,9 +50,7 @@ export default function Detail() {
     <>
       <Container>
         <InnerWidth>
-          {setDetail === "" ? null : (
-            <MapContainer location={setDetail.coord} />
-          )}
+          {setDetail === "" ? null : <MapContainer location={setDetail.coord} />}
           <ContentsContainer>
             <ProfileContainer>
               <ProfileWrap>

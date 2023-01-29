@@ -25,7 +25,8 @@ import CheckModal from "../modal/CheckModal";
 import { getAuth } from "firebase/auth";
 
 export default function CommentInput() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [commentText, setCommentText] = useState("");
@@ -55,9 +56,7 @@ export default function CommentInput() {
   };
 
   // ADD
-  const handleSubmitButtonClick = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmitButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // 내용
     if (!commentText.trim() || commentText === null) {
@@ -71,9 +70,7 @@ export default function CommentInput() {
 
   return (
     <>
-      {checkViewModal ? (
-        <CheckModal setCheckViewModal={setCheckViewModal} />
-      ) : null}
+      {checkViewModal ? <CheckModal setCheckViewModal={setCheckViewModal} /> : null}
       <Container>
         <CommentForm onSubmit={handleSubmitButtonClick}>
           <CommentLabel>

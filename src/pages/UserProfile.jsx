@@ -1,19 +1,49 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CommentItem from "../components/comment/CommentItem";
 import Profile from "../components/Profile";
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { storage, auth } from "../shared/firebase";
+import {
+  doc,
+  getDoc,
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+  updateDoc,
+  Firestore,
+  setDoc,
+  DocumentData,
+} from "firebase/firestore";
+import { auth, dbService, authService } from "../shared/firebase";
 
-function UserProfileModal({
-  setOpenProfileModal,
-  isOpenProfileModal,
-}: {
-  isOpenProfileModal: boolean;
-  setOpenProfileModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+import MyPost from "../components/MyPost";
+import { identifier } from "@babel/types";
+import { getAuth, onAuthStateChanged, updateProfile } from "@firebase/auth";
+import { UserInfo } from "../shared/type";
+import MyInfo from "../components/MyInfo";
+import EditInfo from "../components/EditInfo";
+import userEvent from "@testing-library/user-event";
+
+function UserProfileModal({ setOpenProfileModal, isOpenProfileModal }) {
+  const [user, setUser] = useState("");
+  let { id } = useParams();
+
+  const getUser = async () => {
+    const snapshot = await getDoc(doc(dbService, "comment", id));
+    const data = snapshot.data(); // 가져온 doc의 객체 내용
+    setUser(data);
+    // console.log("data : ", data.nickName);
+  };
+
+  console.log("id: ", id);
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <>
       <Container modalWidth={450} modalHeight={520}>
@@ -24,13 +54,13 @@ function UserProfileModal({
         />
         <UserProfileTextArea>
           <div>
-            <UserNickName>Daniel</UserNickName>
+            <UserNickName>{id.nickName}</UserNickName>
           </div>
           <div>
-            <UserStack>Full Stack</UserStack>
+            <UserStack></UserStack>
           </div>
           <div>
-            <UserLocation>Seoul</UserLocation>
+            <GitAddress></GitAddress>
           </div>
         </UserProfileTextArea>
         <CloseButton onClick={() => setOpenProfileModal(false)}>x</CloseButton>
@@ -38,7 +68,7 @@ function UserProfileModal({
       </Container>
 
       <ContainerBg
-        onClick={(e: React.MouseEvent) => {
+        onClick={(e) => {
           e.preventDefault();
 
           if (isOpenProfileModal) {
@@ -87,7 +117,7 @@ const UserStack = styled.text`
   font-size: 10px;
 `;
 
-const UserLocation = styled.text`
+const GitAddress = styled.text`
   font-size: 10px;
 `;
 
@@ -100,11 +130,6 @@ const UserProfileIntroduce = styled.div`
   border-radius: 5px;
 `;
 
-interface ModalProps {
-  modalWidth: number;
-  modalHeight: number;
-}
-
 const ContainerBg = styled.div`
   width: 100%;
   height: 100%;
@@ -115,7 +140,7 @@ const ContainerBg = styled.div`
   z-index: 1;
 `;
 
-const Container = styled.div<ModalProps>`
+const Container = styled.div`
   width: ${(props) => props.modalWidth + "px"};
   height: ${(props) => props.modalHeight + "px"};
   border: 1px solid #aaa;
