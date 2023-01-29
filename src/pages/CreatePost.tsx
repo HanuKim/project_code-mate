@@ -49,7 +49,6 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
-  console.log(newPost);
   //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
@@ -60,11 +59,7 @@ const CreatePost = () => {
   };
   const handleSubmitButtonClick = async () => {
     // 유효성검사용
-    if (!newPost.title || title === null) {
-      setCorrectTitle(true);
-      return;
-    }
-    if (!newPost.title || title === null) {
+    if (!title.trim() || title === null) {
       setCorrectTitle(true);
       return;
     }
@@ -81,21 +76,24 @@ const CreatePost = () => {
 
   return (
     <Container>
-      <CommentForm>
+      <InnerContainer>
         {/* Map 컴포넌트 */}
         <Map state={state} setState={setState} />
-        <ProfileContainer>
-          <ProfilePhoto background={photoURL ?? 'black'} />
-          <ProfileNickName>{displayName}</ProfileNickName>
-        </ProfileContainer>
-        <CreateCategory
-          category={category}
-          setCategory={setCategory}
-          handleCategory={handleCategory}
-        />
-        <CommentLabel>
+        <ContentsWrap>
+          <ProfileContainer>
+            <ProfilePhoto background={photoURL ?? 'black'} />
+            <p>{displayName}</p>
+          </ProfileContainer>
+          <HirePositionContainer>
+            <HirePositionText>Hiring Position : </HirePositionText>
+            <CreateCategory
+              category={category}
+              setCategory={setCategory}
+              handleCategory={handleCategory}
+            />
+          </HirePositionContainer>
           {/* 제목,내용 input */}
-          <Postitle
+          <PostTitle
             placeholder="제목을 입력 해주세요."
             onChange={handleChangeTitle}
             value={title}
@@ -111,25 +109,56 @@ const CreatePost = () => {
             value={content}
             cols={30}
             wrap="hard"
-          />
-          {correctcontent && (
-            <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
-          )}
-          <CommentSubmitButton onClick={handleSubmitButtonClick}>
-            등록
-          </CommentSubmitButton>
-        </CommentLabel>
-      </CommentForm>
+          >
+            {correctcontent && (
+              <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
+            )}
+          </PostText>
+          <SubmitBtnContainer>
+            <SubmitBtn onClick={handleSubmitButtonClick}>등록</SubmitBtn>
+          </SubmitBtnContainer>
+        </ContentsWrap>
+      </InnerContainer>
     </Container>
   );
 };
 export default CreatePost;
 
+const Container = styled.div`
+  align-items: center;
+  max-width: 1200px;
+  min-height: 1200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 50px 10px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  position: relative;
+`;
+
+const InnerContainer = styled.div`
+  max-width: 1100px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+`;
+
+const ContentsWrap = styled.div`
+  width: 100%;
+  height: 100%;
+
+  padding: 20px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+`;
+
 const ProfileContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
-  margin: 0 0 10px;
+  margin-bottom: 12px;
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
@@ -143,52 +172,87 @@ const ProfilePhoto = styled.div<{ background: any }>`
   border-radius: 100%;
 `;
 
-const ProfileNickName = styled.p`
-  font-size: 15px;
-  font-weight: 500;
-`;
-
-const Container = styled.div`
-  width: 80%;
-  height: 100%;
-  margin: 0 auto;
-`;
-
-const CommentForm = styled.div``;
-
-const CommentLabel = styled.label`
-  position: relative;
-`;
-
-const Postitle = styled.textarea`
+const HirePositionContainer = styled.div`
   width: 100%;
-  height: 100px;
-  border-radius: 10px;
-  padding: 20px 55px 20px 20px;
-  resize: none;
-  outline-color: #262b7f;
+  height: 100%;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin-bottom: 50px;
+  margin-left: 4px;
 `;
 
-const TitleErrorText = styled.p`
-  color: #ff6f6f;
-  padding: 10px 0;
+const HirePositionText = styled.p`
+  width: 120px;
+  height: 100%;
+  margin-right: 12px;
+  text-align: center;
+`;
+
+const PostTitle = styled.textarea`
+  width: 100%;
+  height: 34px;
+  margin-bottom: 12px;
+  padding-left: 8px;
+
+  border-left: 2px solid #aaa;
+
+  resize: none;
+
+  line-height: 2.4;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    border-left: 2px solid #fff;
+    box-shadow: 5px 5px 5px #aaa;
+    background-color: #fff;
+  }
 `;
 
 const PostText = styled.textarea`
+  min-height: 150px;
   width: 100%;
-  height: 150px;
+  height: 100%;
+
+  margin-bottom: 12px;
+  padding: 20px;
+
+  border: 1px solid #aaa;
   border-radius: 10px;
-  padding: 20px 55px 20px 20px;
   resize: none;
-  outline-color: #262b7f;
+  transition-duration: 0.3s;
+  :focus {
+    border: 1px solid #333;
+    box-shadow: 5px 5px 5px #c0c0c0;
+  }
 `;
 
-const CommentSubmitButton = styled.button`
-  background-color: #ffffff;
-  border: 1px solid #000000;
+const TitleErrorText = styled.p`
+  font-size: 12px;
+  color: #ff6f6f;
+  margin: inherit;
+  margin-top: -12px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+`;
+
+const SubmitBtnContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const SubmitBtn = styled.button`
   width: 50px;
   height: 30px;
+
+  border: 1px solid #d0d0d0;
   border-radius: 10px;
+  color: #262b7f;
+
+  background-color: #fff;
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

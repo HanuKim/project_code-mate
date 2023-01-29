@@ -25,6 +25,7 @@ import {
 } from 'firebase/firestore';
 import { dbService, authService } from '../shared/firebase';
 import { getAuth } from 'firebase/auth';
+import UserProfileModal from './UserProfile';
 
 // 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
 // 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
@@ -34,6 +35,7 @@ export default function Detail() {
   const [setDetail, getSetDetail] = useState('');
   let { id } = useParams();
   const uid = authService.currentUser?.uid;
+  const [isOpenProfileModal, setOpenProfileModal] = useState(false);
 
   const getDetail = async () => {
     const snapshot = await getDoc(doc(dbService, 'post', id));
@@ -45,6 +47,9 @@ export default function Detail() {
     getDetail();
   }, []);
 
+  const onClickToggleModal = () => {
+    setOpenProfileModal(!isOpenProfileModal);
+  };
   return (
     <>
       <Container>
@@ -55,7 +60,16 @@ export default function Detail() {
           <ContentsContainer>
             <ProfileContainer>
               <ProfileWrap>
-                <ProfilePic profile={setDetail.profileImg ?? basicImg} />
+                {isOpenProfileModal ? (
+                  <UserProfileModal
+                    setOpenProfileModal={setOpenProfileModal}
+                    isOpenProfileModal={isOpenProfileModal}
+                  />
+                ) : null}
+                <ProfilePic
+                  onClick={onClickToggleModal}
+                  profile={setDetail.profileImg ?? basicImg}
+                />
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
               {uid === setDetail.userId ? (

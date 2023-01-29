@@ -35,9 +35,14 @@ const globalStyles = createGlobalStyle`
         cursor:pointer
     }
 
-    input {
+    input, textarea {
+        background: inherit;
         border:none;
-    } 
+        border-radius:0;
+        margin :0;
+        padding:0;
+        outline : none;
+    }
 
 `;
 

@@ -79,11 +79,11 @@ const EditPost = () => {
   }, []);
 
   const handleEditButton = async () => {
-    if (!editTitle || title === null) {
+    if (!editTitle.trim() || title === null) {
       setCorrectTitle(true);
       return;
     }
-    if (!editContent || content === null) {
+    if (!editContent.trim() || content === null) {
       setCorrectContent(true);
       return;
     } else {
@@ -93,7 +93,6 @@ const EditPost = () => {
         content: editContent,
         coord: state.center,
       });
-      //alert("수정");
       navigate(`/detail/${id}`);
     }
   };

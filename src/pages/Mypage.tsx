@@ -48,15 +48,16 @@ export default function Mypage() {
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
-    gitAddress: '',
-    introduce: '',
+
+    gitAddress: gitAddress,
+    introduce: introduce,
+
     userid: uid,
   });
 
   console.log('formData', formData);
 
   const handleChange = (e: any) => {
-    console.log(e.target.value);
     setFormData(prevFormData => {
       return {
         ...prevFormData,
@@ -85,7 +86,7 @@ export default function Mypage() {
     let reg_url =
       /^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))*\/?$/;
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
-    if (!formData?.nickName) {
+    if (!(formData?.nickName || displayName)) {
       // formdata가 빈값이면 if문은 true
       setCheckViewModal(true);
       return;
@@ -113,11 +114,13 @@ export default function Mypage() {
       }
     } else {
       //깃 어드레스 내용 없으면
-      await updateDoc(doc(dbService, 'user', id), {
-        gitAddress: formData?.gitAddress,
-        nickName: formData?.nickName,
-        introduce: formData?.introduce,
-        stack: formData?.stack,
+
+      await setDoc(doc(dbService, 'user', id), {
+        gitAddress: formData?.gitAddress ?? '',
+        nickName: formData?.nickName ?? displayName,
+        introduce: formData?.introduce ?? '인사말을 입력해주세요.',
+        stack: formData?.stack ?? '주 스택을 선택 해주세요.',
+
         userid: uid,
       });
       await updateProfile(authService?.currentUser, {
@@ -156,14 +159,9 @@ export default function Mypage() {
 
       <Container>
         <MypageBox>
-          {/* <ProfileTitle> */}
-          {/* <TopProfilePhoto> */}
-          {/* <PicInfoContainer> */}
           <Profile />
-          {/* </TopProfilePhoto> */}
 
           <TopProfileNickName></TopProfileNickName>
-          <UploadWrap></UploadWrap>
           {isEditProfile ? (
             <MyInfo
               isEditProfile={isEditProfile}
@@ -186,11 +184,9 @@ export default function Mypage() {
               formData={formData}
             />
           )}
-          {/* </PicInfoContainer> */}
-          {/* </ProfileTitle> */}
 
           <BottomContainer>
-            <MyPostTitle>작성한 글</MyPostTitle>
+            <MyPostTitle>My Post</MyPostTitle>
             <MyPost />
           </BottomContainer>
         </MypageBox>
@@ -204,7 +200,9 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 auto;
+
   display: flex;
+
   border-radius: 10px;
   background-color: #fff;
 `;
@@ -219,19 +217,12 @@ const MypageBox = styled.div`
   background-color: #f2f2f2;
 `;
 
-const UploadWrap = styled.div`
-  /* background-color: blue; */
-  min-width: 200px;
-  position: absolute;
-  top: 185px;
-  left: 50px;
-`;
-
 // ------------ post ---------------
 
 const MyPostTitle = styled.div`
   margin-top: 50px;
-  font-size: 20px;
+  margin-left: 4px;
+  font-size: 24px;
 `;
 
 const BottomContainer = styled.div`
@@ -239,35 +230,8 @@ const BottomContainer = styled.div`
   flex-direction: column;
 `;
 
-// const TopProfilePhoto = styled.div`
-//   background-color: orange;
-//   background-position: center center;
-//   background-size: contain;
-//   background-repeat: no-repeat;
-//   /* cursor: pointer; */
-//   width: 140px;
-//   height: 140px;
-//   margin-bottom: 30px;
-//   /* border: 1px solid black;
-//   border-radius: 100px; */
-// `;
-
 const TopProfileNickName = styled.p`
   background-color: pink;
   font-size: 18px;
   font-weight: 500;
-`;
-
-// const ProfileWrap = styled.div`
-//   width: 100px;
-//   height: 100px;
-//   background-color: blue;
-// `;
-
-const PicInfoContainer = styled.div`
-  display: flex;
-  /* flex-direction: row; */
-  width: 100%;
-  height: 100%;
-  background-color: gray;
 `;

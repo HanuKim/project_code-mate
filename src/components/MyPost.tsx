@@ -112,19 +112,3 @@ const Container = styled.div`
   width: 100%;
   margin: 20px auto;
 `;
-
-const WriteContainer = styled.div`
-  text-align: right;
-`;
-const WriteBt = styled.button`
-  background-color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  margin: 40px 0 20px 0;
-  cursor: pointer;
-  &:hover {
-    border: 1px solid #262b7f;
-  }
-`;

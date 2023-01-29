@@ -5,13 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CodeMate from '../img/CodeMate.png';
 import Modal from './Modal';
-
+import AlertModal from './modal/AlertModal';
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
 // }
 
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState('');
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
@@ -36,10 +38,14 @@ export default function Header() {
   const logout = () => {
     signOut(auth)
       .then(() => {
-        alert('로그아웃 성공 !');
+        //alert("로그아웃 성공 !");
+        setAlertModal(true);
+        setAlertMessageText('로그아웃 성공 !');
       })
       .catch(error => {
-        alert('로그아웃 실패..');
+        //alert("로그아웃 실패..");
+        setAlertModal(true);
+        setAlertMessageText('로그아웃 실패..');
       });
   };
 
@@ -52,6 +58,13 @@ export default function Header() {
   return (
     <>
       <HeaderContainer>
+        {alertModal ? (
+          <AlertModal
+            children={AlertMessageText}
+            setAlertModal={setAlertModal}
+            setOpenModal={setOpenModal}
+          />
+        ) : null}
         <LogoBox
           onClick={() => {
             navigate('/');
@@ -74,7 +87,7 @@ export default function Header() {
                 navigate('/');
               }}
             >
-              로그아웃
+              SignOut
             </LoginBtn>
           ) : (
             <LoginBtn
@@ -82,7 +95,7 @@ export default function Header() {
                 onClickToggleModal();
               }}
             >
-              로그인/회원가입
+              SignUp / Join
             </LoginBtn>
           )}
 
@@ -92,7 +105,7 @@ export default function Header() {
                 navigate(`/Mypage/${uid}`);
               }}
             >
-              마이페이지
+              MyPage
             </LoginBtn>
           ) : null}
         </BtnWrap>
@@ -142,7 +155,7 @@ const EmptyBox = styled.div`
 
 const LoginBtn = styled.button`
   width: 120px;
-  height: 50px;
+  height: 40px;
   border: 1px solid #d0d0d0;
   border-radius: 30px;
   color: #262b7f;
@@ -152,7 +165,7 @@ const LoginBtn = styled.button`
   transition-duration: 0.3s;
   &:hover {
     background-color: #262b7f;
-    color: #fff;
     border: 1px solid #262b7f;
+    color: #fff;
   }
 `;

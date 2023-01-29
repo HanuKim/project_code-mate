@@ -129,12 +129,12 @@ const Container = styled.div`
   max-width: 1100px;
   width: 100%;
   margin: 0 auto;
+  padding: 4px;
 `;
 
 const CommentTitle = styled.h1`
   font-size: 24px;
   margin: 30px 0;
-  margin-left: 4px;
 `;
 
 const CommentsContainer = styled.div`

@@ -206,7 +206,6 @@ const ProfileNickName = styled.p`
   font-size: 16px;
   font-weight: 500;
   margin: 0 8px;
-  margin-top: 16px;
 `;
 
 const Date = styled.div`
@@ -219,33 +218,6 @@ const ContentText = styled.p`
   white-space: pre-wrap;
 `;
 
-const CommentLeftButton = styled.button`
-  position: absolute;
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  width: 50px;
-  height: 30px;
-  border-radius: 20px;
-
-  cursor: pointer;
-  &:hover {
-    background-color: #262b7f;
-    color: #ffffff;
-  }
-`;
-const CommentRightButton = styled.button`
-  position: absolute;
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  width: 50px;
-  height: 30px;
-  border-radius: 20px;
-  cursor: pointer;
-  &:hover {
-    background-color: #262b7f;
-    color: #ffffff;
-  }
-`;
 const CommentEditInput = styled.textarea`
   width: 500px;
   border-radius: 10px;
@@ -256,13 +228,15 @@ const CommentEditInput = styled.textarea`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 4px;
-  margin-top: 20px;
+
+  margin-top: 1px;
 `;
+
 const CommentButton = styled.span`
   font-size: 12px;
   color: #aaa;
   cursor: pointer;
   &:hover {
-    color: #000000;
+    color: #333;
   }
 `;

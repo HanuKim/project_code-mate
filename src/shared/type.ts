@@ -1,5 +1,9 @@
 import { Timestamp } from "firebase/firestore";
 
+export interface ModalProps {
+  modalWidth: number;
+  modalHeight: number;
+}
 export interface PostState {
   id: string;
   nickName: string;
@@ -11,7 +15,6 @@ export interface PostState {
   coord: string;
   profileImg: string;
 }
-
 
 export interface UserInfo {
   introduce: string;
@@ -40,7 +43,6 @@ export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
-
 export interface BtnProps {
   btnWidth?: number;
   btnHeight?: number;
