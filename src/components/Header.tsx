@@ -1,10 +1,10 @@
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../shared/firebase";
-import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
-import Modal from "./Modal";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../shared/firebase';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
+import Modal from './Modal';
 
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
@@ -20,7 +20,7 @@ export default function Header() {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    const listen = onAuthStateChanged(auth, (user) => {
+    const listen = onAuthStateChanged(auth, user => {
       if (user) {
         setAuthUser(user);
       } else {
@@ -36,10 +36,10 @@ export default function Header() {
   const logout = () => {
     signOut(auth)
       .then(() => {
-        alert("로그아웃 성공 !");
+        alert('로그아웃 성공 !');
       })
-      .catch((error) => {
-        alert("로그아웃 실패..");
+      .catch(error => {
+        alert('로그아웃 실패..');
       });
   };
 
@@ -54,7 +54,7 @@ export default function Header() {
       <HeaderContainer>
         <LogoBox
           onClick={() => {
-            navigate("/");
+            navigate('/');
           }}
         />
 
@@ -71,7 +71,7 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 logout();
-                navigate("/");
+                navigate('/');
               }}
             >
               로그아웃

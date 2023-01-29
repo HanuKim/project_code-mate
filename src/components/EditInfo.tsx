@@ -1,10 +1,10 @@
-import {doc, DocumentData, setDoc} from 'firebase/firestore';
-import React, {useEffect} from 'react';
+import { doc, DocumentData, setDoc, updateDoc } from 'firebase/firestore';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import {authService, dbService} from '../shared/firebase';
+import { authService, dbService } from '../shared/firebase';
 import gitIcon from '../img/gitIcon.png';
 import notgitIcon from '../img/notgitIcon.png';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 export default function EditInfo({
   myInfo,
   setIsEditProfile,
@@ -15,12 +15,13 @@ export default function EditInfo({
   setIsEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   stack: string;
   formData: DocumentData;
-  }) {
+}) {
   const displayName = authService.currentUser?.displayName;
-  
+  console.log('EformData', formData);
   const getProfileName = async () => {
     const displayName = authService.currentUser?.displayName;
     const uid = authService.currentUser?.uid;
+
     await setDoc(doc(dbService, 'user', uid), {
       nickName: displayName,
       stack: formData?.stack,
@@ -47,7 +48,7 @@ export default function EditInfo({
           <InfoWrapContent>
             <IconContainer>
               {formData?.gitAddress ? (
-                <a href={formData?.gitAddress} target='_blank'>
+                <a href={formData?.gitAddress} target="_blank">
                   <GitIcon />
                 </a>
               ) : (
@@ -122,7 +123,7 @@ const NotGitIcon = styled.div`
 const IconContainer = styled.div`
   width: 50px;
   height: 50px;
-`
+`;
 
 const IntroduceContainer = styled.div`
   width: 100%;

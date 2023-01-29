@@ -1,7 +1,9 @@
 // react-icons 다운
 import { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import MypageModal from '../components/MypageModal';
+import MypageModal from '../components/modal/MypageModal';
+import MypageUrlmodal from '../components/modal/MypageUrlmodal';
+
 // import { ShowImage } from '../components/ShowImage';
 import UploadImage from '../components/UploadImage';
 import {
@@ -35,6 +37,9 @@ export default function Mypage() {
   const [stack, setStack]: any = useState('');
   const [gitAddress, setGitAddress] = useState('');
   const [introduce, setIntroduce] = useState('');
+  const [checkViewModal, setCheckViewModal] = useState<any>(false);
+  const [checkUrlModal, setCheckUrlModal] = useState<any>(false);
+
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
   const { id } = useParams();
@@ -82,13 +87,13 @@ export default function Mypage() {
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
     if (!formData?.nickName) {
       // formdata가 빈값이면 if문은 true
-      alert('nickname 을 입력해주세요');
+      setCheckViewModal(true);
       return;
     } else if (formData?.gitAddress) {
       // 닉네임 빈값 아니면 깃어드레스 내용 있는지 체크, 만약 내용이 있으면 true
       if (!reg_url.test(formData?.gitAddress)) {
         // 정규식 체크해서 정규식에 부합하지 않으면 알러트
-        alert('Url 형식에 맞게 입력해주세요!');
+        setCheckUrlModal(true);
         return;
       } else {
         //정규식에 부합하면 코드 실행
@@ -140,6 +145,15 @@ export default function Mypage() {
 
   return (
     <>
+      {checkViewModal ? (
+        <MypageModal setCheckViewModal={setCheckViewModal}>
+          닉네임을 입력해주세요.
+        </MypageModal>
+      ) : null}
+      {checkUrlModal ? (
+        <MypageUrlmodal setCheckUrlModal={setCheckUrlModal} />
+      ) : null}
+
       <Container>
         <MypageBox>
           {/* <ProfileTitle> */}

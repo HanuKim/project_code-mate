@@ -26,10 +26,12 @@ import {
   CheckButton,
 } from './DeleteModal';
 
-export default function CheckModal({
+export default function MypageModal({
   setCheckViewModal,
+  children,
 }: {
   setCheckViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  children: any;
 }) {
   const closeModal = () => {
     setCheckViewModal(false);
@@ -37,7 +39,7 @@ export default function CheckModal({
   return (
     <ContainerBg>
       <Container>
-        <TellText>내용을 입력해주세요.</TellText>
+        <TellText>{children}</TellText>
         <CheckButtonContainer>
           <CheckButton onClick={closeModal}>확인</CheckButton>
         </CheckButtonContainer>

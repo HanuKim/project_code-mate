@@ -1,22 +1,24 @@
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { storage, auth } from "../shared/firebase";
-import styled from "styled-components";
+import { onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { storage, auth } from '../shared/firebase';
+import styled from 'styled-components';
+import MypageUploadModal from '../components/modal/MypageUploadModal';
 
 export default function Profile() {
   const currentUser = useAuth();
+  const [checkImageModal, setCheckImageModal] = useState<any>(false);
   const [photo, setPhoto] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
   );
 
   function useAuth() {
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
+      const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
       return unsub;
     }, []);
 
@@ -24,7 +26,7 @@ export default function Profile() {
   }
 
   async function upload(file: any, currentUser: any, setLoading: any) {
-    const fileRef = ref(storage, currentUser.uid + ".png");
+    const fileRef = ref(storage, currentUser.uid + '.png');
 
     setLoading(true);
 
@@ -34,7 +36,7 @@ export default function Profile() {
     updateProfile(currentUser, { photoURL });
     setPhotoURL(photoURL);
     setLoading(false);
-    alert("Uploaded file!");
+    setCheckImageModal(true);
   }
   console.log('photoURL', photoURL);
 
@@ -55,21 +57,26 @@ export default function Profile() {
   }, [currentUser]);
 
   return (
-    <PicContainer>
-      <ImageWrap>
-        <ProfileImage src={photoURL} width={150} height={130} />
-      </ImageWrap>
-      <ButtonWrap>
-        <FileSelectBtn htmlFor="input-file">
-          {" "}
-          사진 선택
-          <input type="file" hidden id="input-file" onChange={handleChange} />
-        </FileSelectBtn>
-        <UploatBtn disabled={loading || !photo} onClick={handleClick}>
-          사진 등록
-        </UploatBtn>
-      </ButtonWrap>
-    </PicContainer>
+    <>
+      {checkImageModal ? (
+        <MypageUploadModal setCheckImageModal={setCheckImageModal} />
+      ) : null}
+      <PicContainer>
+        <ImageWrap>
+          <ProfileImage src={photoURL} width={150} height={130} />
+        </ImageWrap>
+        <ButtonWrap>
+          <FileSelectBtn htmlFor="input-file">
+            {' '}
+            사진 선택
+            <input type="file" hidden id="input-file" onChange={handleChange} />
+          </FileSelectBtn>
+          <UploatBtn disabled={loading || !photo} onClick={handleClick}>
+            사진 등록
+          </UploatBtn>
+        </ButtonWrap>
+      </PicContainer>
+    </>
   );
 }
 
