@@ -12,7 +12,6 @@ export interface PostState {
   profileImg: string;
 }
 
-
 export interface UserInfo {
   introduce: string;
   gitAddress: string;
@@ -40,7 +39,6 @@ export interface ModalProps {
   modalWidth: number;
   modalHeight: number;
 }
-
 export interface BtnProps {
   btnWidth?: number;
   btnHeight?: number;
