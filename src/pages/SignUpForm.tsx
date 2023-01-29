@@ -22,15 +22,13 @@ export default function SignUpForm({
   const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  
+
   const [modalOpen, setModalOpen] = useState(false);
   const [dpNameCheck, setDpNameCheck] = useState(false);
   const [checkError, setCheckError] = useState("");
   const [error, setError] = useState("");
   const [alertModal, setAlertModal] = useState<boolean>(false);
   const [AlertMessageText, setAlertMessageText] = useState("");
-
-
 
   // email, password 정규식
   const emailRegEx =
@@ -80,7 +78,6 @@ export default function SignUpForm({
       setAlertMessageText("비밀번호 형식을 확인해주세요.");
     }
     if (password !== passwordConfirm) {
-
       //return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
       setAlertModal(true);
       setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
@@ -100,11 +97,11 @@ export default function SignUpForm({
         await setDoc(doc(dbService, "user", uid), {
           userid: uid,
           nickName: nickname,
-          gitAddress: '3',
-          introduce: '3',
-          stack: '3',
+          gitAddress: "3",
+          introduce: "3",
+          stack: "3",
         });
-        console.log(uid)
+        console.log(uid);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -124,7 +121,6 @@ export default function SignUpForm({
         } else {
           //alert("회원가입 완료! 🎉");
           //return;
-
         }
       });
   };
@@ -137,83 +133,92 @@ export default function SignUpForm({
     }
   };
   return (
-    <Form onSubmit={signUpForm}>
-      <BtnContainer>
-        <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
-      </BtnContainer>
-      <TitleText>회원가입</TitleText>
-      {/* Error! */}
-      <SignUpFormContainer>
-        <div>
-          <EmailInput
-            onChange={(e) => {
-              setEmail(e.target.value);
-              emailCheck(e.target.value);
+    <>
+      {alertModal ? (
+        <AlertModal
+          children={AlertMessageText}
+          setAlertModal={setAlertModal}
+          setOpenModal={setOpenModal}
+        />
+      ) : null}
+      <Form onSubmit={signUpForm}>
+        <BtnContainer>
+          <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
+        </BtnContainer>
+        <TitleText>회원가입</TitleText>
+        {/* Error! */}
+        <SignUpFormContainer>
+          <div>
+            <EmailInput
+              onChange={(e) => {
+                setEmail(e.target.value);
+                emailCheck(e.target.value);
+              }}
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              value={email}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <div>
+            <NickNameInput
+              type="nickname"
+              name="nickname"
+              id="nickname"
+              placeholder="Nick name"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <div>
+            <PwInput
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                passwordCheck(e.target.value);
+              }}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <div>
+            <PwChekckInput
+              type="password"
+              name="passwordConfirm"
+              id="passwordConfirm"
+              placeholder="Password Confirm"
+              value={passwordConfirm}
+              onChange={(e) => {
+                setPasswordConfirm(e.target.value);
+                passwordDoubleCheck(password, e.target.value);
+              }}
+              required
+              onKeyDown={handleOnKeyPress}
+            />
+          </div>
+          <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
+          <JoinBtn type="submit" onClick={signUpForm}>
+            회원가입
+          </JoinBtn>
+          <LoginBtn
+            onClick={() => {
+              setIsNotLogin(false);
             }}
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-        </div>
-        <div>
-          <NickNameInput
-            type="nickname"
-            name="nickname"
-            id="nickname"
-            placeholder="Nick name"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-        </div>
-        <div>
-          <PwInput
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              passwordCheck(e.target.value);
-            }}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-
-        </div>
-        <div>
-          <PwChekckInput
-            type="password"
-            name="passwordConfirm"
-            id="passwordConfirm"
-            placeholder="Password Confirm"
-            value={passwordConfirm}
-            onChange={(e) => {
-              setPasswordConfirm(e.target.value);
-              passwordDoubleCheck(password, e.target.value);
-            }}
-            required
-            onKeyDown={handleOnKeyPress}
-          />
-        </div>
-        <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
-        <JoinBtn type="submit" onClick={signUpForm}>
-          회원가입
-        </JoinBtn>
-        <LoginBtn
-          onClick={() => {
-            setIsNotLogin(false);
-          }}>
-          로그인 화면으로
-        </LoginBtn>
-      </SignUpFormContainer>
-    </Form>
+          >
+            로그인 화면으로
+          </LoginBtn>
+        </SignUpFormContainer>
+      </Form>
+    </>
   );
 }
 
