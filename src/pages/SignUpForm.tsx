@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 
-function SignUpForm({
+export default function SignUpForm({
   setIsNotLogin,
   setOpenModal,
 }: {
@@ -44,14 +44,15 @@ function SignUpForm({
   const [dpNameCheck, setDpNameCheck] = useState(false);
   const [checkError, setCheckError] = useState("");
   const [error, setError] = useState("");
-  const onChange = async (e:any) => {
-    const {target: {nickname, value}}= event;
-    setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
 
-    if (nickname==="displayName"){ const IDcheck = await dbService
-      .collection("user")
-      .where("nick")
-  }
+  // const onChange = async (e:any) => {
+  //   const {target: {nickname, value}}= event;
+  //   setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
+
+  //   if (nickname==="displayName"){ const IDcheck = await dbService
+  //     .collection("user")
+  //     .where("nick")
+  // }
 
   // email, password 정규식
   const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
@@ -118,11 +119,7 @@ function SignUpForm({
       return alert("비밀번호 형식을 확인해주세요.");
     }
 
-    if (password !== passwordConfirm) {
-      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
-    } else {
-      alert("회원가입 완료! 🎉");
-    }
+    
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         console.log("회원가입 성공 ! :", userCredential);
@@ -135,9 +132,20 @@ function SignUpForm({
         await setDoc(doc(dbService, "user", uid), {
           userid: uid,
         });
+        if (password !== passwordConfirm) {
+          return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
+        } else {
+          alert('회원가입 완료! 🎉');
+        }
       })
       .catch((error) => {
-        console.log(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log('errorMessage:', errorCode, errorMessage);
+        if (errorMessage.includes('auth/email-already-in-use')) {
+          alert('이미 가입된 회원입니다.');
+          return;
+        } 
       });
   };
 
@@ -220,7 +228,6 @@ function SignUpForm({
   );
 }
 
-export default SignUpForm;
 
 const Container = styled.div`
   margin-top: 18px;
