@@ -1,24 +1,11 @@
-// import Modal from "../components/Modal";
 import styled from "styled-components";
-import React, { useState, Dispatch } from "react";
+import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  serverTimestamp,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-import { useDispatch } from "react-redux";
+import { setDoc, doc } from "firebase/firestore";
+import close from "../img/close.png";
+import AlertModal from "../components/modal/AlertModal";
 
 export default function SignUpForm({
   setIsNotLogin,
@@ -27,32 +14,23 @@ export default function SignUpForm({
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
 
+  const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-
-  const [authObj, setAuthObj] = useState({
-    nickname: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  });
+  
+  const [modalOpen, setModalOpen] = useState(false);
   const [dpNameCheck, setDpNameCheck] = useState(false);
-  const [checkError, setCheckError] = useState('');
-  const [error, setError] = useState('');
+  const [checkError, setCheckError] = useState("");
+  const [error, setError] = useState("");
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
 
-  // const onChange = async (e:any) => {
-  //   const {target: {nickname, value}}= event;
-  //   setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
 
-  //   if (nickname==="displayName"){ const IDcheck = await dbService
-  //     .collection("user")
-  //     .where("nick")
-  // }
 
   // email, password 정규식
   const emailRegEx =
@@ -62,74 +40,91 @@ export default function SignUpForm({
   const emailCheck = (email: any) => {
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
-
-  console.log('nickname', nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      console.log('비밀번호 형식을 확인해주세요');
-      return;
+      console.log("비밀번호 형식을 확인해주세요");
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     } else {
       // 맞을 경우 출력
-      console.log('비밀번호 형식이 맞아요');
+      console.log("비밀번호 형식이 맞아요");
     }
   };
   const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
     if (password !== passwordConfirm) {
-      console.log('비밀번호가 다릅니다.');
+      console.log("비밀번호가 다릅니다.");
       return;
     } else {
-      console.log('비밀번호가 동일합니다.');
+      console.log("비밀번호가 동일합니다.");
     }
   };
 
-
   const displayName = auth.currentUser?.displayName;
-  console.log('displayName', displayName);
-  console.log('email : ', email);
-  console.log('PW : ', password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('이메일 형식을 확인해주세요.');
+      setAlertModal(true);
+      setAlertMessageText("이메일 형식을 확인해주세요.");
     }
-
+    if (nickname === "") {
+      //return alert("닉네임을 입력해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("닉네임을 입력해주세요.");
+    }
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('비밀번호 형식을 확인해주세요.');
+      //return alert("비밀번호 형식을 확인해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     }
     if (password !== passwordConfirm) {
-      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+
+      //return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
     }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        console.log('회원가입 성공 ! :', userCredential);
-        console.log('디스플레이네임', authService.currentUser.displayName);
-        setIsNotLogin(false);
-        setOpenModal(false);
+        setAlertModal(true);
+        setAlertMessageText("회원가입 완료! 🎉");
+        if (alertModal === true) {
+          setIsNotLogin(false);
+        }
+        //setOpenModal(false);
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-        await setDoc(doc(dbService, 'user', uid), {
+        await setDoc(doc(dbService, "user", uid), {
           userid: uid,
+          nickName: nickname,
+          gitAddress: '3',
+          introduce: '3',
+          stack: '3',
         });
+        console.log(uid)
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorMessage:", errorCode, errorMessage);
+
         if (errorMessage.includes("auth/email-already-in-use")) {
-          alert("이미 가입된 회원입니다.");
-          return;
+          // alert("이미 가입된 회원입니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("이미 가입된 회원입니다.");
         }
         if (errorMessage.includes("auth/displayName-already-in-use")) {
-          alert("동일한 닉네임이 존재합니다.");
-          return;
+          // alert("동일한 닉네임이 존재합니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("동일한 닉네임이 존재합니다.");
         } else {
-          alert("회원가입 완료! 🎉");
+          //alert("회원가입 완료! 🎉");
+          //return;
+
         }
       });
   };
@@ -137,115 +132,115 @@ export default function SignUpForm({
   // input마다 onKeyDown 속성에 이 함수를 넣었습니다.
   // input에서 Enter를 누르면 signUpForm 함수가 실행됩니다.
   const handleOnKeyPress = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       signUpForm(e);
     }
   };
-
   return (
-    <Container>
-      <form onSubmit={signUpForm}>
-        <div className="form-inner">
-
-          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
-          <TitleText>회원가입</TitleText>
-          {/* Error! */}
-          <SignUpFormContainer>
-            <div>
-              <EmailInput
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  emailCheck(e.target.value);
-                }}
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
-                value={email}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <NickNameInput
-                type='nickname'
-                name='nickname'
-                id='nickname'
-                placeholder='Nick name'
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  passwordCheck(e.target.value);
-                }}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <PwChekckInput
-                type='password'
-                name='passwordConfirm'
-                id='passwordConfirm'
-                placeholder='Password Confirm'
-                value={passwordConfirm}
-                onChange={(e) => {
-                  setPasswordConfirm(e.target.value);
-                  passwordDoubleCheck(password, e.target.value);
-                }}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <Text>
-              비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.
-            </Text>
-            <JoinBtn type='submit' onClick={signUpForm}>
-              회원가입
-            </JoinBtn>
-            <LoginBtn
-              onClick={() => {
-                setIsNotLogin(false);
-              }}
-            >
-              로그인 화면으로
-            </LoginBtn>
-          </SignUpFormContainer>
+    <Form onSubmit={signUpForm}>
+      <BtnContainer>
+        <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
+      </BtnContainer>
+      <TitleText>회원가입</TitleText>
+      {/* Error! */}
+      <SignUpFormContainer>
+        <div>
+          <EmailInput
+            onChange={(e) => {
+              setEmail(e.target.value);
+              emailCheck(e.target.value);
+            }}
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            value={email}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
         </div>
-      </form>
-    </Container>
+        <div>
+          <NickNameInput
+            type="nickname"
+            name="nickname"
+            id="nickname"
+            placeholder="Nick name"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+        </div>
+        <div>
+          <PwInput
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              passwordCheck(e.target.value);
+            }}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+
+        </div>
+        <div>
+          <PwChekckInput
+            type="password"
+            name="passwordConfirm"
+            id="passwordConfirm"
+            placeholder="Password Confirm"
+            value={passwordConfirm}
+            onChange={(e) => {
+              setPasswordConfirm(e.target.value);
+              passwordDoubleCheck(password, e.target.value);
+            }}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+        </div>
+        <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
+        <JoinBtn type="submit" onClick={signUpForm}>
+          회원가입
+        </JoinBtn>
+        <LoginBtn
+          onClick={() => {
+            setIsNotLogin(false);
+          }}>
+          로그인 화면으로
+        </LoginBtn>
+      </SignUpFormContainer>
+    </Form>
   );
 }
 
-const Container = styled.div`
-  margin-top: 18px;
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 
-const CloseButton = styled.button`
-  width: 18px;
-  height: 18px;
-  margin-left: 310px;
-  border-radius: 100px;
-  border: none;
-  background-color: black;
-  color: #fff;
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CloseButton = styled.div`
+  width: 32px;
+  height: 32px;
+
+  margin-top: 20px;
+  margin-right: 12px;
+
+  background-image: url(${close});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
   cursor: pointer;
-  &:hover {
-    background-color: #262b7f;
-    box-shadow: 2px 4px 3px -3px black;
-    transition: 0.3s;
-  }
 `;
 
 const SignUpFormContainer = styled.div`

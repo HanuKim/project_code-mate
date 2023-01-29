@@ -1,10 +1,11 @@
-import React, { PropsWithChildren, useState } from "react";
-import Modal from "../components/Modal";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../shared/firebase";
+import close from "../img/close.png";
 // React.Dispatch<React.SetStateAction<boolean>>
+import AlertModal from "../components/modal/AlertModal";
 
 function LoginForm({
   setIsNotLogin,
@@ -13,21 +14,21 @@ function LoginForm({
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const {id} = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alertText, setAlertText] = useState("");
-  console.log("email : ", email);
-  console.log("PW : ", password);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
 
   const alertTextTimer = (message: any) => {
     setAlertText(message);
     setTimeout(() => setAlertText(""), 3000);
   };
   // email, password 정규식
-  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
 
   const signIn = (e: any) => {
@@ -35,117 +36,130 @@ function LoginForm({
 
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("올바른 이메일 형식이 아닙니다.");
+      //return alert("올바른 이메일 형식이 아닙니다.");
+      setAlertModal(true);
+      setAlertMessageText("올바른 이메일 형식이 아닙니다.");
     }
 
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.");
+      //return alert("비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.");
+      setAlertModal(true);
+      setAlertMessageText(
+        "비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다."
+      );
     }
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // console.log("로그인 성공 ! : ", userCredential);
-        setOpenModal(false);
-        console.log("uid확인1", uid);
+        setAlertModal(true);
+        setAlertMessageText("로그인 성공! 🎉");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorMessage:", errorCode, errorMessage);
+        //console.log("errorMessage:", errorCode, errorMessage);
         if (errorMessage.includes("user-not-found")) {
-          alert("가입되지 않은 회원입니다.");
+          //alert("가입되지 않은 회원입니다.");
+          setAlertModal(true);
+          setAlertMessageText("가입되지 않은 회원입니다.");
           return;
         } else if (errorMessage.includes("wrong-password")) {
-          alert("비밀번호가 올바르지 않습니다.");
+          //alert("비밀번호가 올바르지 않습니다.");
+          setAlertModal(true);
+          setAlertMessageText("비밀번호가 올바르지 않습니다.");
         } else {
-          alert("로그인 성공! 🎉");
+          //alert("로그인 성공! 🎉");
+          //return;
         }
       });
   };
-  
+
   // input마다 onKeyDown 속성에 이 함수를 넣었습니다.
   // input에서 Enter를 누르면 signIn 함수가 실행됩니다.
   const handleOnKeyPress = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       signIn(e);
     }
   };
-  
-  console.log("useparams:", useParams());
-  console.log("uid확인2", uid);
-  
+
   return (
-    <Container>
-      <form onSubmit={signIn}>
-        <div className="form-inner">
-          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
-          <TitleText>로그인</TitleText>
-          {/* Error! */}
-          <LoginFormContainer>
-            <div>
-              <EmailInput
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <SignUpBtn
-              onClick={() => {
-                setIsNotLogin(true);
-              }}
-            >
-              회원가입
-            </SignUpBtn>
-            <LoginBtn>로그인</LoginBtn>
-          </LoginFormContainer>
+    <Form onSubmit={signIn}>
+      <BtnContainer>
+        <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
+      </BtnContainer>
+      <TitleText>로그인</TitleText>
+      {/* Error! */}
+      <LoginFormContainer>
+        <div>
+          <EmailInput
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
         </div>
-      </form>
-    </Container>
+        <div>
+          <PwInput
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+        </div>
+        <SignUpBtn
+          onClick={() => {
+            setIsNotLogin(true);
+          }}>
+          Join
+        </SignUpBtn>
+        <LoginBtn>SignIn</LoginBtn>
+      </LoginFormContainer>
+    </Form>
   );
 }
 export default LoginForm;
-const Container = styled.div`
-  margin-top: 18px;
+
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 
-const CloseButton = styled.button`
-  width: 18px;
-  height: 18px;
-  margin-left: 310px;
-  margin-bottom: 20px;
-  border-radius: 100px;
-  border: none;
-  background-color: black;
-  color: #fff;
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CloseButton = styled.div`
+  width: 32px;
+  height: 32px;
+
+  margin-top: 20px;
+  margin-right: 12px;
+
+  background-image: url(${close});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
   cursor: pointer;
-  &:hover {
-    background-color: #262b7f;
-    box-shadow: 2px 4px 3px -3px black;
-    transition: 0.3s;
-  }
 `;
 
 const LoginFormContainer = styled.div`
-  margin-left: 38px;
-  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const TitleText = styled.h2`
@@ -155,52 +169,45 @@ const TitleText = styled.h2`
 `;
 
 const EmailInput = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 86%;
-  color: #7f7d7d;
-  border: 1px solid #d0d0d0;
+  width: 318px;
+  color: #f2f2f2;
+  background: #333;
+  margin-bottom: 12px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    box-shadow: 3px 3px 3px #aaa;
+    transform: scale(1.03);
+  }
 `;
 
 const PwInput = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 86%;
-  border: 1px solid #d0d0d0;
-  color: #7f7d7d;
+  width: 318px;
+  color: #333;
+  margin-bottom: 32px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    transform: scale(1.03);
+    box-shadow: 3px 3px 3px #aaa;
+  }
 `;
 const SignUpBtn = styled.button`
-  border: none;
-  width: 30%;
-  margin-top: 18px;
-  margin-left: 87px;
-  margin-bottom: 5px;
+  background-color: #333;
+  color: #f2f2f2;
+  width: 80%;
+  margin-bottom: 8px;
+  padding: 12px;
+
   cursor: pointer;
-  color: #a29f9f;
-  &:hover {
-    color: #262b7f;
-    transition: 0.3s;
-  }
 `;
 
 const LoginBtn = styled.button`
-  border: none;
-  border-radius: 5px;
-  padding: 8px;
-  width: 86%;
-  margin: 20px;
-  margin-left: 0px;
-  margin-top: 10px;
-  position: flex;
-  align-items: center;
+  width: 80%;
+  padding: 12px;
   background-color: #262b7f;
   color: #ffffff;
   cursor: pointer;
-  &:hover {
-    background-color: #ffffff;
-    border: 1px solid #262b7f;
-    box-shadow: 1px 1px 1px 1px #262b7f;
-    color: #262b7f;
-    transition: 0.3s;
-  }
 `;
