@@ -118,8 +118,10 @@ export default function SignUpForm({
       //형식에 맞지 않을 경우 아래 alert 출력
       return alert("비밀번호 형식을 확인해주세요.");
     }
+    if (password !== passwordConfirm) {
+      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+    }
 
-    
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         console.log("회원가입 성공 ! :", userCredential);
@@ -132,26 +134,27 @@ export default function SignUpForm({
         await setDoc(doc(dbService, "user", uid), {
           userid: uid,
         });
-        if (password !== passwordConfirm) {
-          return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
-        } else {
-          alert('회원가입 완료! 🎉');
-        }
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log('errorMessage:', errorCode, errorMessage);
-        if (errorMessage.includes('auth/email-already-in-use')) {
-          alert('이미 가입된 회원입니다.');
+        console.log("errorMessage:", errorCode, errorMessage);
+        if (errorMessage.includes("auth/email-already-in-use")) {
+          alert("이미 가입된 회원입니다.");
           return;
-        } 
+        }
+        if (errorMessage.includes("auth/displayName-already-in-use")) {
+          alert("동일한 닉네임이 존재합니다.");
+          return;
+        } else {
+          alert("회원가입 완료! 🎉");
+        }
       });
   };
 
   return (
     <Container>
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={signUpForm}>
         <div className="form-inner">
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
@@ -227,7 +230,6 @@ export default function SignUpForm({
     </Container>
   );
 }
-
 
 const Container = styled.div`
   margin-top: 18px;
