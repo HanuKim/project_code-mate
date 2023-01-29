@@ -33,12 +33,14 @@ export default function MyInfo({
 
   return (
     <>
+
       <form onSubmit={onSubmitMyInfo}>
         <Container>
           <ProfileContentsBox>
             <Input
               type="text"
               placeholder="활동명을 작성해주세요."
+
               onChange={handleChange}
               value={formData?.nickName ?? displayName}
               id="nickName"
@@ -46,6 +48,7 @@ export default function MyInfo({
               maxLength={10}
               style={{ width: "180px" }}
             />
+
 
             <StackContainer>
               <StackButton
@@ -111,20 +114,24 @@ export default function MyInfo({
             </StackContainer>
 
             <Input
+
               type="text"
               onChange={handleChange}
               value={formData?.gitAddress}
               id="gitAddress"
               name="gitAddress"
+
               placeholder="본인 Github 주소를 소개합니다."
               style={{ width: "240px" }}
             />
             <TextAreaIntroduce
               placeholder="간단한 소개글을 적어주세요."
+
               onChange={handleChange}
               value={formData?.introduce}
               id="introduce"
               name="introduce"
+
               maxLength={150}></TextAreaIntroduce>
             <BtnContainer>
               <BtnWrap>
@@ -140,6 +147,7 @@ export default function MyInfo({
           </ProfileContentsBox>
         </Container>
       </form>
+
     </>
   );
 }
@@ -219,6 +227,20 @@ const BtnWrap = styled.div`
   justify-content: flex-end;
 `;
 
+const IntroduceLb = styled.label`
+  /* background-color: red; */
+  width: 100%;
+  height: 220px;
+`;
+
+const Introducebox = styled.textarea`
+  /* background-color: red; */
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+`;
 const SaveBtn = styled.button`
   margin-right: 8px;
   padding: 4px 12px;

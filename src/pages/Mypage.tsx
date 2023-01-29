@@ -1,8 +1,10 @@
 // react-icons 다운
+
 import { useState, useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import MypageModal from "../components/MypageModal";
-// import { ShowImage } from '../components/ShowImage';
+
+
 import UploadImage from "../components/UploadImage";
 import {
   doc,
@@ -17,6 +19,7 @@ import {
   Firestore,
   setDoc,
   DocumentData,
+
 } from "firebase/firestore";
 import { auth, dbService, authService } from "../shared/firebase";
 import Profile from "../components/Profile";
@@ -28,6 +31,7 @@ import { UserInfo } from "../shared/type";
 import MyInfo from "../components/MyInfo";
 import EditInfo from "../components/EditInfo";
 import userEvent from "@testing-library/user-event";
+
 
 export default function Mypage() {
 const displayName = authService.currentUser?.displayName;
@@ -54,7 +58,9 @@ const displayName = authService.currentUser?.displayName;
   console.log("formData", formData);
 
   const handleChange = (e: any) => {
+
     setFormData((prevFormData) => {
+
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,
@@ -86,6 +92,7 @@ const displayName = authService.currentUser?.displayName;
       // formdata가 빈값이면 if문은 true
       alert("nickname 을 입력해주세요");
       return;
+
     } else if (formData?.gitAddress) {
       // 닉네임 빈값 아니면 깃어드레스 내용 있는지 체크, 만약 내용이 있으면 true
       if (!reg_url.test(formData?.gitAddress)) {
@@ -108,6 +115,7 @@ const displayName = authService.currentUser?.displayName;
         setIsEditProfile(false);
         console.log("setIsEditProfile", isEditProfile);
       }
+
     } else {
       //깃 어드레스 내용 없으면
 
