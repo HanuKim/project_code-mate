@@ -15,7 +15,9 @@ export default function EditInfo({
   setIsEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   stack: string;
   formData: DocumentData;
-}) {
+  }) {
+  const displayName = authService.currentUser?.displayName;
+  
   const getProfileName = async () => {
     const displayName = authService.currentUser?.displayName;
     const uid = authService.currentUser?.uid;
@@ -28,11 +30,9 @@ export default function EditInfo({
     });
   };
   useEffect(() => {
-    const displayName = authService.currentUser?.displayName;
-    console.log(displayName);
+    getProfileName();
   }, []);
-  const displayName = authService.currentUser?.displayName;
-  console.log(displayName);
+
   return (
     <>
       <IntroduceContainer>

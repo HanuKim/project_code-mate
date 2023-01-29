@@ -72,27 +72,21 @@ export default function Mypage() {
     setIntroduce(e.target.value);
     // console.log(introduce);
   };
-
+  console.log('formData', formData);
+  console.log(Boolean(formData?.gitAddress));
   const onSubmitMyInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let reg_url =
       /^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))*\/?$/;
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
-    if (formData?.nickName.replace(/ /g, '') === '') {
+    if (formData?.nickName === '') {
       alert('nickname 을 입력해주세요');
       return;
-    } else if (formData?.stack.replace(/ /g, '') === '') {
-      alert('주 포지션을 선택해주세요');
-      return;
-    } else if (formData?.gitAddress.replace(/ /g, '') === '') {
-      alert('Url 을 입력해주세요');
-      return;
-    } else if (!reg_url.test(formData?.gitAddress)) {
+      // } else if (formData?.gitAddress) {
+      // if (!reg_url.test(formData?.gitAddress)) {
       alert('Url 형식에 맞게 입력해주세요!');
       return;
-    } else if (formData?.introduce.replace(/ /g, '') === '') {
-      alert('내용을 입력해주세요');
-      return;
+      // }
     } else {
       await updateDoc(doc(dbService, 'user', id), {
         gitAddress: formData?.gitAddress,
