@@ -18,20 +18,20 @@ export default function EditInfo({
   }) {
   const displayName = authService.currentUser?.displayName;
   
-  const getProfileName = async () => {
-    const displayName = authService.currentUser?.displayName;
-    const uid = authService.currentUser?.uid;
-    await setDoc(doc(dbService, 'user', uid), {
-      nickName: displayName,
-      stack: formData?.stack,
-      gitAddress: formData?.gitAddress,
-      introduce: formData?.introduce,
-      userid: uid,
-    });
-  };
-  useEffect(() => {
-    getProfileName();
-  }, []);
+  // const getProfileName = async () => {
+  //   const displayName = authService.currentUser?.displayName;
+  //   const uid = authService.currentUser?.uid;
+  //   await setDoc(doc(dbService, 'user', uid), {
+  //     nickName: displayName,
+  //     stack: formData?.stack ?? '5',
+  //     gitAddress: formData?.gitAddress ?? '5',
+  //     introduce: formData?.introduce ?? '5',
+  //     userid: uid,
+  //   });
+  // };
+  // useEffect(() => {
+  //   getProfileName();
+  // }, []);
 
   return (
     <>
@@ -61,7 +61,7 @@ export default function EditInfo({
           <EditBtn
             onClick={() => {
               setIsEditProfile(true);
-              getProfileName();
+              // getProfileName();
             }}
           >
             편집

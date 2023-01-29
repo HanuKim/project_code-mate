@@ -1,9 +1,9 @@
 // import Modal from "../components/Modal";
-import styled from "styled-components";
-import React, { useState, Dispatch } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, dbService } from "../shared/firebase";
-import { getAuth } from "firebase/auth";
+import styled from 'styled-components';
+import React, {useState, Dispatch, useEffect} from 'react';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import {auth, dbService} from '../shared/firebase';
+import {getAuth} from 'firebase/auth';
 import {
   collection,
   addDoc,
@@ -17,8 +17,12 @@ import {
   serverTimestamp,
   setDoc,
   doc,
-} from "firebase/firestore";
-import { useDispatch } from "react-redux";
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+} from 'firebase/firestore';
+import {useDispatch} from 'react-redux';
 
 export default function SignUpForm({
   setIsNotLogin,
@@ -31,28 +35,15 @@ export default function SignUpForm({
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [nickname, setNickname] = useState('');
-
+  const [authObj, setAuthObj] = useState({
+    nickName: '',
+  });
   const authService = getAuth();
+
   const uid = authService.currentUser?.uid;
 
-  const [authObj, setAuthObj] = useState({
-    nickname: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  });
-  const [dpNameCheck, setDpNameCheck] = useState(false);
-  const [checkError, setCheckError] = useState('');
-  const [error, setError] = useState('');
 
-  // const onChange = async (e:any) => {
-  //   const {target: {nickname, value}}= event;
-  //   setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
 
-  //   if (nickname==="displayName"){ const IDcheck = await dbService
-  //     .collection("user")
-  //     .where("nick")
-  // }
 
   // email, password 정규식
   const emailRegEx =
@@ -83,11 +74,17 @@ export default function SignUpForm({
     }
   };
 
-
   const displayName = auth.currentUser?.displayName;
   console.log('displayName', displayName);
   console.log('email : ', email);
   console.log('PW : ', password);
+
+  const q = query(
+    collection(dbService, 'user'),
+    where('nickName', '==', nickname)
+  );
+
+
 
   const signUpForm = (e: any) => {
     e.preventDefault();
@@ -101,7 +98,7 @@ export default function SignUpForm({
       return alert('비밀번호 형식을 확인해주세요.');
     }
     if (password !== passwordConfirm) {
-      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+      return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
     }
 
     createUserWithEmailAndPassword(auth, email, password)
@@ -113,23 +110,30 @@ export default function SignUpForm({
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
+        // getUserInfo();
+        // console.log('checkNickName!!!', checkNickName);
         await setDoc(doc(dbService, 'user', uid), {
           userid: uid,
+          nickName: nickname,
+          gitAddress: '3',
+          introduce: '3',
+          stack: '3',
         });
+        console.log(uid)
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorMessage:", errorCode, errorMessage);
-        if (errorMessage.includes("auth/email-already-in-use")) {
-          alert("이미 가입된 회원입니다.");
+        console.log('errorMessage:', errorCode, errorMessage);
+        if (errorMessage.includes('auth/email-already-in-use')) {
+          alert('이미 가입된 회원입니다.');
           return;
         }
-        if (errorMessage.includes("auth/displayName-already-in-use")) {
-          alert("동일한 닉네임이 존재합니다.");
+        if (errorMessage.includes('auth/displayName-already-in-use')) {
+          alert('동일한 닉네임이 존재합니다.');
           return;
         } else {
-          alert("회원가입 완료! 🎉");
+          alert('회원가입 완료! 🎉');
         }
       });
   };
@@ -145,8 +149,7 @@ export default function SignUpForm({
   return (
     <Container>
       <form onSubmit={signUpForm}>
-        <div className="form-inner">
-
+        <div className='form-inner'>
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
@@ -173,7 +176,9 @@ export default function SignUpForm({
                 id='nickname'
                 placeholder='Nick name'
                 value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                }}
                 required
                 onKeyDown={handleOnKeyPress}
               />
