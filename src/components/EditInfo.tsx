@@ -23,9 +23,9 @@ export default function EditInfo({
     const uid = authService.currentUser?.uid;
     await setDoc(doc(dbService, 'user', uid), {
       nickName: displayName,
-      stack: '',
-      gitAddress: '',
-      introduce: '',
+      stack: formData?.stack,
+      gitAddress: formData?.gitAddress,
+      introduce: formData?.introduce,
       userid: uid,
     });
   };
