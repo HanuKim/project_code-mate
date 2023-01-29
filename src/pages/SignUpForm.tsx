@@ -31,10 +31,27 @@ function SignUpForm({
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
-  const [modal, setModal] = useState(false);
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
+
+  const [authObj, setAuthObj] = useState({
+    nickname: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
+  const [dpNameCheck, setDpNameCheck] = useState(false);
+  const [checkError, setCheckError] = useState("");
+  const [error, setError] = useState("");
+  const onChange = async (e:any) => {
+    const {target: {nickname, value}}= event;
+    setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
+
+    if (nickname==="displayName"){ const IDcheck = await dbService
+      .collection("user")
+      .where("nick")
+  }
 
   // email, password 정규식
   const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
