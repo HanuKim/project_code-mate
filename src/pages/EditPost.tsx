@@ -1,19 +1,19 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import Map from "../components/main/Map";
-import CreateCategory from "../components/main/CreateCategory";
-import { PostState, MapProps } from "../shared/type";
+import React, { useRef, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Map from '../components/main/Map';
+import CreateCategory from '../components/main/CreateCategory';
+import { PostState, MapProps } from '../shared/type';
 import {
   collection,
   updateDoc,
   doc,
   getDoc,
   DocumentData,
-} from "firebase/firestore";
-import { dbService, authService } from "../shared/firebase";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getAuth } from "firebase/auth";
-import basicImg from "../../img/basicImg.png";
+} from 'firebase/firestore';
+import { dbService, authService } from '../shared/firebase';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+import basicImg from '../../img/basicImg.png';
 
 const EditPost = () => {
   const location = useLocation();
@@ -29,15 +29,15 @@ const EditPost = () => {
   } = location.state.setDetail;
 
   const navigate = useNavigate();
-  const [editTitle, setEditTitle] = useState("");
-  const [editContent, setEditContent] = useState("");
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory] = useState(["all"]); //카테고리
+  const [category, setCategory] = useState(['all']); //카테고리
   const [editPost, setEditPost] = useState<DocumentData>({
-    title: "",
+    title: '',
     category: category,
-    content: "",
+    content: '',
     coord: { lat, lng },
   });
   const ref = useRef(null);
@@ -69,7 +69,7 @@ const EditPost = () => {
 
   //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
-    const snapshot = await getDoc(doc(dbService, "post", id));
+    const snapshot = await getDoc(doc(dbService, 'post', id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setEditPost(data);
   };
@@ -87,7 +87,7 @@ const EditPost = () => {
       setCorrectContent(true);
       return;
     } else {
-      await updateDoc(doc(dbService, "post", id), {
+      await updateDoc(doc(dbService, 'post', id), {
         title: editTitle,
         category: category,
         content: editContent,
@@ -102,7 +102,7 @@ const EditPost = () => {
         <Map state={state} setState={setState} />
         <PostsTopContainer>
           <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? "black"} />
+            <ProfilePhoto background={photoURL ?? 'black'} />
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
         </PostsTopContainer>
@@ -161,7 +161,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
