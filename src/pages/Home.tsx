@@ -17,10 +17,13 @@ import PostList from "../components/main/PostList";
 import { useFirestoreQuery } from "@react-query-firebase/firestore";
 import { PostState } from "../shared/type";
 import { useNavigate } from "react-router-dom";
+import AlertModal from "../components/modal/AlertModal";
 
-export default function Home() {
+export default function Home({ setOpenModal }: any) {
   const [posts, setPosts] = useState<PostState[]>([]);
   const [category, setCategory] = useState("");
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
   const navigate = useNavigate();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -89,12 +92,22 @@ export default function Home() {
     // 유효성검사용
     let authWrite = authService.currentUser
       ? navigate("/createpost")
-      : alert("로그인이 필요합니다!");
+      : handleWriteLoginModal();
     return authWrite;
   };
-
+  const handleWriteLoginModal = () => {
+    setAlertModal(true);
+    setAlertMessageText("로그인이 필요합니다!");
+  };
   return (
     <Container>
+      {alertModal ? (
+        <AlertModal
+          children={AlertMessageText}
+          setAlertModal={setAlertModal}
+          setOpenModal={setOpenModal}
+        />
+      ) : null}
       {/* 카테고리 */}
       {/* Slice로 어떻게 넣지..? */}
       <MainCategory category={category} setCategory={setCategory} />
