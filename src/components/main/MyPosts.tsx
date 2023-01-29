@@ -35,15 +35,15 @@ export default function MyPosts({ post }: { post: PostState }) {
               // BottomCategoryBt에 key 지정해줘야 함.
               <BottomCategoryBt>
                 {item === "front"
-                  ? "프론트엔드"
+                  ? "FrontEnd"
                   : item === "back"
-                  ? "백엔드"
+                  ? "BackEnd"
                   : item === "design"
-                  ? "디자이너"
+                  ? "Design"
                   : item === "publ"
-                  ? "퍼블리셔"
+                  ? "Web Publish"
                   : item === "pm"
-                  ? "PM"
+                  ? "Produc Manage"
                   : ""}
               </BottomCategoryBt>
             );
@@ -110,22 +110,20 @@ const TitleText = styled.h1`
 `;
 
 const ContentText = styled.p`
-  font-size: 16px;
+  margin-bottom: 80px;
   margin-left: 44px;
 `;
 
 const BottomCategoryContainer = styled.div`
   display: flex;
   gap: 15px;
-  margin: 30px 0 0 30px;
+  margin: 0 44px;
 `;
 
 const BottomCategoryBt = styled.button`
-  width: 100px;
-  height: 30px;
-  border: 1px solid #a8a8a8;
-  border-radius: 30px;
-  color: #efefef;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 12px;
   background-color: #262b7f;
-  filter: drop-shadow(1px 2px 3px #818181);
 `;

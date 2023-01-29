@@ -21,7 +21,7 @@ export default function CreateCategory({
     <CategoryContainer>
       <CategoryBt
         type="button"
-        value={"front"}
+        value={"FrontEnd"}
         id="iscategory"
         name="iscategory"
         onClick={(e) => {
@@ -29,25 +29,29 @@ export default function CreateCategory({
           setIsClickfront(!isClickfront);
         }}
         style={{
-          borderColor: isClickfront ? "#262b7f" : "#a8a8a8",
+          background: isClickfront ? "#262b7f" : "#fff",
+          color: isClickfront ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
         type="button"
-        value={"back"}
+        value={"BackEnd"}
         id="iscategory"
         name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickBack(!isClickBack);
         }}
-        style={{ borderColor: isClickBack ? "#262b7f" : "#a8a8a8" }}
+        style={{
+          background: isClickBack ? "#262b7f" : "#fff",
+          color: isClickBack ? "#f2f2f2" : "#aaa",
+        }}
       />
 
       <CategoryBt
         type="button"
-        value={"design"}
+        value={"Designer"}
         id="iscategory"
         name="iscategory"
         onClick={(e) => {
@@ -55,52 +59,64 @@ export default function CreateCategory({
           setIsClickDesign(!isClickDesign);
         }}
         style={{
-          borderColor: isClickDesign ? "#262b7f" : "#a8a8a8",
+          background: isClickDesign ? "#262b7f" : "#fff",
+          color: isClickDesign ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
         type="button"
-        value={"publ"}
+        value={"Web Publish"}
         id="iscategory"
         name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickPul(!isClickPul);
         }}
-        style={{ borderColor: isClickPul ? "#262b7f" : "#a8a8a8" }}
+        style={{
+          background: isClickPul ? "#262b7f" : "#fff",
+          color: isClickPul ? "#f2f2f2" : "#aaa",
+        }}
       />
 
       <CategoryBt
         type="button"
-        value={"pm"}
+        value={"Product Manage"}
         id="iscategory"
         name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickPm(!isClickPm);
         }}
-        style={{ borderColor: isClickPm ? "#262b7f" : "#a8a8a8" }}
+        style={{
+          background: isClickPm ? "#262b7f" : "#fff",
+          color: isClickPm ? "#f2f2f2" : "#aaa",
+        }}
       />
     </CategoryContainer>
   );
 }
 
 const CategoryContainer = styled.div`
-  width: 100%;
+  width: 70%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  gap: 25px;
-  background-color: green;
+  justify-content: flex-start;
+  gap: 12px;
+  /* background-color: black; */
 `;
+
 const CategoryBt = styled.input`
-  height: 55px;
-  width: 150px;
-  border: 1px solid #a8a8a8;
-  background-color: white;
+  width: 140px;
+  height: 44px;
+
   border-radius: 30px;
-  color: #a8a8a8;
-  font-size: 18px;
+  border: 1px solid #d0d0d0;
+
+  color: #aaa;
+  font-size: 14px;
+
+  /* background-color: #fff; */
+
   cursor: pointer;
 `;

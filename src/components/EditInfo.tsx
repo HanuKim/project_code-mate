@@ -1,10 +1,10 @@
-import {doc, DocumentData, setDoc} from 'firebase/firestore';
-import React, {useEffect} from 'react';
-import styled from 'styled-components';
-import {authService, dbService} from '../shared/firebase';
-import gitIcon from '../img/gitIcon.png';
-import notgitIcon from '../img/notgitIcon.png';
-import {Link} from 'react-router-dom';
+import { doc, DocumentData, setDoc } from "firebase/firestore";
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { authService, dbService } from "../shared/firebase";
+import gitIcon from "../img/gitIcon.png";
+import notgitIcon from "../img/notgitIcon.png";
+import { Link } from "react-router-dom";
 export default function EditInfo({
   myInfo,
   setIsEditProfile,
@@ -15,13 +15,12 @@ export default function EditInfo({
   setIsEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   stack: string;
   formData: DocumentData;
-  }) {
+}) {
   const displayName = authService.currentUser?.displayName;
-  
   const getProfileName = async () => {
     const displayName = authService.currentUser?.displayName;
     const uid = authService.currentUser?.uid;
-    await setDoc(doc(dbService, 'user', uid), {
+    await setDoc(doc(dbService, "user", uid), {
       nickName: displayName,
       stack: formData?.stack,
       gitAddress: formData?.gitAddress,
@@ -32,22 +31,20 @@ export default function EditInfo({
   useEffect(() => {
     getProfileName();
   }, []);
-
+  console.log("formData is : ", formData);
   return (
     <>
       <IntroduceContainer>
         <InfoWrap>
-          <InfoWrapContent>별명 : {displayName}</InfoWrapContent>
+          <InfoWrapContent>Name : {displayName}</InfoWrapContent>
           <InfoWrapContent>
-            position :
-            {formData?.stack ? (
-              <ViewStackButton> {formData?.stack} </ViewStackButton>
-            ) : undefined}
+            Position :
+            {formData?.stack ? <Stack> {formData?.stack} </Stack> : undefined}
           </InfoWrapContent>
           <InfoWrapContent>
             <IconContainer>
               {formData?.gitAddress ? (
-                <a href={formData?.gitAddress} target='_blank'>
+                <a href={formData?.gitAddress} target="_blank">
                   <GitIcon />
                 </a>
               ) : (
@@ -62,8 +59,7 @@ export default function EditInfo({
             onClick={() => {
               setIsEditProfile(true);
               getProfileName();
-            }}
-          >
+            }}>
             편집
           </EditBtn>
         </ProfileContentsBtnBox>
@@ -72,13 +68,11 @@ export default function EditInfo({
   );
 }
 
-const ViewStackButton = styled.button`
-  padding: 4px 8px;
-  border-radius: 10px;
-  background-color: #262b7f;
-  font-size: 12px;
-  color: #f2f2f2;
-  cursor: default;
+const Stack = styled.span`
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
 `;
 
 const ProfileContentsBtnBox = styled.div`
@@ -90,13 +84,12 @@ const ProfileContentsBtnBox = styled.div`
 const InfoWrap = styled.div`
   width: 100%;
   height: 100%;
-  margin-top: 24px;
-  margin-bottom: 50px;
+  margin: 24px 0;
 `;
 
 const InfoWrapContent = styled.div`
   height: 100%;
-  margin: 8px 0;
+  margin: 12px 0;
 `;
 
 const GitIcon = styled.div`
@@ -122,7 +115,7 @@ const NotGitIcon = styled.div`
 const IconContainer = styled.div`
   width: 50px;
   height: 50px;
-`
+`;
 
 const IntroduceContainer = styled.div`
   width: 100%;

@@ -34,16 +34,16 @@ export default function Post({ post }: { post: PostState }) {
             return (
               // BottomCategoryBt에 key 지정해줘야 함.
               <BottomCategoryBt>
-                {item === "front"
-                  ? "프론트엔드"
-                  : item === "back"
-                  ? "백엔드"
-                  : item === "design"
-                  ? "디자이너"
-                  : item === "publ"
-                  ? "퍼블리셔"
-                  : item === "pm"
-                  ? "PM"
+                {item === "FrontEnd"
+                  ? "FrontEnd"
+                  : item === "BackEnd"
+                  ? "BackEnd"
+                  : item === "Designer"
+                  ? "Designer"
+                  : item === "Web Publish"
+                  ? "Web Publish"
+                  : item === "Product Manage"
+                  ? "Product Manage"
                   : ""}
               </BottomCategoryBt>
             );
@@ -55,6 +55,7 @@ export default function Post({ post }: { post: PostState }) {
 }
 const Posts = styled.div`
   background-color: #ffffff;
+  min-height: 305px;
   width: 100%;
   height: 100%;
   border-radius: 20px;
@@ -80,18 +81,17 @@ const PostsTopContainer = styled.div`
 
 const ProfileContainer = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
   width: 48px;
   height: 48px;
-  border: 1px solid #d0d0d0;
   border-radius: 100%;
   background-image: url(${(props) => props.background});
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 `;
 
@@ -124,11 +124,10 @@ const BottomCategoryContainer = styled.div`
 
 const BottomCategoryBt = styled.button`
   padding: 10px 12px;
-  border: 1px solid #262b7f;
   border-radius: 12px;
 
   font-size: 12px;
-  font-weight: bold;
+
   color: #f2f2f2;
   background-color: #262b7f;
 `;

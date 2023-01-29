@@ -72,17 +72,15 @@ export default function Header() {
               onClick={() => {
                 logout();
                 navigate("/");
-              }}
-            >
-              로그아웃
+              }}>
+              SignOut
             </LoginBtn>
           ) : (
             <LoginBtn
               onClick={() => {
                 onClickToggleModal();
-              }}
-            >
-              로그인/회원가입
+              }}>
+              SignUp / Join
             </LoginBtn>
           )}
 
@@ -90,9 +88,8 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 navigate(`/Mypage/${uid}`);
-              }}
-            >
-              마이페이지
+              }}>
+              MyPage
             </LoginBtn>
           ) : null}
         </BtnWrap>
@@ -142,7 +139,7 @@ const EmptyBox = styled.div`
 
 const LoginBtn = styled.button`
   width: 120px;
-  height: 50px;
+  height: 40px;
   border: 1px solid #d0d0d0;
   border-radius: 30px;
   color: #262b7f;
@@ -152,7 +149,7 @@ const LoginBtn = styled.button`
   transition-duration: 0.3s;
   &:hover {
     background-color: #262b7f;
-    color: #fff;
     border: 1px solid #262b7f;
+    color: #fff;
   }
 `;
