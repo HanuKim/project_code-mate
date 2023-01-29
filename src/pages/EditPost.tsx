@@ -131,8 +131,7 @@ const EditPost = () => {
           <CommentSubmitButton
             onClick={() => {
               navigate(`/detail/${id}`);
-            }}
-          >
+            }}>
             취소
           </CommentSubmitButton>
         </CommentLabel>
@@ -161,7 +160,8 @@ const ProfilePhoto = styled.div<{ background: any }>`
   cursor: pointer;
   width: 50px;
   height: 50px;
-  border-radius: 100%;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
 `;
 
 const ProfileNickName = styled.p`

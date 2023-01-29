@@ -26,6 +26,7 @@ import { getAuth } from "firebase/auth";
 
 export default function CommentInput() {
   // const dispatch = useDispatch();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [commentText, setCommentText] = useState("");

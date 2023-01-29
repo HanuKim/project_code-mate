@@ -8,16 +8,9 @@ import {
   orderBy,
   query,
   doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  getFirestore,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { dbService } from "../shared/firebase";
 import MainCategory from "../components/main/MainCategory";
 import PostList from "../components/main/PostList";
@@ -29,7 +22,8 @@ export default function Home() {
   const [posts, setPosts] = useState<PostState[]>([]);
   const [category, setCategory] = useState("");
   const navigate = useNavigate();
-
+  const authService = getAuth();
+  const uid = authService.currentUser?.uid;
   // post 데이터에서 createAt을 내림차순으로 정렬
   const q = query(collection(dbService, "post"), orderBy("createdAt", "desc"));
 
@@ -91,7 +85,13 @@ export default function Home() {
     getCategory();
   }, []);
 
-  // console.log("getTimegap : ", getTimegap());
+  const handleWriteNaviageClick = () => {
+    // 유효성검사용
+    let authWrite = authService.currentUser
+      ? navigate("/createpost")
+      : alert("로그인이 필요합니다!");
+    return authWrite;
+  };
 
   return (
     <Container>
@@ -100,11 +100,9 @@ export default function Home() {
       <MainCategory category={category} setCategory={setCategory} />
 
       {/* 글쓰기 버튼 */}
+
       <WriteContainer>
-        <WriteBt
-          onClick={() => {
-            navigate("/createpost");
-          }}>
+        <WriteBt onClick={handleWriteNaviageClick}>
           <HiOutlinePencilSquare size={30} />
         </WriteBt>
       </WriteContainer>
@@ -115,23 +113,26 @@ export default function Home() {
   );
 }
 const Container = styled.div`
-  max-width: 1440px;
-  width: 80%;
+  max-width: 1280px;
+  width: 100%;
   margin: 20px auto;
 `;
 
 const WriteContainer = styled.div`
+  width: 100%;
   text-align: right;
 `;
+
 const WriteBt = styled.button`
-  background-color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   margin: 40px 0 20px 0;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  background-color: #f2f2f2;
   cursor: pointer;
   &:hover {
-    border: 1px solid #262b7f;
+    background-color: #262b7f;
+    color: #f2f2f2;
   }
 `;
