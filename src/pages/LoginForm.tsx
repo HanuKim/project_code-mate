@@ -13,7 +13,7 @@ function LoginForm({
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { id } = useParams();
+  const {id} = useParams();
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState('');
@@ -46,45 +46,57 @@ function LoginForm({
   const signIn = (e: any) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
+      .then((userCredential) => {
         // console.log("로그인 성공 ! : ", userCredential);
         setOpenModal(false);
         console.log('uid확인1', uid);
       })
-      .catch(error => {
+      .catch((error) => {
         // console.log(error);
       });
   };
+
+  // input마다 onKeyDown 속성에 이 함수를 넣었습니다.
+  // input에서 Enter를 누르면 onSubmitHandler, signIn 함수가 실행됩니다.
+  const handleOnKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      onSubmitHandler(e);
+      signIn(e);
+    }
+  };
+
   console.log('useparams:', useParams());
   console.log('uid확인2', uid);
   return (
     <Container onSubmit={signIn}>
       <form onSubmit={onSubmitHandler}>
-        <div className="form-inner">
+        <div className='form-inner'>
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>로그인</TitleText>
           {/* Error! */}
           <LoginFormContainer>
             <div>
               <EmailInput
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                onKeyDown={handleOnKeyPress}
               />
             </div>
             <div>
               <PwInput
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
+                onKeyDown={handleOnKeyPress}
               />
             </div>
             <SignUpBtn
