@@ -44,8 +44,10 @@ const displayName = authService.currentUser?.displayName;
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
+
     gitAddress: gitAddress,
     introduce: introduce,
+
     userid: uid,
   });
 
@@ -108,11 +110,13 @@ const displayName = authService.currentUser?.displayName;
       }
     } else {
       //깃 어드레스 내용 없으면
+
       await setDoc(doc(dbService, 'user', id), {
         gitAddress: formData?.gitAddress ?? '',
         nickName: formData?.nickName ?? displayName,
         introduce: formData?.introduce ?? '인사말을 입력해주세요.',
         stack: formData?.stack ?? '주 스택을 선택 해주세요.',
+
         userid: uid,
       });
       await updateProfile(authService?.currentUser, {
@@ -160,12 +164,7 @@ const displayName = authService.currentUser?.displayName;
               handleChange={handleChange}
             />
           ) : (
-            <EditInfo
-              myInfo={myInfo}
-              setIsEditProfile={setIsEditProfile}
-              stack={stack}
-              formData={formData}
-            />
+            <EditInfo myInfo={myInfo} setIsEditProfile={setIsEditProfile} stack={stack} formData={formData} />
           )}
 
           <BottomContainer>
