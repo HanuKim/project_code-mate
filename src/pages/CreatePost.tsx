@@ -49,7 +49,6 @@ const CreatePost = () => {
     profileImg: photoURL,
     coord: state.center,
   };
-  console.log(newPost);
   //타이틀 값
   const handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
@@ -60,7 +59,7 @@ const CreatePost = () => {
   };
   const handleSubmitButtonClick = async () => {
     // 유효성검사용
-    if (!newPost.title || title === null) {
+    if (!title.trim() || title === null) {
       setCorrectTitle(true);
       return;
     }

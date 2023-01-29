@@ -1,4 +1,3 @@
-// import Modal from "../components/Modal";
 import styled from "styled-components";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -6,6 +5,7 @@ import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import close from "../img/close.png";
+import AlertModal from "../components/modal/AlertModal";
 
 export default function SignUpForm({
   setIsNotLogin,
@@ -19,27 +19,18 @@ export default function SignUpForm({
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
 
+  const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-
-  const [authObj, setAuthObj] = useState({
-    nickname: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  });
+  
+  const [modalOpen, setModalOpen] = useState(false);
   const [dpNameCheck, setDpNameCheck] = useState(false);
   const [checkError, setCheckError] = useState("");
   const [error, setError] = useState("");
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
 
-  // const onChange = async (e:any) => {
-  //   const {target: {nickname, value}}= event;
-  //   setAuthObj(authObj => ({ ...authObj, [nickname]: value}))
 
-  //   if (nickname==="displayName"){ const IDcheck = await dbService
-  //     .collection("user")
-  //     .where("nick")
-  // }
 
   // email, password 정규식
   const emailRegEx =
@@ -49,13 +40,11 @@ export default function SignUpForm({
   const emailCheck = (email: any) => {
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
-
-  console.log("nickname", nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
       console.log("비밀번호 형식을 확인해주세요");
-      return;
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     } else {
       // 맞을 경우 출력
       console.log("비밀번호 형식이 맞아요");
@@ -71,51 +60,71 @@ export default function SignUpForm({
   };
 
   const displayName = auth.currentUser?.displayName;
-  console.log("displayName", displayName);
-  console.log("email : ", email);
-  console.log("PW : ", password);
 
   const signUpForm = (e: any) => {
     e.preventDefault();
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("이메일 형식을 확인해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("이메일 형식을 확인해주세요.");
     }
-
+    if (nickname === "") {
+      //return alert("닉네임을 입력해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("닉네임을 입력해주세요.");
+    }
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert("비밀번호 형식을 확인해주세요.");
+      //return alert("비밀번호 형식을 확인해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     }
     if (password !== passwordConfirm) {
-      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+
+      //return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
     }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        console.log("회원가입 성공 ! :", userCredential);
-        console.log("디스플레이네임", authService.currentUser.displayName);
-        setIsNotLogin(false);
-        setOpenModal(false);
+        setAlertModal(true);
+        setAlertMessageText("회원가입 완료! 🎉");
+        if (alertModal === true) {
+          setIsNotLogin(false);
+        }
+        //setOpenModal(false);
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
         await setDoc(doc(dbService, "user", uid), {
           userid: uid,
+          nickName: nickname,
+          gitAddress: '3',
+          introduce: '3',
+          stack: '3',
         });
+        console.log(uid)
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorMessage:", errorCode, errorMessage);
+
         if (errorMessage.includes("auth/email-already-in-use")) {
-          alert("이미 가입된 회원입니다.");
-          return;
+          // alert("이미 가입된 회원입니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("이미 가입된 회원입니다.");
         }
         if (errorMessage.includes("auth/displayName-already-in-use")) {
-          alert("동일한 닉네임이 존재합니다.");
-          return;
+          // alert("동일한 닉네임이 존재합니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("동일한 닉네임이 존재합니다.");
         } else {
-          alert("회원가입 완료! 🎉");
+          //alert("회원가입 완료! 🎉");
+          //return;
+
         }
       });
   };
@@ -127,7 +136,6 @@ export default function SignUpForm({
       signUpForm(e);
     }
   };
-
   return (
     <Form onSubmit={signUpForm}>
       <BtnContainer>
@@ -177,6 +185,7 @@ export default function SignUpForm({
             required
             onKeyDown={handleOnKeyPress}
           />
+
         </div>
         <div>
           <PwChekckInput
