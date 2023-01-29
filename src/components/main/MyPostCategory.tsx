@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { doc, updateDoc } from "firebase/firestore";
-import { dbService } from "../../shared/firebase";
-import { useEffect } from "react";
+import styled from 'styled-components';
+import { doc, updateDoc } from 'firebase/firestore';
+import { dbService } from '../../shared/firebase';
+import { useEffect } from 'react';
 
-export default function MyPostCategory({
+export default function MainCategory({
   category,
   setCategory,
 }: {
@@ -17,39 +17,56 @@ export default function MyPostCategory({
   return (
     <CategoryContainer>
       <CategoryBt
-        onClick={() => setCat("all")}
-        style={{ color: category === "all" ? "#333" : "#d0d0d0" }}>
-        전체
+        onClick={() => setCat('all')}
+        style={{
+          color: category === 'all' ? '#333' : '#d0d0d0',
+        }}
+      >
+        All
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("front")}
-        style={{ color: category === "front" ? "#333" : "#d0d0d0" }}>
-        프론트엔드
+        onClick={() => setCat('FrontEnd')}
+        style={{
+          color: category === 'FrontEnd' ? '#333' : '#d0d0d0',
+        }}
+      >
+        FrontEnd
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("back")}
-        style={{ color: category === "back" ? "#333" : "#d0d0d0" }}>
-        백엔드
+        onClick={() => setCat('BackEnd')}
+        style={{
+          color: category === 'BackEnd' ? '#333' : '#d0d0d0',
+        }}
+      >
+        BackEnd
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("design")}
-        style={{ color: category === "design" ? "#333" : "#d0d0d0" }}>
-        디자이너
+        onClick={() => setCat('Designer')}
+        style={{
+          color: category === 'Designer' ? '#333' : '#d0d0d0',
+        }}
+      >
+        Designer
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("publ")}
-        style={{ color: category === "publ" ? "#333" : "#d0d0d0" }}>
-        퍼블리셔
+        onClick={() => setCat('Web Publish')}
+        style={{
+          color: category === 'Web Publish' ? '#333' : '#d0d0d0',
+        }}
+      >
+        Web Publish
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("pm")}
-        style={{ color: category === "pm" ? "#333" : "#d0d0d0" }}>
-        PM
+        onClick={() => setCat('Product Manage')}
+        style={{
+          color: category === 'Product Manage' ? '#333' : '#d0d0d0',
+        }}
+      >
+        Product Manage
       </CategoryBt>
     </CategoryContainer>
   );
 }
-
 const CategoryContainer = styled.div`
   width: 90%;
   height: 100%;

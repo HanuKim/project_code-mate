@@ -26,18 +26,18 @@ import {
   CheckButton,
 } from './DeleteModal';
 
-export default function CheckModal({
-  setCheckViewModal,
+export default function MypageUploadModal({
+  setCheckImageModal,
 }: {
-  setCheckViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setCheckImageModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const closeModal = () => {
-    setCheckViewModal(false);
+    setCheckImageModal(false);
   };
   return (
     <ContainerBg>
       <Container>
-        <TellText>내용을 입력해주세요.</TellText>
+        <TellText>Upload 완료되었습니다.</TellText>
         <CheckButtonContainer>
           <CheckButton onClick={closeModal}>확인</CheckButton>
         </CheckButtonContainer>

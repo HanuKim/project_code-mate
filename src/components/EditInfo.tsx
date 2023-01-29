@@ -1,10 +1,10 @@
-import { doc, DocumentData, setDoc } from "firebase/firestore";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { authService, dbService } from "../shared/firebase";
-import gitIcon from "../img/gitIcon.png";
-import notgitIcon from "../img/notgitIcon.png";
-import { Link } from "react-router-dom";
+import { doc, DocumentData, setDoc } from 'firebase/firestore';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { authService, dbService } from '../shared/firebase';
+import gitIcon from '../img/gitIcon.png';
+import notgitIcon from '../img/notgitIcon.png';
+import { Link } from 'react-router-dom';
 export default function EditInfo({
   myInfo,
   setIsEditProfile,
@@ -17,7 +17,7 @@ export default function EditInfo({
   formData: DocumentData;
 }) {
   const displayName = authService.currentUser?.displayName;
-  
+
   return (
     <>
       <IntroduceContainer>
@@ -44,7 +44,8 @@ export default function EditInfo({
           <EditBtn
             onClick={() => {
               setIsEditProfile(true);
-            }}>
+            }}
+          >
             편집
           </EditBtn>
         </ProfileContentsBtnBox>

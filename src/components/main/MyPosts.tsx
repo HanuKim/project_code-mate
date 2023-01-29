@@ -1,8 +1,8 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import basicImg from "../../img/basicImg.png";
-import { PostState } from "../../shared/type";
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import basicImg from '../../img/basicImg.png';
+import { PostState } from '../../shared/type';
 
 export default function MyPosts({ post }: { post: PostState }) {
   const navigate = useNavigate();
@@ -12,7 +12,8 @@ export default function MyPosts({ post }: { post: PostState }) {
       onClick={() => {
         navigate(`/detail/${post.id}`);
         // navigate(`/detail/${post.id}`, { state: { ...post } });
-      }}>
+      }}
+    >
       {/* 포스트 상단 프로필 + 날짜 */}
       <PostsTopContainer>
         <ProfileContainer>
@@ -28,23 +29,23 @@ export default function MyPosts({ post }: { post: PostState }) {
       <BottomCategoryContainer>
         {post.category.map((item: string) => {
           // 카테고리가 all이면 버튼보이지않게
-          if (item === "all") {
+          if (item === 'all') {
             return;
           } else {
             return (
               // BottomCategoryBt에 key 지정해줘야 함.
               <BottomCategoryBt>
-                {item === "front"
-                  ? "FrontEnd"
-                  : item === "back"
-                  ? "BackEnd"
-                  : item === "design"
-                  ? "Design"
-                  : item === "publ"
-                  ? "Web Publish"
-                  : item === "pm"
-                  ? "Produc Manage"
-                  : ""}
+                {item === 'FrontEnd'
+                  ? 'FrontEnd'
+                  : item === 'BackEnd'
+                  ? 'BackEnd'
+                  : item === 'Designer'
+                  ? 'Designer'
+                  : item === 'Web Publish'
+                  ? 'Web Publish'
+                  : item === 'Product Manage'
+                  ? 'Product Manage'
+                  : ''}
               </BottomCategoryBt>
             );
           }
@@ -82,7 +83,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

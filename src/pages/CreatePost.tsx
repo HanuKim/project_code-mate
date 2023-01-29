@@ -1,21 +1,21 @@
-import React, { FC, useState, useEffect } from "react";
-import styled from "styled-components";
-import Map from "../components/main/Map";
-import CreateCategory from "../components/main/CreateCategory";
-import { PostState, MapProps } from "../shared/type";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import { dbService, authService } from "../shared/firebase";
-import { useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
-import basicImg from "../../img/basicImg.png";
+import React, { FC, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Map from '../components/main/Map';
+import CreateCategory from '../components/main/CreateCategory';
+import { PostState, MapProps } from '../shared/type';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import { dbService, authService } from '../shared/firebase';
+import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+import basicImg from '../../img/basicImg.png';
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState(""); //제목
-  const [content, setContent]: any = useState(""); //내용
+  const [title, setTitle] = useState(''); //제목
+  const [content, setContent]: any = useState(''); //내용
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory]: any = useState(["all"]); //카테고리
+  const [category, setCategory]: any = useState(['all']); //카테고리
   //map
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
@@ -67,9 +67,9 @@ const CreatePost = () => {
       setCorrectContent(true);
       return;
     } else {
-      await addDoc(collection(dbService, "post"), newPost);
-      setTitle("");
-      setContent("");
+      await addDoc(collection(dbService, 'post'), newPost);
+      setTitle('');
+      setContent('');
       navigate(`/`);
     }
   };
@@ -81,7 +81,7 @@ const CreatePost = () => {
         <Map state={state} setState={setState} />
         <ContentsWrap>
           <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? "black"} />
+            <ProfilePhoto background={photoURL ?? 'black'} />
             <p>{displayName}</p>
           </ProfileContainer>
           <HirePositionContainer>
@@ -108,7 +108,8 @@ const CreatePost = () => {
             onChange={handleChangeContent}
             value={content}
             cols={30}
-            wrap="hard">
+            wrap="hard"
+          >
             {correctcontent && (
               <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
             )}
@@ -161,7 +162,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

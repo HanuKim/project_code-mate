@@ -1,11 +1,11 @@
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../shared/firebase";
-import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import CodeMate from "../img/CodeMate.png";
-import Modal from "./Modal";
-import AlertModal from "./modal/AlertModal";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../shared/firebase';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CodeMate from '../img/CodeMate.png';
+import Modal from './Modal';
+import AlertModal from './modal/AlertModal';
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
 // }
@@ -13,7 +13,7 @@ import AlertModal from "./modal/AlertModal";
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const [alertModal, setAlertModal] = useState<boolean>(false);
-  const [AlertMessageText, setAlertMessageText] = useState("");
+  const [AlertMessageText, setAlertMessageText] = useState('');
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
@@ -22,7 +22,7 @@ export default function Header() {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    const listen = onAuthStateChanged(auth, (user) => {
+    const listen = onAuthStateChanged(auth, user => {
       if (user) {
         setAuthUser(user);
       } else {
@@ -40,12 +40,12 @@ export default function Header() {
       .then(() => {
         //alert("로그아웃 성공 !");
         setAlertModal(true);
-        setAlertMessageText("로그아웃 성공 !");
+        setAlertMessageText('로그아웃 성공 !');
       })
-      .catch((error) => {
+      .catch(error => {
         //alert("로그아웃 실패..");
         setAlertModal(true);
-        setAlertMessageText("로그아웃 실패..");
+        setAlertMessageText('로그아웃 실패..');
       });
   };
 
@@ -67,7 +67,7 @@ export default function Header() {
         ) : null}
         <LogoBox
           onClick={() => {
-            navigate("/");
+            navigate('/');
           }}
         />
 
@@ -84,15 +84,17 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 logout();
-                navigate("/");
-              }}>
+                navigate('/');
+              }}
+            >
               SignOut
             </LoginBtn>
           ) : (
             <LoginBtn
               onClick={() => {
                 onClickToggleModal();
-              }}>
+              }}
+            >
               SignUp / Join
             </LoginBtn>
           )}
@@ -101,7 +103,8 @@ export default function Header() {
             <LoginBtn
               onClick={() => {
                 navigate(`/Mypage/${uid}`);
-              }}>
+              }}
+            >
               MyPage
             </LoginBtn>
           ) : null}
