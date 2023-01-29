@@ -79,16 +79,24 @@ const EditPost = () => {
   }, []);
 
   const handleEditButton = async () => {
-    await updateDoc(doc(dbService, "post", id), {
-      title: editTitle,
-      category: category,
-      content: editContent,
-      coord: state.center,
-    });
-    //alert("수정");
-    navigate(`/detail/${id}`);
+    if (!editTitle || title === null) {
+      setCorrectTitle(true);
+      return;
+    }
+    if (!editContent || content === null) {
+      setCorrectContent(true);
+      return;
+    } else {
+      await updateDoc(doc(dbService, "post", id), {
+        title: editTitle,
+        category: category,
+        content: editContent,
+        coord: state.center,
+      });
+      //alert("수정");
+      navigate(`/detail/${id}`);
+    }
   };
-  console.log("editPost", editPost);
   return (
     <Container>
       <CommentForm>
