@@ -36,20 +36,13 @@ export default function SignUpForm({
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [nickname, setNickname] = useState('');
-  const [authObj, setAuthObj] = useState({
-    nickName: '',
-  });
+
   const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [authObj, setAuthObj] = useState({
-    nickname: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  });
+
   const [dpNameCheck, setDpNameCheck] = useState(false);
   const [checkError, setCheckError] = useState("");
   const [error, setError] = useState("");
