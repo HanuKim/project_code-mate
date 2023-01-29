@@ -27,22 +27,45 @@ import { UserInfo } from "../shared/type";
 import MyInfo from "../components/MyInfo";
 import EditInfo from "../components/EditInfo";
 import userEvent from "@testing-library/user-event";
+import Mypage from "./Mypage";
+import { useDispatch } from "react-redux";
 
-function UserProfileModal({ setOpenProfileModal, isOpenProfileModal }) {
-  const [user, setUser] = useState("");
-  let { id } = useParams();
+function UserProfileModal({ setOpenProfileModal, isOpenProfileModal, myInfo, formData, stack }) {
+  // const [user, setUser] = useState("");
+  // const [nickName, setnickName] = useState("");
 
-  const getUser = async () => {
-    const snapshot = await getDoc(doc(dbService, "comment", id));
-    const data = snapshot.data(); // 가져온 doc의 객체 내용
-    setUser(data);
-    // console.log("data : ", data.nickName);
-  };
+  // const [gitAddress, setGitAddress] = useState("");
+  // const [introduce, setIntroduce] = useState("");
+  // // const [myInfo, setMyInfo] = useState<DocumentData>();
+  // const uid = authService.currentUser?.uid;
+  // const { id } = useParams();
 
-  console.log("id: ", id);
-  useEffect(() => {
-    getUser();
-  }, []);
+  // console.log(stack);
+
+  // const displayName = authService.currentUser?.displayName;
+
+  // Firestore.collection("user").get("nickName");
+
+  // const getProfileName = async () => {
+  //   const displayName = authService.currentUser?.displayName;
+  //   const uid = authService.currentUser?.uid;
+  //   await getDoc(doc(dbService, "user", uid), {
+  //     nickName: displayName,
+  //     stack: formData?.stack,
+  //     gitAddress: formData?.gitAddress,
+  //     introduce: formData?.introduce,
+  //     userid: uid,
+  //   });
+  //   await getDoc(doc(dbService, "comment", id), {
+  //     nickName: displayName,
+  //     userid: id,
+  //   });
+  // };
+  // useEffect(() => {
+  //   if (user.uid === user.id) {
+  //     getProfileName();
+  //   }
+  // }, []);
 
   return (
     <>
@@ -54,17 +77,17 @@ function UserProfileModal({ setOpenProfileModal, isOpenProfileModal }) {
         />
         <UserProfileTextArea>
           <div>
-            <UserNickName>{id.nickName}</UserNickName>
+            <UserNickName>displayName</UserNickName>
           </div>
           <div>
-            <UserStack></UserStack>
+            <UserStack>stack</UserStack>
           </div>
           <div>
-            <GitAddress></GitAddress>
+            <GitAddress>gitAddress</GitAddress>
           </div>
         </UserProfileTextArea>
         <CloseButton onClick={() => setOpenProfileModal(false)}>x</CloseButton>
-        <UserProfileIntroduce></UserProfileIntroduce>
+        <UserProfileIntroduce>introduce</UserProfileIntroduce>
       </Container>
 
       <ContainerBg
@@ -83,11 +106,11 @@ export default UserProfileModal;
 
 const CloseButton = styled.button`
   float: right;
-  width: 18px;
-  height: 18px;
-  margin-top: -88px;
-  margin-right: 20px;
-  border-radius: 100px;
+  width: 20px;
+  height: 20px;
+  margin-left: 50px;
+  margin-bottom: 300px;
+  border-radius: 50px;
   border: none;
   background-color: black;
   color: #fff;
@@ -100,15 +123,15 @@ const CloseButton = styled.button`
 `;
 
 const UserProfileImage = styled.img`
-  border-radius: 100px;
+  border-radius: 50px;
   margin-top: 30px;
   margin-left: 30px;
 `;
 
 const UserProfileTextArea = styled.div`
   float: right;
-  margin-top: 30px;
-  margin-right: 280px;
+  margin-right: 230px;
+  margin-top: 27px;
 `;
 
 const UserNickName = styled.text``;
