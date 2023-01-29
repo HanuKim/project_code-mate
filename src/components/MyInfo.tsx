@@ -92,6 +92,8 @@ export default function MyInfo({
                   stackData === '퍼블리셔' ? '#262b7f' : '#ffffff',
                 color: stackData === '퍼블리셔' ? '#ffffff' : '#262b7f',
               }}
+              id='stack'
+              name='stack'
             />
             <StackButton
               type="button"
