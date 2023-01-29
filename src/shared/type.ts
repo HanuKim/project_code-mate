@@ -1,5 +1,9 @@
 import { Timestamp } from "firebase/firestore";
 
+export interface ModalProps {
+  modalWidth: number;
+  modalHeight: number;
+}
 export interface PostState {
   id: string;
   nickName: string;

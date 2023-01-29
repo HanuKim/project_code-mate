@@ -21,42 +21,42 @@ export default function MainCategory({
         style={{
           color: category === "all" ? "#333" : "#d0d0d0",
         }}>
-        전체
+        All
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("front")}
+        onClick={() => setCat("FrontEnd")}
         style={{
-          color: category === "front" ? "#333" : "#d0d0d0",
+          color: category === "FrontEnd" ? "#333" : "#d0d0d0",
         }}>
-        프론트엔드
+        FrontEnd
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("back")}
+        onClick={() => setCat("BackEnd")}
         style={{
-          color: category === "back" ? "#333" : "#d0d0d0",
+          color: category === "BackEnd" ? "#333" : "#d0d0d0",
         }}>
-        백엔드
+        BackEnd
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("design")}
+        onClick={() => setCat("Designer")}
         style={{
-          color: category === "design" ? "#333" : "#d0d0d0",
+          color: category === "Designer" ? "#333" : "#d0d0d0",
         }}>
-        디자이너
+        Designer
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("publ")}
+        onClick={() => setCat("Web Publish")}
         style={{
-          color: category === "publ" ? "#333" : "#d0d0d0",
+          color: category === "Web Publish" ? "#333" : "#d0d0d0",
         }}>
-        퍼블리셔
+        Web Publish
       </CategoryBt>
       <CategoryBt
-        onClick={() => setCat("pm")}
+        onClick={() => setCat("Product Manage")}
         style={{
-          color: category === "pm" ? "#333" : "#d0d0d0",
+          color: category === "Product Manage" ? "#333" : "#d0d0d0",
         }}>
-        PM
+        Product Manage
       </CategoryBt>
     </CategoryContainer>
   );

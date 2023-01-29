@@ -1,28 +1,10 @@
-// import Modal from "../components/Modal";
-import styled from 'styled-components';
-import React, {useState, Dispatch, useEffect} from 'react';
-import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
-import {auth, dbService} from '../shared/firebase';
-import {getAuth} from 'firebase/auth';
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  serverTimestamp,
-  setDoc,
-  doc,
-  query,
-  where,
-  getDocs,
-  onSnapshot,
-} from 'firebase/firestore';
-import {useDispatch} from 'react-redux';
+import styled from "styled-components";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, dbService } from "../shared/firebase";
+import { getAuth } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import close from "../img/close.png";
 import AlertModal from "../components/modal/AlertModal";
 
 export default function SignUpForm({
@@ -32,17 +14,16 @@ export default function SignUpForm({
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-
+  
   const [modalOpen, setModalOpen] = useState(false);
-
   const [dpNameCheck, setDpNameCheck] = useState(false);
   const [checkError, setCheckError] = useState("");
   const [error, setError] = useState("");
@@ -84,7 +65,6 @@ export default function SignUpForm({
     e.preventDefault();
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      //return alert("이메일 형식을 확인해주세요.");
       setAlertModal(true);
       setAlertMessageText("이메일 형식을 확인해주세요.");
     }
@@ -117,7 +97,6 @@ export default function SignUpForm({
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-
         await setDoc(doc(dbService, "user", uid), {
           userid: uid,
           nickName: nickname,
@@ -158,118 +137,110 @@ export default function SignUpForm({
     }
   };
   return (
-    <Container>
-      {alertModal ? (
-        <AlertModal
-          children={AlertMessageText}
-          setAlertModal={setAlertModal}
-          setOpenModal={setOpenModal}
-        />
-      ) : null}
-      <form onSubmit={signUpForm}>
-
-        <div className="form-inner">
-          <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
-          <TitleText>회원가입</TitleText>
-          {/* Error! */}
-          <SignUpFormContainer>
-            <div>
-              <EmailInput
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  emailCheck(e.target.value);
-                }}
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                value={email}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <NickNameInput
-                type="nickname"
-                name="nickname"
-                id="nickname"
-                placeholder="Nick name"
-                value={nickname}
-                onChange={(e) => {
-                  setNickname(e.target.value);
-                }}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <PwInput
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  passwordCheck(e.target.value);
-                }}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <div>
-              <PwChekckInput
-                type="password"
-                name="passwordConfirm"
-                id="passwordConfirm"
-                placeholder="Password Confirm"
-                value={passwordConfirm}
-                onChange={(e) => {
-                  setPasswordConfirm(e.target.value);
-                  passwordDoubleCheck(password, e.target.value);
-                }}
-                required
-                onKeyDown={handleOnKeyPress}
-              />
-            </div>
-            <Text>
-              비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.
-            </Text>
-            <JoinBtn type="submit" onClick={signUpForm}>
-              회원가입
-            </JoinBtn>
-            <LoginBtn
-              onClick={() => {
-                setIsNotLogin(false);
-              }}
-            >
-              로그인 화면으로
-            </LoginBtn>
-          </SignUpFormContainer>
+    <Form onSubmit={signUpForm}>
+      <BtnContainer>
+        <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
+      </BtnContainer>
+      <TitleText>회원가입</TitleText>
+      {/* Error! */}
+      <SignUpFormContainer>
+        <div>
+          <EmailInput
+            onChange={(e) => {
+              setEmail(e.target.value);
+              emailCheck(e.target.value);
+            }}
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            value={email}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
         </div>
-      </form>
-    </Container>
+        <div>
+          <NickNameInput
+            type="nickname"
+            name="nickname"
+            id="nickname"
+            placeholder="Nick name"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+        </div>
+        <div>
+          <PwInput
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              passwordCheck(e.target.value);
+            }}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+
+        </div>
+        <div>
+          <PwChekckInput
+            type="password"
+            name="passwordConfirm"
+            id="passwordConfirm"
+            placeholder="Password Confirm"
+            value={passwordConfirm}
+            onChange={(e) => {
+              setPasswordConfirm(e.target.value);
+              passwordDoubleCheck(password, e.target.value);
+            }}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+        </div>
+        <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
+        <JoinBtn type="submit" onClick={signUpForm}>
+          회원가입
+        </JoinBtn>
+        <LoginBtn
+          onClick={() => {
+            setIsNotLogin(false);
+          }}>
+          로그인 화면으로
+        </LoginBtn>
+      </SignUpFormContainer>
+    </Form>
   );
 }
 
-const Container = styled.div`
-  margin-top: 18px;
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 
-const CloseButton = styled.button`
-  width: 18px;
-  height: 18px;
-  margin-left: 310px;
-  border-radius: 100px;
-  border: none;
-  background-color: black;
-  color: #fff;
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CloseButton = styled.div`
+  width: 32px;
+  height: 32px;
+
+  margin-top: 20px;
+  margin-right: 12px;
+
+  background-image: url(${close});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
   cursor: pointer;
-  &:hover {
-    background-color: #262b7f;
-    box-shadow: 2px 4px 3px -3px black;
-    transition: 0.3s;
-  }
 `;
 
 const SignUpFormContainer = styled.div`

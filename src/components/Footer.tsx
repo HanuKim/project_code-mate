@@ -1,16 +1,28 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Navigate, Route } from "react-router-dom";
 import styled from "styled-components";
-import basicImg from "../img/CodeMate.png";
+import CodeMate from "../img/CodeMate.png";
+import gitIcon from "../img/gitIcon.png";
 
 export default function Footer() {
+  const url = "https://enfp-jake.tistory.com";
+
+  // 외부 브라우저 열기
+  window.open(url, "_blank");
+
   return (
     <Container>
       <InnerContainer>
         <InfoWrap />
-        {/* Contributor 내용 넣기 */}
-
-        {/* github 링크 */}
+        <LinkGitContainer>
+          <a
+            href="https://github.com/HanuKim/project_code-mate"
+            target="_blank">
+            <LinkGit />
+          </a>
+          <LinkGitText>Go GitHub</LinkGitText>
+        </LinkGitContainer>
       </InnerContainer>
     </Container>
   );
@@ -20,36 +32,45 @@ const Container = styled.div`
   width: 100%;
   height: 180px;
   margin-top: 100px;
-  /* box-shadow: 1px -1px 3px #333; */
-  background-color: #f2f2f2;
+  background-color: #fff;
 `;
 
 const InnerContainer = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: space-between;
   max-width: 1280px;
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background-color: #ffffff;
 `;
 
 const InfoWrap = styled.div`
   width: 120px;
   height: 80px;
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
-  background-image: url(${basicImg});
+  margin: auto 0;
+  background-image: url(${CodeMate});
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
 `;
 
-// const Button = styled.button``;
+const LinkGitContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
-// const LinkGit = styled.div`
+const LinkGit = styled.div`
+  width: 74px;
+  height: 74px;
+  background-image: url(${gitIcon});
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
 
-// `
-
-// const ContributorContainer = styled.div``;
+const LinkGitText = styled.div`
+  font-size: 12px;
+  text-align: center;
+`;
