@@ -19,6 +19,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
+import AlertModal from "../components/modal/AlertModal";
 
 export default function SignUpForm({
   setIsNotLogin,
@@ -27,23 +28,25 @@ export default function SignUpForm({
   setIsNotLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [nickname, setNickname] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
+  const AlertMessageTextMessge = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-
+  const [modalOpen, setModalOpen] = useState(false);
   const [authObj, setAuthObj] = useState({
-    nickname: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
+    nickname: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
   });
   const [dpNameCheck, setDpNameCheck] = useState(false);
-  const [checkError, setCheckError] = useState('');
-  const [error, setError] = useState('');
+  const [checkError, setCheckError] = useState("");
+  const [error, setError] = useState("");
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
 
   // const onChange = async (e:any) => {
   //   const {target: {nickname, value}}= event;
@@ -62,74 +65,83 @@ export default function SignUpForm({
   const emailCheck = (email: any) => {
     return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
   };
-
-  console.log('nickname', nickname);
   const passwordCheck = (password: any) => {
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      console.log('비밀번호 형식을 확인해주세요');
-      return;
+      console.log("비밀번호 형식을 확인해주세요");
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     } else {
       // 맞을 경우 출력
-      console.log('비밀번호 형식이 맞아요');
+      console.log("비밀번호 형식이 맞아요");
     }
   };
   const passwordDoubleCheck = (password: any, passwordConfirm: any) => {
     if (password !== passwordConfirm) {
-      console.log('비밀번호가 다릅니다.');
+      console.log("비밀번호가 다릅니다.");
       return;
     } else {
-      console.log('비밀번호가 동일합니다.');
+      console.log("비밀번호가 동일합니다.");
     }
   };
 
-
   const displayName = auth.currentUser?.displayName;
-  console.log('displayName', displayName);
-  console.log('email : ', email);
-  console.log('PW : ', password);
-
   const signUpForm = (e: any) => {
     e.preventDefault();
     if (email.match(emailRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('이메일 형식을 확인해주세요.');
+      //return alert("이메일 형식을 확인해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("이메일 형식을 확인해주세요.");
     }
-
+    if (nickname === "") {
+      //return alert("닉네임을 입력해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("닉네임을 입력해주세요.");
+    }
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('비밀번호 형식을 확인해주세요.');
+      //return alert("비밀번호 형식을 확인해주세요.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     }
     if (password !== passwordConfirm) {
-      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+      //return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+      setAlertModal(true);
+      setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
     }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        console.log('회원가입 성공 ! :', userCredential);
-        console.log('디스플레이네임', authService.currentUser.displayName);
-        setIsNotLogin(false);
-        setOpenModal(false);
+        setAlertModal(true);
+        setAlertMessageText("회원가입 완료! 🎉");
+        if (alertModal === true) {
+          setIsNotLogin(false);
+        }
+        //setOpenModal(false);
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
-        await setDoc(doc(dbService, 'user', uid), {
+        await setDoc(doc(dbService, "user", uid), {
           userid: uid,
         });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorMessage:", errorCode, errorMessage);
         if (errorMessage.includes("auth/email-already-in-use")) {
-          alert("이미 가입된 회원입니다.");
-          return;
+          // alert("이미 가입된 회원입니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("이미 가입된 회원입니다.");
         }
         if (errorMessage.includes("auth/displayName-already-in-use")) {
-          alert("동일한 닉네임이 존재합니다.");
-          return;
+          // alert("동일한 닉네임이 존재합니다.");
+          // return;
+          setAlertModal(true);
+          setAlertMessageText("동일한 닉네임이 존재합니다.");
         } else {
-          alert("회원가입 완료! 🎉");
+          //alert("회원가입 완료! 🎉");
+          //return;
         }
       });
   };
@@ -137,16 +149,21 @@ export default function SignUpForm({
   // input마다 onKeyDown 속성에 이 함수를 넣었습니다.
   // input에서 Enter를 누르면 signUpForm 함수가 실행됩니다.
   const handleOnKeyPress = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       signUpForm(e);
     }
   };
-
   return (
     <Container>
+      {alertModal ? (
+        <AlertModal
+          children={AlertMessageText}
+          setAlertModal={setAlertModal}
+          setOpenModal={setOpenModal}
+        />
+      ) : null}
       <form onSubmit={signUpForm}>
         <div className="form-inner">
-
           <CloseButton onClick={() => setOpenModal(false)}>x</CloseButton>
           <TitleText>회원가입</TitleText>
           {/* Error! */}
@@ -157,10 +174,10 @@ export default function SignUpForm({
                   setEmail(e.target.value);
                   emailCheck(e.target.value);
                 }}
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
                 value={email}
                 required
                 onKeyDown={handleOnKeyPress}
@@ -168,10 +185,10 @@ export default function SignUpForm({
             </div>
             <div>
               <NickNameInput
-                type='nickname'
-                name='nickname'
-                id='nickname'
-                placeholder='Nick name'
+                type="nickname"
+                name="nickname"
+                id="nickname"
+                placeholder="Nick name"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
@@ -180,10 +197,10 @@ export default function SignUpForm({
             </div>
             <div>
               <PwInput
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -195,10 +212,10 @@ export default function SignUpForm({
             </div>
             <div>
               <PwChekckInput
-                type='password'
-                name='passwordConfirm'
-                id='passwordConfirm'
-                placeholder='Password Confirm'
+                type="password"
+                name="passwordConfirm"
+                id="passwordConfirm"
+                placeholder="Password Confirm"
                 value={passwordConfirm}
                 onChange={(e) => {
                   setPasswordConfirm(e.target.value);
@@ -211,7 +228,7 @@ export default function SignUpForm({
             <Text>
               비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.
             </Text>
-            <JoinBtn type='submit' onClick={signUpForm}>
+            <JoinBtn type="submit" onClick={signUpForm}>
               회원가입
             </JoinBtn>
             <LoginBtn

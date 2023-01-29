@@ -5,13 +5,15 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
 import Modal from "./Modal";
-
+import AlertModal from "./modal/AlertModal";
 // interface Props {
 //   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
 // }
 
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [AlertMessageText, setAlertMessageText] = useState("");
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
 
@@ -36,10 +38,14 @@ export default function Header() {
   const logout = () => {
     signOut(auth)
       .then(() => {
-        alert("로그아웃 성공 !");
+        //alert("로그아웃 성공 !");
+        setAlertModal(true);
+        setAlertMessageText("로그아웃 성공 !");
       })
       .catch((error) => {
-        alert("로그아웃 실패..");
+        //alert("로그아웃 실패..");
+        setAlertModal(true);
+        setAlertMessageText("로그아웃 실패..");
       });
   };
 
@@ -52,6 +58,13 @@ export default function Header() {
   return (
     <>
       <HeaderContainer>
+        {alertModal ? (
+          <AlertModal
+            children={AlertMessageText}
+            setAlertModal={setAlertModal}
+            setOpenModal={setOpenModal}
+          />
+        ) : null}
         <LogoBox
           onClick={() => {
             navigate("/");
