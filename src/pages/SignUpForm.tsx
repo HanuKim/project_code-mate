@@ -83,25 +83,6 @@ export default function SignUpForm({
     }
   };
 
-  const onSubmitHandler = (event: any) => {
-    event.preventDefault();
-
-    if (email.match(emailRegEx) === null) {
-      //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('이메일 형식을 확인해주세요.');
-    }
-
-    if (password.match(passwordRegEx) === null) {
-      //형식에 맞지 않을 경우 아래 alert 출력
-      return alert('비밀번호 형식을 확인해주세요.');
-    }
-
-    if (password !== passwordConfirm) {
-      return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
-    } else {
-      alert('회원가입 완료! 🎉');
-    }
-  }; // 아무 동작 안하고 버튼만 눌러도 리프레쉬 되는 것을 막는다
 
   const displayName = auth.currentUser?.displayName;
   console.log('displayName', displayName);
@@ -154,10 +135,9 @@ export default function SignUpForm({
   };
 
   // input마다 onKeyDown 속성에 이 함수를 넣었습니다.
-  // input에서 Enter를 누르면 onSubmitHandler, signUpForm 함수가 실행됩니다.
+  // input에서 Enter를 누르면 signUpForm 함수가 실행됩니다.
   const handleOnKeyPress = (e: any) => {
     if (e.key === 'Enter') {
-      onSubmitHandler(e);
       signUpForm(e);
     }
   };
