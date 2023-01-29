@@ -116,17 +116,18 @@ export default function MyInfo({
               name="gitAddress"
             />
           </label>
-          <label>
+          <IntroduceLb>
             introduce:
-            <input
-              type="text"
+            <Introducebox
+              // type="text"
               onChange={handleChange}
               value={formData?.introduce}
               id="introduce"
               name="introduce"
-              maxLength={30}
+              maxLength={300}
+              style={{ resize: 'none', width: '100%' }}
             />
-          </label>
+          </IntroduceLb>
         </ProfileContentsBox>
         <ProfileContentsBtnBox>
           <button>저장</button>
@@ -172,4 +173,19 @@ const ProfileContentsBtnBox = styled.div`
   position: absolute;
   right: 70px;
   top: 215px;
+`;
+
+const IntroduceLb = styled.label`
+  /* background-color: red; */
+  width: 100%;
+  height: 220px;
+`;
+
+const Introducebox = styled.textarea`
+  /* background-color: red; */
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
 `;

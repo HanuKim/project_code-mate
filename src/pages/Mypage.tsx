@@ -82,7 +82,7 @@ export default function Mypage() {
       alert('nickname 을 입력해주세요');
       return;
     } else if (formData?.stack.replace(/ /g, '') === '') {
-      alert('내용을 입력해주세요');
+      alert('주 포지션을 선택해주세요');
       return;
     } else if (formData?.gitAddress.replace(/ /g, '') === '') {
       alert('Url 을 입력해주세요');
