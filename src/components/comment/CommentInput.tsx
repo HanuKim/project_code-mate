@@ -56,7 +56,9 @@ export default function CommentInput() {
   };
 
   // ADD
-  const handleSubmitButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitButtonClick = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     // 내용
     if (!commentText.trim() || commentText === null) {
@@ -70,19 +72,23 @@ export default function CommentInput() {
 
   return (
     <>
-      {checkViewModal ? <CheckModal setCheckViewModal={setCheckViewModal} /> : null}
+      {checkViewModal ? (
+        <CheckModal setCheckViewModal={setCheckViewModal} />
+      ) : null}
       <Container>
         <CommentForm onSubmit={handleSubmitButtonClick}>
-          <CommentLabel>
-            <CommentText
-              placeholder="댓글을 입력 해주세요."
-              onChange={handleChangeComment}
-              value={commentText}
-              cols={30}
-              wrap="hard"
-            />
+          {/* <CommentLabel> */}
+          <CommentText
+            placeholder="댓글을 입력 해주세요."
+            onChange={handleChangeComment}
+            value={commentText}
+            cols={30}
+            wrap="hard"
+          />
+          <CommentSubmitButtonContainer>
             <CommentSubmitButton>등록</CommentSubmitButton>
-          </CommentLabel>
+          </CommentSubmitButtonContainer>
+          {/* </CommentLabel> */}
         </CommentForm>
       </Container>
     </>
@@ -90,6 +96,7 @@ export default function CommentInput() {
 }
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   margin: 0 auto;
 `;
 
@@ -99,34 +106,45 @@ const CommentForm = styled.form`
   margin: 0 auto;
 `;
 
-const CommentLabel = styled.label`
-  position: relative;
-`;
+// const CommentLabel = styled.label`
+//   position: relative;
+// `;
 
 const CommentText = styled.textarea`
-  position: relative;
+  min-height: 150px;
   width: 100%;
-  height: 150px;
-  border-radius: 10px;
-  padding: 20px 55px 20px 20px;
-  resize: none;
+  height: 100%;
+
+  margin-bottom: 12px;
+  padding: 20px;
+
   border: 1px solid #d0d0d0;
-  transition-duration: 0.15s;
+  border-radius: 10px;
+
+  resize: none;
+
+  transition-duration: 0.3s;
   &:focus {
     box-shadow: 5px 5px 5px #aaa;
   }
 `;
 
+const CommentSubmitButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
 const CommentSubmitButton = styled.button`
-  position: absolute;
-  top: -25px;
-  right: 20px;
-  background-color: #fff;
-  color: #262b7f;
-  border: 1px solid #d0d0d0;
   width: 50px;
   height: 30px;
+
+  border: 1px solid #d0d0d0;
   border-radius: 10px;
+
+  background-color: #fff;
+  color: #262b7f;
+
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

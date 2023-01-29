@@ -34,26 +34,21 @@ export default function JobCategory() {
           return (
             // BottomCategoryBt에 key 지정해줘야 함.
             <JobBar>
-              {item === "front"
-                ? "프론트엔드"
-                : item === "back"
-                ? "백엔드"
-                : item === "design"
-                ? "디자이너"
-                : item === "publ"
-                ? "퍼블리셔"
-                : item === "pm"
-                ? "PM"
+              {item === "FrontEnd"
+                ? "FrontEnd"
+                : item === "BackEnd"
+                ? "BackEnd"
+                : item === "Designer"
+                ? "Designer"
+                : item === "Web Publish"
+                ? "Web Publish"
+                : item === "Product Manage"
+                ? "Product Manage"
                 : ""}
             </JobBar>
           );
         }
       })}
-      {/* <JobBar>백엔드</JobBar>
-      <JobBar>프론트엔드</JobBar>
-      <JobBar>UX/UI</JobBar>
-      <JobBar>웹 디자이너</JobBar>
-      <JobBar>퍼블리셔</JobBar> */}
     </Container>
   );
 }
@@ -72,16 +67,15 @@ const JobBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 30px;
-  border-radius: 50px;
-  background-color #262b7f;
+
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  background-color: #262b7f;
+
+  font-size: 12px;
   color: #f2f2f2;
-  font-size: 14px;
-  cursor: pointer;
-  transition-duration: 0.3s;
-  &:hover {
-    color: #f2f2f2;
-    background-color: #262b7f;
-  }
+
+  cursor: default;
 `;

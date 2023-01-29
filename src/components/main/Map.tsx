@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapProps } from "../..//shared/type";
 import styled from "styled-components";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import { dbService, authService } from "../../shared/firebase";
 
 declare global {
   interface Window {
@@ -76,13 +73,13 @@ const Map = ({ state, setState }: any) => {
   };
 
   return (
-    <>
-      {/* 맵 컨테이너 */}
+    // {/* 맵 컨테이너 */}
+    <Container>
       <div
         id="map"
         style={{
           width: "100%",
-          height: "600px",
+          height: "300px",
           alignItems: "center",
           justifyContent: "center",
           marginLeft: "auto",
@@ -91,42 +88,64 @@ const Map = ({ state, setState }: any) => {
       <MapSearchContainer>
         {/* 주소창 */}
         <MapInput
-          placeholder="주소를 입력해주세요."
+          placeholder="프로젝트를 위해 만날 장소(건물 이름, 지하철역 등)를 입력해주세요."
           onChange={handleSearchAddress}
         />
         {/* onclick시 검색한 키워드의 지도 좌표를 띄움 */}
-        <MapSummitButton onClick={SearchMap}>확인</MapSummitButton>
+        <MapSummitButton onClick={SearchMap}>여기서 만나요!</MapSummitButton>
       </MapSearchContainer>
-    </>
+    </Container>
   );
 };
 
 export default Map;
 
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+
+  margin-bottom: 30px;
+`;
+
 const MapSearchContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   width: 100%;
   margin: 10px 0;
+  margin-bottom: 50px;
 `;
 const MapInput = styled.input`
-  width: 80%;
+  width: 83%;
   height: 80px;
-  border-radius: 10px;
-  border: 1px solid #a8a8a8;
-  padding: 15px 20px;
-  resize: none;
   margin: 10px 0;
+  padding: 15px 20px;
+
+  border: 1px solid #aaa;
+  border-radius: 10px;
+
+  resize: none;
+  transition-duration: 0.3s;
+
+  :focus {
+    border: none;
+    box-shadow: 3px 3px 3px #aaa;
+    background-color: #fff;
+  }
 `;
+
 const MapSummitButton = styled.button`
-  float: right;
-  background-color: #ffffff;
-  border: 1px solid #a8a8a8;
   width: 15%;
   height: 80px;
+
+  border: 1px solid #aaa;
   border-radius: 10px;
-  margin: 10px;
+
   font-size: 18px;
+  color : #333;
   cursor: pointer;
-  &:hover {
+  :hover {
     background-color: #262b7f;
     color: #ffffff;
   }
