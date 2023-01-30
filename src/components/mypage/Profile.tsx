@@ -41,7 +41,7 @@ export default function Profile() {
     await updateDoc(doc(dbService, 'user', userEmail), {
       imageUrl: photoURL,
     });
-    setCheckImageModal(false);
+    setCheckImageModal(true);
   }
   console.log('photoURL', photoURL);
 

@@ -32,7 +32,7 @@ export default function MypageUploadModal({
   setCheckImageModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const closeModal = () => {
-    setCheckImageModal(true);
+    setCheckImageModal(false);
   };
   return (
     <ContainerBg>
