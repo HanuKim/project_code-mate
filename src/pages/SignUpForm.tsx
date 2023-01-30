@@ -36,7 +36,6 @@ export default function SignUpForm({
     if (password.match(passwordRegEx) === null) {
       //형식에 맞지 않을 경우 아래 alert 출력
       console.log("비밀번호 형식을 확인해주세요");
-      setAlertMessageText("비밀번호 형식을 확인해주세요.");
     } else {
       // 맞을 경우 출력
       console.log("비밀번호 형식이 맞아요");
@@ -57,24 +56,27 @@ export default function SignUpForm({
     if (email.match(emailRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("이메일 형식을 확인해주세요.");
-      return;
+      //return;
     } else if (nickname === "") {
       setAlertModal(true);
       setAlertMessageText("닉네임을 입력해주세요.");
-      return;
+      //return;
     } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("비밀번호 형식을 확인해주세요.");
-      return;
+      //return;
     } else if (password !== passwordConfirm) {
       setAlertModal(true);
       setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
       return;
     }
-
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         setAlertModal(true);
+        setAlertMessageText("회원가입 완료! 🎉");
+        if (alertModal === true) {
+          setIsNotLogin(false);
+        }
         await setDoc(doc(dbService, "user", email), {
           userid: "",
           nickName: nickname,
@@ -85,10 +87,6 @@ export default function SignUpForm({
           useremail: email,
         });
         console.log(uid);
-        setAlertMessageText("회원가입 완료! 🎉");
-        if (alertModal === true) {
-          setIsNotLogin(false);
-        }
         await updateProfile(authService?.currentUser, {
           displayName: nickname,
         });
@@ -132,7 +130,6 @@ export default function SignUpForm({
           <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
         </BtnContainer>
         <TitleText>회원가입</TitleText>
-
         <EmailInput
           onChange={(e) => {
             setEmail(e.target.value);

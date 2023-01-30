@@ -33,7 +33,8 @@ function LoginForm({
     if (email.match(emailRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("올바른 이메일 형식이 아닙니다.");
-      return;
+      //return;
+
     } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText(
@@ -41,7 +42,6 @@ function LoginForm({
       );
       return;
     }
-
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setAlertModal(true);
@@ -69,7 +69,6 @@ function LoginForm({
       signIn(e);
     }
   };
-
   return (
     <>
       {alertModal ? (
