@@ -176,6 +176,7 @@ const ProfileContainer = styled.div`
 const PostsTopContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 `;
 
 const ProfileNickName = styled.p`
