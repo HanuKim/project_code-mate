@@ -1,9 +1,7 @@
-import {useState} from 'react';
-import styled from 'styled-components';
+import { useState } from "react";
+import styled from "styled-components";
 
-export default function CreateCategory({
-  handleCategory,
-}: any) {
+export default function CreateCategory({ handleCategory }: any) {
   const [isClickfront, setIsClickfront] = useState(false);
   const [isClickBack, setIsClickBack] = useState(false);
   const [isClickDesign, setIsClickDesign] = useState(false);
@@ -13,77 +11,77 @@ export default function CreateCategory({
   return (
     <CategoryContainer>
       <CategoryBt
-        type='button'
-        value={'FrontEnd'}
-        id='iscategory'
-        name='iscategory'
+        type="button"
+        value={"FrontEnd"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickfront(!isClickfront);
         }}
         style={{
-          background: isClickfront ? '#262b7f' : '#fff',
-          color: isClickfront ? '#f2f2f2' : '#aaa',
+          background: isClickfront ? "#262b7f" : "#fff",
+          color: isClickfront ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
-        type='button'
-        value={'BackEnd'}
-        id='iscategory'
-        name='iscategory'
+        type="button"
+        value={"BackEnd"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickBack(!isClickBack);
         }}
         style={{
-          background: isClickBack ? '#262b7f' : '#fff',
-          color: isClickBack ? '#f2f2f2' : '#aaa',
+          background: isClickBack ? "#262b7f" : "#fff",
+          color: isClickBack ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
-        type='button'
-        value={'Designer'}
-        id='iscategory'
-        name='iscategory'
+        type="button"
+        value={"Designer"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickDesign(!isClickDesign);
         }}
         style={{
-          background: isClickDesign ? '#262b7f' : '#fff',
-          color: isClickDesign ? '#f2f2f2' : '#aaa',
+          background: isClickDesign ? "#262b7f" : "#fff",
+          color: isClickDesign ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
-        type='button'
-        value={'Web Publish'}
-        id='iscategory'
-        name='iscategory'
+        type="button"
+        value={"Web Publish"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickPul(!isClickPul);
         }}
         style={{
-          background: isClickPul ? '#262b7f' : '#fff',
-          color: isClickPul ? '#f2f2f2' : '#aaa',
+          background: isClickPul ? "#262b7f" : "#fff",
+          color: isClickPul ? "#f2f2f2" : "#aaa",
         }}
       />
 
       <CategoryBt
-        type='button'
-        value={'Product Manage'}
-        id='iscategory'
-        name='iscategory'
+        type="button"
+        value={"Product Manage"}
+        id="iscategory"
+        name="iscategory"
         onClick={(e) => {
           handleCategory(e);
           setIsClickPm(!isClickPm);
         }}
         style={{
-          background: isClickPm ? '#262b7f' : '#fff',
-          color: isClickPm ? '#f2f2f2' : '#aaa',
+          background: isClickPm ? "#262b7f" : "#fff",
+          color: isClickPm ? "#f2f2f2" : "#aaa",
         }}
       />
     </CategoryContainer>

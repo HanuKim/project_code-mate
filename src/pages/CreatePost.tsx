@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Map from "../components/map/Map";
 import CreateCategory from "../components/post/CreateCategory";
-import {  MapProps } from "../shared/type";
+import { MapProps } from "../shared/type";
 import { collection, addDoc } from "firebase/firestore";
 import { dbService } from "../shared/firebase";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,11 @@ import { getAuth } from "firebase/auth";
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState(''); //제목
-  const [content, setContent]: any = useState(''); //내용
+  const [title, setTitle] = useState(""); //제목
+  const [content, setContent]: any = useState(""); //내용
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory]: any = useState(['all']); //카테고리
+  const [category, setCategory]: any = useState(["all"]); //카테고리
   //map
   const [state, setState] = useState<MapProps>({
     // 지도의 초기 위치
@@ -66,9 +66,9 @@ const CreatePost = () => {
       setCorrectContent(true);
       return;
     } else {
-      await addDoc(collection(dbService, 'post'), newPost);
-      setTitle('');
-      setContent('');
+      await addDoc(collection(dbService, "post"), newPost);
+      setTitle("");
+      setContent("");
       navigate(`/`);
     }
   };
@@ -80,7 +80,7 @@ const CreatePost = () => {
         <Map state={state} setState={setState} />
         <ContentsWrap>
           <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? 'black'} />
+            <ProfilePhoto background={photoURL ?? "black"} />
             <p>{displayName}</p>
           </ProfileContainer>
           <HirePositionContainer>
@@ -107,8 +107,7 @@ const CreatePost = () => {
             onChange={handleChangeContent}
             value={content}
             cols={30}
-            wrap="hard"
-          >
+            wrap="hard">
             {correctcontent && (
               <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
             )}
@@ -146,9 +145,7 @@ const InnerContainer = styled.div`
 const ContentsWrap = styled.div`
   width: 100%;
   height: 100%;
-
   padding: 20px;
-
   border: 1px solid #d0d0d0;
   border-radius: 10px;
 `;
@@ -161,7 +158,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${props => props.background});
+  background-image: url(${(props) => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -174,11 +171,9 @@ const ProfilePhoto = styled.div<{ background: any }>`
 const HirePositionContainer = styled.div`
   width: 100%;
   height: 100%;
-
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
   margin-bottom: 50px;
   margin-left: 4px;
 `;
@@ -195,11 +190,8 @@ const PostTitle = styled.textarea`
   height: 34px;
   margin-bottom: 12px;
   padding-left: 8px;
-
   border-left: 2px solid #aaa;
-
   resize: none;
-
   line-height: 2.4;
   font-size: 14px;
   transition-duration: 0.3s;
@@ -214,10 +206,8 @@ const PostText = styled.textarea`
   min-height: 150px;
   width: 100%;
   height: 100%;
-
   margin-bottom: 12px;
   padding: 20px;
-
   border: 1px solid #aaa;
   border-radius: 10px;
   resize: none;
@@ -246,11 +236,9 @@ const SubmitBtnContainer = styled.div`
 const SubmitBtn = styled.button`
   width: 50px;
   height: 30px;
-
   border: 1px solid #d0d0d0;
   border-radius: 10px;
   color: #262b7f;
-
   background-color: #fff;
   cursor: pointer;
   &:hover {

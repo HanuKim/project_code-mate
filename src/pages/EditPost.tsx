@@ -1,17 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Map from '../components/map/Map';
-import CreateCategory from '../components/post/CreateCategory';
-import { MapProps } from '../shared/type';
-import {
-  updateDoc,
-  doc,
-  getDoc,
-  DocumentData,
-} from 'firebase/firestore';
-import { dbService } from '../shared/firebase';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import Map from "../components/map/Map";
+import CreateCategory from "../components/post/CreateCategory";
+import { MapProps } from "../shared/type";
+import { updateDoc, doc, getDoc, DocumentData } from "firebase/firestore";
+import { dbService } from "../shared/firebase";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 const EditPost = () => {
   const location = useLocation();
@@ -22,15 +17,15 @@ const EditPost = () => {
   } = location.state.setDetail;
 
   const navigate = useNavigate();
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
   const [correcttitle, setCorrectTitle] = useState<boolean>(false); //제목 유효성 검사
   const [correctcontent, setCorrectContent] = useState<boolean>(false); //제목 유효성 검사
-  const [category, setCategory] = useState(['all']); //카테고리
+  const [category, setCategory] = useState(["all"]); //카테고리
   const [editPost, setEditPost] = useState<DocumentData>({
-    title: '',
+    title: "",
     category: category,
-    content: '',
+    content: "",
     coord: { lat, lng },
   });
   const ref = useRef(null);
@@ -62,7 +57,7 @@ const EditPost = () => {
 
   //post의 doc.id 가져오기(params이용)
   const getPost = async () => {
-    const snapshot = await getDoc(doc(dbService, 'post', id));
+    const snapshot = await getDoc(doc(dbService, "post", id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setEditPost(data);
   };
@@ -80,7 +75,7 @@ const EditPost = () => {
       setCorrectContent(true);
       return;
     } else {
-      await updateDoc(doc(dbService, 'post', id), {
+      await updateDoc(doc(dbService, "post", id), {
         title: editTitle,
         category: category,
         content: editContent,
@@ -91,78 +86,96 @@ const EditPost = () => {
   };
   return (
     <Container>
-      <CommentForm>
+      <InnerContainer>
         <Map state={state} setState={setState} />
-        <PostsTopContainer>
+        <ContentsWrap>
           <ProfileContainer>
-            <ProfilePhoto background={photoURL ?? 'black'} />
+            <ProfilePhoto background={photoURL ?? "black"} />
             <ProfileNickName>{displayName}</ProfileNickName>
           </ProfileContainer>
-        </PostsTopContainer>
-        <CreateCategory
-          category={category}
-          setCategory={setCategory}
-          handleCategory={handleCategory}
+          <PostsTopContainer>
+            <HirePositionText>Hiring Position : </HirePositionText>
+            <CreateCategory
+              category={category}
+              setCategory={setCategory}
+              handleCategory={handleCategory}
+            />
+          </PostsTopContainer>
+        </ContentsWrap>
+
+        <PostTitle
+          defaultValue={editPost.title}
+          onChange={handleChangeTitle}
+          id="title"
+          name="title"
+          ref={ref}
         />
-        <CommentLabel>
-          <Postitle
-            defaultValue={editPost.title}
-            onChange={handleChangeTitle}
-            id="title"
-            name="title"
-            ref={ref}
-          />
-          {correcttitle && (
-            <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
-          )}
-          <PostText
-            defaultValue={editPost.content}
-            onChange={handleChangeContent}
-            id="content"
-            name="content"
-            ref={ref}
-          />
-          {correctcontent && (
-            <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
-          )}
-          <CommentSubmitButton onClick={handleEditButton}>
-            등록
-          </CommentSubmitButton>
-          <CommentSubmitButton
+        {correcttitle && (
+          <TitleErrorText>제목을 입력하지 않았습니다.</TitleErrorText>
+        )}
+        <PostText
+          defaultValue={editPost.content}
+          onChange={handleChangeContent}
+          id="content"
+          name="content"
+          ref={ref}></PostText>
+        {correctcontent && (
+          <TitleErrorText>내용을 입력하지 않았습니다.</TitleErrorText>
+        )}
+        <SubmitBtnContainer>
+          <SubmitBtn onClick={handleEditButton}>등록</SubmitBtn>
+          <SubmitBtn
             onClick={() => {
               navigate(`/detail/${id}`);
-            }}
-          >
+            }}>
             취소
-          </CommentSubmitButton>
-        </CommentLabel>
-      </CommentForm>
+          </SubmitBtn>
+        </SubmitBtnContainer>
+      </InnerContainer>
     </Container>
   );
 };
 export default EditPost;
 
-const PostsTopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+const Container = styled.div`
+  align-items: center;
+  max-width: 1200px;
+  min-height: 1200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 50px 10px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  position: relative;
+`;
+
+const InnerContainer = styled.div`
+  max-width: 1100px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+`;
+
+const ContentsWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
+  margin-bottom: 12px;
 `;
 
-const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${props => props.background});
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  border: 1px solid #d0d0d0;
-  border-radius: 50%;
+const PostsTopContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
 `;
 
 const ProfileNickName = styled.p`
@@ -170,47 +183,81 @@ const ProfileNickName = styled.p`
   font-weight: 500;
 `;
 
-const Container = styled.div`
-  width: 80%;
+const ProfilePhoto = styled.div<{ background: any }>`
+  background-image: url(${(props) => props.background});
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+`;
+
+const HirePositionText = styled.p`
+  width: 120px;
   height: 100%;
-  margin: 0 auto;
+  margin-right: 12px;
+  text-align: center;
 `;
 
-const CommentForm = styled.div``;
-
-const CommentLabel = styled.label`
-  position: relative;
-`;
-
-const Postitle = styled.input`
+const PostTitle = styled.input`
   width: 100%;
-  height: 100px;
-  border-radius: 10px;
-  padding: 20px 55px 20px 20px;
+  height: 34px;
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 2px solid #aaa;
   resize: none;
-  outline-color: #262b7f;
-`;
-
-const TitleErrorText = styled.p`
-  color: #ff6f6f;
-  padding: 10px 0;
+  line-height: 2.4;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    border-left: 2px solid #fff;
+    box-shadow: 5px 5px 5px #aaa;
+    background-color: #fff;
+    border-radius: 10px;
+  }
 `;
 
 const PostText = styled.input`
+  min-height: 150px;
   width: 100%;
-  height: 150px;
+  height: 100%;
+  margin-bottom: 12px;
+  padding: 20px;
+  border: 1px solid #aaa;
   border-radius: 10px;
-  padding: 20px 55px 20px 20px;
   resize: none;
-  outline-color: #262b7f;
+  transition-duration: 0.3s;
+  :focus {
+    border: 1px solid #333;
+    box-shadow: 5px 5px 5px #c0c0c0;
+  }
 `;
 
-const CommentSubmitButton = styled.button`
-  background-color: #ffffff;
-  border: 1px solid #000000;
+const TitleErrorText = styled.p`
+  font-size: 12px;
+  color: #ff6f6f;
+  margin: inherit;
+  margin-top: -12px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+`;
+
+const SubmitBtnContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 4px;
+`;
+
+const SubmitBtn = styled.button`
   width: 50px;
   height: 30px;
+  border: 1px solid #d0d0d0;
   border-radius: 10px;
+  color: #262b7f;
+  background-color: #fff;
   cursor: pointer;
   &:hover {
     background-color: #262b7f;

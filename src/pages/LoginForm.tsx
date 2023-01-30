@@ -34,9 +34,7 @@ function LoginForm({
       setAlertModal(true);
       setAlertMessageText("올바른 이메일 형식이 아닙니다.");
       return;
-    }
-
-    else if (password.match(passwordRegEx) === null) {
+    } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText(
         "비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다."
@@ -115,8 +113,7 @@ function LoginForm({
           <SignUpBtn
             onClick={() => {
               setIsNotLogin(true);
-            }}
-          >
+            }}>
             Join
           </SignUpBtn>
           <LoginBtn>SignIn</LoginBtn>
@@ -148,7 +145,7 @@ const CloseButton = styled.div`
   background-image: url(${close});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 
   cursor: pointer;
 `;
