@@ -1,17 +1,16 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {doc, getDoc, updateDoc, DocumentData} from 'firebase/firestore';
-import {dbService, authService} from '../shared/firebase';
+import { doc, getDoc, updateDoc, DocumentData } from 'firebase/firestore';
+import { dbService, authService } from '../shared/firebase';
 import Profile from '../components/mypage/Profile';
 import MyPost from '../components/mypage/MyPost';
-import {updateProfile} from '@firebase/auth';
+import { updateProfile } from '@firebase/auth';
 import MyInfo from '../components/mypage/MyInfo';
 import EditInfo from '../components/mypage/EditInfo';
 import MypageUrlModal from '../components/modal/MypageUrlmodal';
-import MypageUrlmodal from '../components/modal/MypageUrlmodal';
+
 
 export default function Mypage() {
-
   const displayName = authService.currentUser?.displayName;
 
   const [isEditProfile, setIsEditProfile] = useState(false);
@@ -34,7 +33,7 @@ export default function Mypage() {
   });
 
   const handleChange = (e: any) => {
-    setFormData((prevFormData) => {
+    setFormData(prevFormData => {
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,

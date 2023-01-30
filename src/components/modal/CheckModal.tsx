@@ -9,11 +9,12 @@ import {
 } from './DeleteModal';
 
 export default function CheckModal({
-  
   setCheckViewModal,
 }: {
+
   
   setCheckViewModal:  React.Dispatch<React.SetStateAction<boolean>>;
+
 }) {
   const closeModal = () => {
     setCheckViewModal(false);
