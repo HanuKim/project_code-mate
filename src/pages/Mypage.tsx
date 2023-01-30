@@ -7,6 +7,8 @@ import MyPost from '../components/mypage/MyPost';
 import {updateProfile} from '@firebase/auth';
 import MyInfo from '../components/mypage/MyInfo';
 import EditInfo from '../components/mypage/EditInfo';
+import MypageUrlModal from '../components/modal/MypageUrlmodal';
+import MypageUrlmodal from '../components/modal/MypageUrlmodal';
 
 export default function Mypage() {
 
@@ -117,13 +119,8 @@ export default function Mypage() {
 
   return (
     <>
-      {checkViewModal ? (
-        <MypageModal setCheckViewModal={setCheckViewModal}>
-          닉네임을 입력해주세요.
-        </MypageModal>
-      ) : null}
       {checkUrlModal ? (
-        <MypageUrlmodal setCheckUrlModal={setCheckUrlModal} />
+        <MypageUrlModal setCheckUrlModal={setCheckUrlModal} />
       ) : null}
 
       <Container>

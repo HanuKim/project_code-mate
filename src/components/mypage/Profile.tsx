@@ -19,7 +19,7 @@ export default function Profile() {
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
+      const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
       return unsub;
     }, []);
 
@@ -30,7 +30,7 @@ export default function Profile() {
     const fileRef = ref(storage, currentUser.uid + '.png');
 
     setLoading(true);
-
+    const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(fileRef);
 
     updateProfile(currentUser, {photoURL});
