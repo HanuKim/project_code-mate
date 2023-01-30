@@ -56,12 +56,15 @@ export default function SignUpForm({
     if (email.match(emailRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("이메일 형식을 확인해주세요.");
+      //return;
     } else if (nickname === "") {
       setAlertModal(true);
       setAlertMessageText("닉네임을 입력해주세요.");
+      //return;
     } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("비밀번호 형식을 확인해주세요.");
+      //return;
     } else if (password !== passwordConfirm) {
       setAlertModal(true);
       setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
@@ -127,77 +130,69 @@ export default function SignUpForm({
           <CloseButton onClick={() => setOpenModal(false)}></CloseButton>
         </BtnContainer>
         <TitleText>회원가입</TitleText>
-        {/* Error! */}
-        <SignUpFormContainer>
-          <div>
-            <EmailInput
-              onChange={(e) => {
-                setEmail(e.target.value);
-                emailCheck(e.target.value);
-              }}
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email"
-              value={email}
-              required
-              onKeyDown={handleOnKeyPress}
-            />
-          </div>
-          <div>
-            <NickNameInput
-              type="nickname"
-              name="nickname"
-              id="nickname"
-              placeholder="Nick name"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              required
-              onKeyDown={handleOnKeyPress}
-            />
-          </div>
-          <div>
-            <PwInput
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                passwordCheck(e.target.value);
-              }}
-              required
-              onKeyDown={handleOnKeyPress}
-            />
-          </div>
-          <div>
-            <PwChekckInput
-              type="password"
-              name="passwordConfirm"
-              id="passwordConfirm"
-              placeholder="Password Confirm"
-              value={passwordConfirm}
-              onChange={(e) => {
-                setPasswordConfirm(e.target.value);
-                passwordDoubleCheck(password, e.target.value);
-              }}
-              required
-              onKeyDown={handleOnKeyPress}
-            />
-          </div>
-          <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
-          <JoinBtn type="submit" onClick={signUpForm}>
-            회원가입
-          </JoinBtn>
-          <LoginBtn
-            onClick={() => {
-              setIsNotLogin(false);
-            }}
-          >
-            로그인 화면으로
-          </LoginBtn>
-        </SignUpFormContainer>
+        <EmailInput
+          onChange={(e) => {
+            setEmail(e.target.value);
+            emailCheck(e.target.value);
+          }}
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email"
+          value={email}
+          required
+          onKeyDown={handleOnKeyPress}
+        />
+
+        <NickNameInput
+          type="nickname"
+          name="nickname"
+          id="nickname"
+          placeholder="Nick name"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          required
+          onKeyDown={handleOnKeyPress}
+        />
+
+        <PwInput
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            passwordCheck(e.target.value);
+          }}
+          required
+          onKeyDown={handleOnKeyPress}
+        />
+
+        <PwChekckInput
+          type="password"
+          name="passwordConfirm"
+          id="passwordConfirm"
+          placeholder="Password Confirm"
+          value={passwordConfirm}
+          onChange={(e) => {
+            setPasswordConfirm(e.target.value);
+            passwordDoubleCheck(password, e.target.value);
+          }}
+          required
+          onKeyDown={handleOnKeyPress}
+        />
+
+        <Text>비밀번호는 영문자, 숫자를 혼합하여 8~20자를 입력해주세요.</Text>
+        <JoinBtn type="submit" onClick={signUpForm}>
+          Join !
+        </JoinBtn>
+        <LoginBtn
+          onClick={() => {
+            setIsNotLogin(false);
+          }}>
+          Back to SignIn
+        </LoginBtn>
       </Form>
     </>
   );
@@ -205,7 +200,12 @@ export default function SignUpForm({
 
 const Form = styled.form`
   width: 100%;
-  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: red; */
 `;
 
 const BtnContainer = styled.div`
@@ -224,89 +224,92 @@ const CloseButton = styled.div`
   background-image: url(${close});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 
   cursor: pointer;
-`;
-
-const SignUpFormContainer = styled.div`
-  margin-left: 38px;
 `;
 
 const TitleText = styled.h2`
+  margin: inherit;
+  margin: 16px 0;
   font-size: 20px;
-  margin-left: 40px;
-  margin-top: 3px;
 `;
 
 const EmailInput = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 86%;
-  color: #7f7d7d;
-  border: 1px solid #d0d0d0;
+  width: 318px;
+  color: #333;
+  background: #d0d0d0;
+  margin-bottom: 12px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    box-shadow: 3px 3px 3px #aaa;
+    transform: scale(1.03);
+  }
 `;
 
 const NickNameInput = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 86%;
-  color: #7f7d7d;
-  border: 1px solid #d0d0d0;
+  width: 318px;
+  color: #333;
+  background: #d0d0d0;
+  margin-bottom: 12px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    box-shadow: 3px 3px 3px #aaa;
+    transform: scale(1.03);
+  }
 `;
 
 const PwInput = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 86%;
-  color: #7f7d7d;
-  border: 1px solid #d0d0d0;
+  width: 318px;
+  color: #333;
+  background: #d0d0d0;
+  margin-bottom: 12px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    transform: scale(1.03);
+    box-shadow: 3px 3px 3px #aaa;
+  }
+`;
+
+const PwChekckInput = styled.input`
+  width: 318px;
+  color: #333;
+  background: #d0d0d0;
+  margin-bottom: 4px;
+  padding: 8px;
+  font-size: 14px;
+  transition-duration: 0.3s;
+  :focus {
+    transform: scale(1.03);
+    box-shadow: 3px 3px 3px #aaa;
+  }
 `;
 
 const Text = styled.p`
-  font-size: 10px;
+  font-size: 12px;
   color: #262b7f;
-  margin-bottom: 0;
-`;
-const PwChekckInput = styled.input`
-  margin-bottom: 2px;
-  padding: 10px;
-  width: 86%;
-  color: #7f7d7d;
-  border: 1px solid #d0d0d0;
+  margin-bottom: 32px;
 `;
 
 const JoinBtn = styled.button`
-  border: none;
-  border-radius: 5px;
-  padding: 8px;
-  width: 86%;
-  margin-left: 0px;
-  margin-top: 10px;
-  position: flex;
-  align-items: center;
-  background-color: #262b7f;
-  color: #ffffff;
+  background-color: #333;
+  color: #f2f2f2;
+  width: 80%;
+  margin-bottom: 8px;
+  padding: 12px;
   cursor: pointer;
-  &:hover {
-    background-color: #ffffff;
-    border: 1px solid #262b7f;
-    box-shadow: 1px 1px 1px 1px #262b7f;
-    color: #262b7f;
-    transition: 0.3s;
-  }
 `;
 
 const LoginBtn = styled.button`
-  border: none;
-  width: 50%;
-  margin-bottom: 10px;
-  margin-left: 55px;
-  margin-top: 15px;
+  width: 80%;
+  padding: 12px;
+  background-color: #262b7f;
+  color: #ffffff;
   cursor: pointer;
-  color: #a29f9f;
-  &:hover {
-    color: #262b7f;
-    transition: 0.3s;
-  }
 `;
