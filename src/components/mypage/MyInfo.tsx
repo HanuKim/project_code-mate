@@ -144,7 +144,6 @@ export default function MyInfo({
 const Form = styled.form`
   width: 100%;
   height: 100%;
-  border: 1px solid red;
 `;
 
 const Container = styled.div`
