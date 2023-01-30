@@ -1,22 +1,16 @@
-import styled from 'styled-components';
-import CodeMate from '../img/CodeMate.png';
-import gitIcon from '../img/gitIcon.png';
+import styled from "styled-components";
+import CodeMate from "../img/CodeMate.png";
+import gitIcon from "../img/gitIcon.png";
 
 export default function Footer() {
-  const url = 'https://enfp-jake.tistory.com';
-
-  // 외부 브라우저 열기
-  window.open(url, '_blank');
-
   return (
     <Container>
       <InnerContainer>
         <InfoWrap />
         <LinkGitContainer>
           <a
-            href='https://github.com/HanuKim/project_code-mate'
-            target='_blank'
-          >
+            href="https://github.com/HanuKim/project_code-mate"
+            target="_blank">
             <LinkGit />
           </a>
           <LinkGitText>Go GitHub</LinkGitText>
