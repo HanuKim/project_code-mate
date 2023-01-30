@@ -1,9 +1,17 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, dbService } from "../shared/firebase";
 import { getAuth } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  collection,
+  getDocs,
+  where,
+  query,
+  DocumentData,
+} from "firebase/firestore";
 import close from "../img/close.png";
 import AlertModal from "../components/modal/AlertModal";
 
@@ -18,6 +26,7 @@ export default function SignUpForm({
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
+  const [checkNick, setCheckNick] = useState<DocumentData>();
 
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -50,26 +59,53 @@ export default function SignUpForm({
     }
   };
 
+  // 회원가입 시, DB와 비교하여 닉네임을 체크해주는 함수입니다.
+  const getNick = async () => {
+    const q = query(
+      collection(dbService, "user"),
+      where("nickName", "==", nickname)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      const isNick: any = {
+        ...doc.data(),
+      };
+      setCheckNick(isNick);
+    });
+  };
+  useEffect(() => {
+    getNick();
+  }, [nickname]);
+  // -----------------------------------------------
+
+  // Join Btn 시작
   const signUpForm = (e: any) => {
     e.preventDefault();
 
     if (email.match(emailRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("이메일 형식을 확인해주세요.");
-      //return;
+      return;
     } else if (nickname === "") {
       setAlertModal(true);
       setAlertMessageText("닉네임을 입력해주세요.");
-      //return;
+      return;
+    } else if (checkNick.nickName === nickname) {
+      setAlertModal(true);
+      setAlertMessageText("중복된 닉네임입니다.");
+      return;
     } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText("비밀번호 형식을 확인해주세요.");
-      //return;
+      return;
     } else if (password !== passwordConfirm) {
       setAlertModal(true);
       setAlertMessageText("비밀번호와 비밀번호 확인은 같아야 합니다.");
       return;
     }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         setAlertModal(true);
@@ -144,16 +180,25 @@ export default function SignUpForm({
           onKeyDown={handleOnKeyPress}
         />
 
-        <NickNameInput
-          type="nickname"
-          name="nickname"
-          id="nickname"
-          placeholder="Nick name"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          required
-          onKeyDown={handleOnKeyPress}
-        />
+        <NickNameWrap>
+          <NickNameInput
+            type="nickname"
+            name="nickname"
+            id="nickname"
+            placeholder="Nick name"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            required
+            onKeyDown={handleOnKeyPress}
+          />
+
+          <NickNameCheckBtn
+            onClick={() => {
+              getNick();
+            }}>
+            중복검사
+          </NickNameCheckBtn>
+        </NickNameWrap>
 
         <PwInput
           type="password"
@@ -250,7 +295,7 @@ const EmailInput = styled.input`
 `;
 
 const NickNameInput = styled.input`
-  width: 318px;
+  width: 70%;
   color: #333;
   background: #d0d0d0;
   margin-bottom: 12px;
@@ -295,6 +340,36 @@ const Text = styled.p`
   font-size: 12px;
   color: #262b7f;
   margin-bottom: 32px;
+`;
+
+const NickNameWrap = styled.div`
+  width: 80%;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const NickNameCheckBtn = styled.button`
+  height: 36px;
+
+  margin-bottom: 8px;
+  padding: 0 12px;
+
+  align-self: flex-start;
+  border-radius: 10px;
+
+  font-size: 12px;
+
+  color: #f2f2f2;
+  background-color: #476be3;
+  transition-duration: 0.3s;
+  :hover {
+    box-shadow: 3px 3px 5px #aaa;
+    background-color: #fff;
+    color: #476be3;
+  }
 `;
 
 const JoinBtn = styled.button`

@@ -34,7 +34,6 @@ function LoginForm({
       setAlertModal(true);
       setAlertMessageText("올바른 이메일 형식이 아닙니다.");
       //return;
-
     } else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText(
@@ -164,8 +163,7 @@ const TitleText = styled.h2`
 
 const EmailInput = styled.input`
   width: 318px;
-  color: #f2f2f2;
-  background: #333;
+  color: #333;
   margin-bottom: 12px;
   padding: 8px;
   font-size: 14px;
