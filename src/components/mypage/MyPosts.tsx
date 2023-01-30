@@ -26,23 +26,23 @@ export default function MyPosts({ post }: { post: PostState }) {
       <BottomCategoryContainer>
         {post.category.map((item: string) => {
           // 카테고리가 all이면 버튼보이지않게
-          if (item === "all") {
+          if (item === 'all') {
             return;
           } else {
             return (
               // BottomCategoryBt에 key 지정해줘야 함.
               <BottomCategoryBt>
-                {item === "front"
-                  ? "FrontEnd"
-                  : item === "back"
-                  ? "BackEnd"
-                  : item === "design"
-                  ? "Design"
-                  : item === "publ"
-                  ? "Web Publish"
-                  : item === "pm"
-                  ? "Produc Manage"
-                  : ""}
+                {item === 'FrontEnd'
+                  ? 'FrontEnd'
+                  : item === 'BackEnd'
+                  ? 'BackEnd'
+                  : item === 'Designer'
+                  ? 'Designer'
+                  : item === 'Web Publish'
+                  ? 'Web Publish'
+                  : item === 'Product Manage'
+                  ? 'Product Manage'
+                  : ''}
               </BottomCategoryBt>
             );
           }
@@ -80,7 +80,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePhoto = styled.div<{ background: any }>`
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

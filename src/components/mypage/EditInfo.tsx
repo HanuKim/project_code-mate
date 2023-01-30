@@ -44,6 +44,7 @@ export default function EditInfo({
             onClick={() => {
               setIsEditProfile(true);
             }}
+          
           >
             편집
           </EditBtn>

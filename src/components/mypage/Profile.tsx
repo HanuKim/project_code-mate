@@ -7,6 +7,7 @@ import {doc, updateDoc} from 'firebase/firestore';
 
 export default function Profile() {
   const currentUser = useAuth();
+  const [checkImageModal, setCheckImageModal] = useState<any>(false);
   const [photo, setPhoto] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const userEmail = authService.currentUser?.email;
@@ -18,7 +19,7 @@ export default function Profile() {
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
+      const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
       return unsub;
     }, []);
 

@@ -45,13 +45,19 @@ export default function Detail() {
               <ProfileWrap>
                 {isOpenProfileModal ? (
                   <UserProfileModal
+                   
                     setOpenProfileModal={setOpenProfileModal}
+                   
                     isOpenProfileModal={isOpenProfileModal}
+                 
                   />
                 ) : null}
                 <ProfilePic
+                 
                   onClick={onClickToggleModal}
+                 
                   profile={setDetail.profileImg ?? basicImg}
+               
                 />
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
@@ -140,7 +146,7 @@ const ProfilePic = styled.div`
   max-height: 52px;
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.profile});
+  background-image: url(${props => props.profile});
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
