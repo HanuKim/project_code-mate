@@ -26,7 +26,7 @@ import {
   CheckButton,
 } from './DeleteModal';
 
-export default function MypageUrlModal({
+export default function MypageUrlmodal({
   setCheckUrlModal,
 }: {
   setCheckUrlModal: React.Dispatch<React.SetStateAction<boolean>>;

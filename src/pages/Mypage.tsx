@@ -9,6 +9,7 @@ import MyInfo from '../components/mypage/MyInfo';
 import EditInfo from '../components/mypage/EditInfo';
 import MypageUrlModal from '../components/modal/MypageUrlmodal';
 
+
 export default function Mypage() {
   const displayName = authService.currentUser?.displayName;
 

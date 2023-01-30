@@ -20,7 +20,7 @@ export default function Profile() {
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
+      const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
       return unsub;
     }, []);
 
