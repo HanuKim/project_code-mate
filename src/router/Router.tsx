@@ -14,7 +14,6 @@ import { TopBtn } from "../components/TopBtn";
 
 const Router = () => {
   const authService = getAuth();
-  const uid = authService.currentUser?.uid;
   return (
     <BrowserRouter>
       <Header />

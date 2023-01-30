@@ -1,15 +1,17 @@
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { storage, auth } from "../shared/firebase";
-import styled from "styled-components";
+import {onAuthStateChanged, updateProfile} from 'firebase/auth';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {ChangeEvent, useEffect, useState} from 'react';
+import {storage, auth, authService, dbService} from '../../shared/firebase';
+import styled from 'styled-components';
+import {doc, updateDoc} from 'firebase/firestore';
 
 export default function Profile() {
   const currentUser = useAuth();
   const [photo, setPhoto] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const userEmail = authService.currentUser?.email;
   const [photoURL, setPhotoURL] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
   );
 
   function useAuth() {
@@ -24,17 +26,19 @@ export default function Profile() {
   }
 
   async function upload(file: any, currentUser: any, setLoading: any) {
-    const fileRef = ref(storage, currentUser.uid + ".png");
+    const fileRef = ref(storage, currentUser.uid + '.png');
 
     setLoading(true);
 
-    const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(fileRef);
 
-    updateProfile(currentUser, { photoURL });
+    updateProfile(currentUser, {photoURL});
     setPhotoURL(photoURL);
     setLoading(false);
-    alert("Uploaded file!");
+    await updateDoc(doc(dbService, 'user', userEmail), {
+      imageUrl: photoURL,
+    });
+    alert('Uploaded file!');
   }
   console.log('photoURL', photoURL);
 
@@ -60,10 +64,10 @@ export default function Profile() {
         <ProfileImage src={photoURL} width={150} height={130} />
       </ImageWrap>
       <ButtonWrap>
-        <FileSelectBtn htmlFor="input-file">
-          {" "}
+        <FileSelectBtn htmlFor='input-file'>
+          {' '}
           사진 선택
-          <input type="file" hidden id="input-file" onChange={handleChange} />
+          <input type='file' hidden id='input-file' onChange={handleChange} />
         </FileSelectBtn>
         <UploatBtn disabled={loading || !photo} onClick={handleClick}>
           사진 등록

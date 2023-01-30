@@ -1,44 +1,26 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import basicImg from "../../img/basicImg.png";
-
-import PaginationItem from "./Paging";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
 import {
   collection,
   onSnapshot,
   orderBy,
   query,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
   where,
-} from "firebase/firestore";
-import { dbService } from "../../shared/firebase";
-import { Comment } from "../../shared/type";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/config/configStore";
-import { async } from "@firebase/util";
-import { useParams } from "react-router-dom";
-import CommentItem from "./CommentItem";
-import { useInView } from "react-intersection-observer";
-import Paging from "./Paging";
+} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
+import {Comment} from '../../shared/type';
+import {useParams} from 'react-router-dom';
+import CommentItem from './CommentItem';
+import Paging from './Paging';
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
-  const { id } = useParams();
-
-  const [ref, setRef] = useInView();
+  const {id} = useParams();
 
   const q = query(
-    collection(dbService, "comment"),
-    orderBy("createdAt", "desc"),
-    where("postId", "==", id)
+    collection(dbService, 'comment'),
+    orderBy('createdAt', 'desc'),
+    where('postId', '==', id)
     // Where를 만들 때에는 색인을 만들어줘야 한다. 브라우저에서 나오는 에러 링크를 누르면 됨
   );
 
@@ -70,7 +52,7 @@ export default function CommentList() {
     const hourgap = Math.floor(msgap / 3600000);
     const daygap = Math.floor(msgap / 86400000);
     if (msgap < 0) {
-      return "0분전";
+      return '0분전';
     }
     if (daygap > 7) {
       const time = new Date(posting);
@@ -106,7 +88,7 @@ export default function CommentList() {
 
   return (
     <Container>
-      <CommentTitle>Comment({comments.length})</CommentTitle>
+      <CommentTitle>Comments({comments.length})</CommentTitle>
       {/* 댓글들 컨테이너 */}
       <CommentsContainer>
         {currentPosts && comments.length > 0 ? (
@@ -114,11 +96,8 @@ export default function CommentList() {
             return <CommentItem comment={comment} />;
           })
         ) : (
-          <div>Not Comment</div>
+          <div>No Comments</div>
         )}
-        {/* {comments.map((comment) => {
-          return <CommentItem comment={comment} />;
-          })} */}
         <Paging page={currentpage} count={count} setPage={setPage} />
       </CommentsContainer>
     </Container>

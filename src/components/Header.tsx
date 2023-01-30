@@ -1,14 +1,12 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../shared/firebase";
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CodeMate from "../img/CodeMate.png";
-import Modal from "./Modal";
+import Modal from "./modal/Modal";
 import AlertModal from "./modal/AlertModal";
-// interface Props {
-//   setIsOpen: React.Dispatch<React.SetStateAction<any>>;
-// }
+
 
 export default function Header() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
@@ -19,7 +17,6 @@ export default function Header() {
 
   // login, logout 상태 변화 감지
   const [authUser, setAuthUser] = useState(null);
-  const [login, setLogin] = useState(false);
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {

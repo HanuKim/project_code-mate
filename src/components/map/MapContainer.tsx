@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { MapMarker, Map, CustomOverlayMap } from "react-kakao-maps-sdk";
-import { Mapprops } from "../shared/type";
+import { Mapprops } from "../../shared/type";
 
 declare global {
   interface Window {

@@ -1,75 +1,66 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Button from "../components/Button";
-import MapContainer from "../components/MapContainer";
-import JobCategory from "../components/JobCategory";
-import CodeMate from "../img/CodeMate.png";
-import Comments from "../components/comment/Comments";
-import CommentInput from "../components/comment/CommentInput";
-import CommentList from "../components/comment/CommentList";
-import basicImg from "../img/basicImg.png";
-import { useLocation } from "react-router-dom";
-import {
-  collection,
-  addDoc,
-  doc,
-  getDoc,
-  query,
-  orderBy,
-  where,
-  onSnapshot,
-  setDoc,
-  getDocs,
-} from "firebase/firestore";
-import { dbService, authService } from "../shared/firebase";
-import { getAuth } from "firebase/auth";
-import UserProfileModal from "./UserProfile";
+import {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import Button from '../components/Button';
+import MapContainer from '../components/map/MapContainer';
+import JobCategory from '../components/post/JobCategory';
+import CommentInput from '../components/comment/CommentInput';
+import CommentList from '../components/comment/CommentList';
+import basicImg from '../img/basicImg.png';
+import {doc, getDoc} from 'firebase/firestore';
+import {dbService, authService} from '../shared/firebase';
+import UserProfileModal from '../components/modal/UserProfile';
 
 // 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
 // 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
-import { useParams } from "react-router-dom";
+import {useParams} from 'react-router-dom';
 
 export default function Detail() {
-  const [setDetail, getSetDetail] = useState("");
-  let { id } = useParams();
+  const [setDetail, getSetDetail] = useState('');
+  let {id} = useParams();
   const uid = authService.currentUser?.uid;
   const [isOpenProfileModal, setOpenProfileModal] = useState(false);
 
   const getDetail = async () => {
-    const snapshot = await getDoc(doc(dbService, "post", id));
+    const snapshot = await getDoc(doc(dbService, 'post', id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     getSetDetail(data);
-    console.log("data : ", data);
+    console.log('data : ', data);
   };
   useEffect(() => {
     getDetail();
   }, []);
 
   const onClickToggleModal = () => {
-    setOpenProfileModal(!isOpenProfileModal);
+    setOpenProfileModal(true);
   };
   return (
     <>
       <Container>
         <InnerWidth>
-          {setDetail === "" ? null : <MapContainer location={setDetail.coord} />}
+          {setDetail === '' ? null : (
+            <MapContainer location={setDetail.coord} />
+          )}
           <ContentsContainer>
             <ProfileContainer>
               <ProfileWrap>
                 {isOpenProfileModal ? (
-                  <UserProfileModal setOpenProfileModal={setOpenProfileModal} isOpenProfileModal={isOpenProfileModal} />
+                  <UserProfileModal
+                    setOpenProfileModal={setOpenProfileModal}
+                    isOpenProfileModal={isOpenProfileModal}
+                  />
                 ) : null}
-                <ProfilePic onClick={onClickToggleModal} profile={setDetail.profileImg ?? basicImg} />
+                <ProfilePic
+                  onClick={onClickToggleModal}
+                  profile={setDetail.profileImg ?? basicImg}
+                />
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
               {uid === setDetail.userId ? (
                 <Button
                   location={setDetail.coord}
                   id={id}
-                  delete="삭제"
-                  edit="수정"
+                  delete='삭제'
+                  edit='수정'
                   btnWidth={80}
                   btnHeight={40}
                 ></Button>
@@ -80,7 +71,7 @@ export default function Detail() {
             <JobCategory />
           </ContentsContainer>
         </InnerWidth>
-        <CommentInput />
+        {uid ? <CommentInput /> : undefined}
         <CommentList />
       </Container>
     </>

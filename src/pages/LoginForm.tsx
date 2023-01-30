@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../shared/firebase";
 import close from "../img/close.png";
-// React.Dispatch<React.SetStateAction<boolean>>
 import AlertModal from "../components/modal/AlertModal";
 
 function LoginForm({
@@ -14,8 +12,6 @@ function LoginForm({
   setIsNotLogin: any;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const authService = getAuth();
-  const uid = authService.currentUser?.uid;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alertText, setAlertText] = useState("");
@@ -35,43 +31,35 @@ function LoginForm({
     e.preventDefault();
 
     if (email.match(emailRegEx) === null) {
-      //형식에 맞지 않을 경우 아래 alert 출력
-      //return alert("올바른 이메일 형식이 아닙니다.");
       setAlertModal(true);
       setAlertMessageText("올바른 이메일 형식이 아닙니다.");
+      return;
     }
 
-    if (password.match(passwordRegEx) === null) {
-      //형식에 맞지 않을 경우 아래 alert 출력
-      //return alert("비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다.");
+    else if (password.match(passwordRegEx) === null) {
       setAlertModal(true);
       setAlertMessageText(
         "비밀번호를 확인해주세요. 영문자, 숫자 혼합 8~20자입니다."
       );
+      return;
     }
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // console.log("로그인 성공 ! : ", userCredential);
         setAlertModal(true);
         setAlertMessageText("로그인 성공! 🎉");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        //console.log("errorMessage:", errorCode, errorMessage);
         if (errorMessage.includes("user-not-found")) {
-          //alert("가입되지 않은 회원입니다.");
           setAlertModal(true);
           setAlertMessageText("가입되지 않은 회원입니다.");
           return;
         } else if (errorMessage.includes("wrong-password")) {
-          //alert("비밀번호가 올바르지 않습니다.");
           setAlertModal(true);
           setAlertMessageText("비밀번호가 올바르지 않습니다.");
         } else {
-          //alert("로그인 성공! 🎉");
-          //return;
         }
       });
   };

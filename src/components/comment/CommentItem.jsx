@@ -1,37 +1,15 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import basicImg from "../../img/basicImg.png";
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  where,
-} from "firebase/firestore";
-import { dbService } from "../../shared/firebase";
-import { Comment } from "../../shared/type";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/config/configStore";
-import { async } from "@firebase/util";
-import { useParams } from "react-router-dom";
-import CheckModal from "../modal/DeleteModal";
-import { useDispatch } from "react-redux";
-import DeleteModal from "../modal/DeleteModal";
-import EditModal from "../modal/EditModal";
-import UserProfileModal from "../../pages/UserProfile";
-import { getAuth } from "firebase/auth";
+import {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import basicImg from '../../img/basicImg.png';
+import {doc, getDoc} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
+import DeleteModal from '../modal/DeleteModal';
+import EditModal from '../modal/EditModal';
+import UserProfileModal from '../modal/UserProfile';
+import {getAuth} from 'firebase/auth';
 
-export default function CommentItem({ comment }) {
-  const [editText, setEditText] = useState("");
+export default function CommentItem({comment}) {
+  const [editText, setEditText] = useState('');
   const [isOpenProfileModal, setOpenProfileModal] = useState(false);
   const [editComments, setEditComments] = useState({
     id: comment.id,
@@ -45,8 +23,8 @@ export default function CommentItem({ comment }) {
   });
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
-  const dispatch = useDispatch();
   // 모달
+
   const [viewDeleteModal, setDeleteViewModal] = useState(false);
   const [viewEditModal, setEditViewModal] = useState(false);
   const openDeleteModalClick = () => {
@@ -58,7 +36,7 @@ export default function CommentItem({ comment }) {
 
   //isEdit true로 바꾸기
   const onClickIsEditSwitch = (commentid) => {
-    setEditComments({ ...editComments, isEdit: true });
+    setEditComments({...editComments, isEdit: true});
   };
 
   const editTextOnChange = (e) => {
@@ -68,12 +46,12 @@ export default function CommentItem({ comment }) {
   // 수정 중 취소버튼 누르면 isEdit이 false로 변경되서 취소할 수 있는 함수
   const cancleEditButton = (commentid) => {
     console.log(commentid);
-    setEditComments({ ...editComments, isEdit: false });
+    setEditComments({...editComments, isEdit: false});
   };
 
   //수정 후 data get하면서 editComments state 내의 commentText를 data에 있는 내용으로 업데이트
   const getComment = async () => {
-    const snapshot = await getDoc(doc(dbService, "comment", comment.id));
+    const snapshot = await getDoc(doc(dbService, 'comment', comment.id));
     const data = snapshot.data();
     if (data.id === editComments.id) {
       setEditComments({
@@ -134,7 +112,8 @@ export default function CommentItem({ comment }) {
                   <CommentButton
                     onClick={() => {
                       cancleEditButton(comment.id);
-                    }}>
+                    }}
+                  >
                     취소
                   </CommentButton>
                 </>
@@ -144,7 +123,8 @@ export default function CommentItem({ comment }) {
                   <CommentButton
                     onClick={() => {
                       onClickIsEditSwitch(comment.id);
-                    }}>
+                    }}
+                  >
                     수정
                   </CommentButton>
                   <CommentButton onClick={openDeleteModalClick}>
@@ -155,7 +135,6 @@ export default function CommentItem({ comment }) {
             </ButtonContainer>
           </ProfileContainer>
           <Date>{comment.createdAt}</Date>
-          {/* {JSON.stringify(comment.createdAt.slice(1, 11))} */}
         </CommentTopContainer>
         {/* 수정버튼 누르면 인풋 생기게 */}
         {editComments.isEdit ? (

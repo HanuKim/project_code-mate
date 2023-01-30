@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import LoginForm from "../pages/LoginForm";
-import SignUpForm from "../pages/SignUpForm";
-import { ModalProps } from "../shared/type";
+import LoginForm from "../../pages/LoginForm";
+import SignUpForm from "../../pages/SignUpForm";
+import { ModalProps } from "../../shared/type";
 
 function Modal({
   setOpenModal,

@@ -1,9 +1,6 @@
-// import React from "react";
-import { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
+import {createGlobalStyle} from 'styled-components';
 
 const globalStyles = createGlobalStyle`
-
 
     * {
         box-sizing:border-box;
@@ -12,20 +9,15 @@ const globalStyles = createGlobalStyle`
         text-decoration : none;
         box-shadow:none;
     }
-    
     body {
         width : 100%;
         height : 100%;
-
         position: relative;
-
         background-color : #e0e0e0;
-
         letter-spacing : -0.01em;
         line-height :1.5;
         color: #333;
     }
-
     button, label {
         background: inherit;
         border:none;
@@ -34,7 +26,6 @@ const globalStyles = createGlobalStyle`
         overflow:visible;
         cursor:pointer
     }
-
     input, textarea {
         background: inherit;
         border:none;

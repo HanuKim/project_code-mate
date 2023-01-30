@@ -1,38 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
+
 import {
   collection,
   onSnapshot,
   orderBy,
   query,
   doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
   where,
 } from "firebase/firestore";
-import { dbService, authService } from "../shared/firebase";
-import MainCategory from "../components/main/MainCategory";
-import { useFirestoreQuery } from "@react-query-firebase/firestore";
-import { PostState } from "../shared/type";
-import { useNavigate, useParams } from "react-router-dom";
-import MyPostCategory from "./main/MyPostCategory";
-import MyPostList from "./main/MyPostList";
+import { dbService, authService } from "../../shared/firebase";
+
+import { PostState } from "../../shared/type";
+import { useParams } from "react-router-dom";
+import MyPostCategory from "./MyPostCategory";
+import MyPostList from "./MyPostList";
 
 export default function MyPost() {
   const [posts, setPosts] = useState<PostState[]>([]);
   const [category, setCategory] = useState("");
-  const navigate = useNavigate();
-
-  const id = useParams();
-
-  const uid =
     authService.currentUser?.uid || window.localStorage.getItem("userid");
 
   const q = query(
@@ -40,8 +27,6 @@ export default function MyPost() {
     orderBy("createdAt", "desc"),
     where("userId", "==", useParams().id)
   );
-  // console.log('Mypost uid', authService.currentUser);
-  // console.log('mypostid', useParams());
 
   const getTimegap = (posting: number) => {
     const msgap = Date.now() - posting;
@@ -68,32 +53,24 @@ export default function MyPost() {
   const getPost = () => {
     onSnapshot(q, (snapshot) => {
       const newPosts = snapshot.docs.map((doc) => {
-        // console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
           ...doc.data(),
           createdAt: getTimegap(doc.data().createdAt),
         } as PostState;
-
-        // console.log('newpost', newPost);
         return newPost;
       });
-      // console.log('newPosts:', newPosts);
       setPosts(newPosts);
-      //   console.log('posts2', newPosts);
     });
   };
 
   useEffect(() => {
     getPost();
-    // console.log('posts', posts);
-    // console.log('category', category);
 
     const getCategory = async () => {
       const snapshot = await getDoc(
         doc(dbService, "category", "currentCategory")
       );
-      //   console.log(snapshot.data());
       setCategory(snapshot.data().category);
     };
     getCategory();

@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import {
-  collection,
-  updateDoc,
-  doc,
-  getDoc,
-  DocumentData,
-} from "firebase/firestore";
-import { dbService, authService } from "../shared/firebase";
+import {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {useParams} from 'react-router-dom';
+import {doc, getDoc, DocumentData} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
 
 export default function JobCategory() {
   const [categorypost, setCategoryPost] = useState<DocumentData>({
     category: [],
   });
-  let { id } = useParams();
+  let {id} = useParams();
   const getPost = async () => {
-    const snapshot = await getDoc(doc(dbService, "post", id));
+    const snapshot = await getDoc(doc(dbService, 'post', id));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setCategoryPost(data);
   };
@@ -28,23 +22,23 @@ export default function JobCategory() {
     <Container>
       {categorypost.category.map((item: string) => {
         // 카테고리가 all이면 버튼보이지않게
-        if (item === "all") {
+        if (item === 'all') {
           return;
         } else {
           return (
             // BottomCategoryBt에 key 지정해줘야 함.
             <JobBar>
-              {item === "FrontEnd"
-                ? "FrontEnd"
-                : item === "BackEnd"
-                ? "BackEnd"
-                : item === "Designer"
-                ? "Designer"
-                : item === "Web Publish"
-                ? "Web Publish"
-                : item === "Product Manage"
-                ? "Product Manage"
-                : ""}
+              {item === 'FrontEnd'
+                ? 'FrontEnd'
+                : item === 'BackEnd'
+                ? 'BackEnd'
+                : item === 'Designer'
+                ? 'Designer'
+                : item === 'Web Publish'
+                ? 'Web Publish'
+                : item === 'Product Manage'
+                ? 'Product Manage'
+                : ''}
             </JobBar>
           );
         }

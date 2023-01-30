@@ -1,23 +1,6 @@
-import React, {Children, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  where,
-} from 'firebase/firestore';
+import React, {useState} from 'react';
+import {doc, updateDoc} from 'firebase/firestore';
 import {dbService} from '../../shared/firebase';
-import styled from 'styled-components';
 import {
   ContainerBg,
   Container,

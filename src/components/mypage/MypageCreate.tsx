@@ -1,20 +1,11 @@
-// react-redux 설치
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-// import { RootState } from '../redux/config/configStore';
-import { useDispatch } from 'react-redux';
-import { collection, addDoc } from 'firebase/firestore';
-import { auth, dbService } from '../shared/firebase';
-import { useParams } from 'react-router-dom';
+
+import {collection, addDoc} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
 
 export default function MypageCreate() {
   const [introduce, setIntroduce] = useState('');
-
-  // const dispatch = useDispatch();
-  const { id } = useParams();
-
-  const uid = auth.currentUser?.uid;
 
   const newIntroduce = {
     introduce,
@@ -41,11 +32,11 @@ export default function MypageCreate() {
     <Container>
       <CreateForm onSubmit={addIntroduce}>
         <CreateBox
-          placeholder="내용을 입력해주세요"
+          placeholder='내용을 입력해주세요'
           onChange={introducehandle}
           value={introduce}
           cols={30}
-          wrap="hard"
+          wrap='hard'
         />
         <CreateBtnWrap>
           <CreateBtn>등록</CreateBtn>
@@ -70,8 +61,6 @@ const CreateBox = styled.textarea`
 `;
 
 const CreateBtn = styled.button`
-  /* position: flex; */
-
   background-color: #262b7f;
   color: white;
   width: 60px;

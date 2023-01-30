@@ -1,14 +1,11 @@
-import { doc, DocumentData, setDoc } from "firebase/firestore";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { authService, dbService } from "../shared/firebase";
-import gitIcon from "../img/gitIcon.png";
-import notgitIcon from "../img/notgitIcon.png";
-import { Link } from "react-router-dom";
+import {DocumentData} from 'firebase/firestore';
+import React from 'react';
+import styled from 'styled-components';
+import {authService} from '../../shared/firebase';
+import gitIcon from '../../img/gitIcon.png';
+import notgitIcon from '../../img/notgitIcon.png';
 export default function EditInfo({
-  myInfo,
   setIsEditProfile,
-  stack,
   formData,
 }: {
   myInfo: DocumentData;
@@ -17,7 +14,7 @@ export default function EditInfo({
   formData: DocumentData;
 }) {
   const displayName = authService.currentUser?.displayName;
-  
+
   return (
     <>
       <IntroduceContainer>
@@ -25,12 +22,14 @@ export default function EditInfo({
           <InfoWrapContent>Name : {displayName}</InfoWrapContent>
           <InfoWrapContent>
             Position :
-            {formData?.stack ? <Stack> {formData?.stack} </Stack> : undefined}
+            {formData?.stack ? (
+              <CategoryBt> {formData?.stack} </CategoryBt>
+            ) : undefined}
           </InfoWrapContent>
           <InfoWrapContent>
             <IconContainer>
               {formData?.gitAddress ? (
-                <a href={formData?.gitAddress} target="_blank">
+                <a href={formData?.gitAddress} target='_blank'>
                   <GitIcon />
                 </a>
               ) : (
@@ -44,7 +43,8 @@ export default function EditInfo({
           <EditBtn
             onClick={() => {
               setIsEditProfile(true);
-            }}>
+            }}
+          >
             편집
           </EditBtn>
         </ProfileContentsBtnBox>
@@ -52,13 +52,6 @@ export default function EditInfo({
     </>
   );
 }
-
-const Stack = styled.span`
-  width: 100%;
-  position: relative;
-  top: 0;
-  left: 0;
-`;
 
 const ProfileContentsBtnBox = styled.div`
   display: flex;
@@ -129,4 +122,12 @@ const EditBtn = styled.button`
     background-color: #262b7f;
     border: 1px solid #262b7f;
   }
+`;
+
+const CategoryBt = styled.button`
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #f2f2f2;
+  background-color: #262b7f;
 `;

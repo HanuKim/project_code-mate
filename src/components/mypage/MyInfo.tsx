@@ -1,16 +1,9 @@
-import { DocumentData } from "firebase/firestore";
-import React, { useState } from "react";
-import styled from "styled-components";
-import { authService } from "../shared/firebase";
+import {DocumentData} from 'firebase/firestore';
+import React from 'react';
+import styled from 'styled-components';
+import {authService} from '../../shared/firebase';
 
 export default function MyInfo({
-  isEditProfile,
-  onChangeNickName,
-  myInfo,
-  setStack,
-  stack,
-  onChangegitAddress,
-  onChangeintroduce,
   setIsEditProfile,
   onSubmitMyInfo,
   formData,
@@ -33,113 +26,108 @@ export default function MyInfo({
 
   return (
     <>
-
       <form onSubmit={onSubmitMyInfo}>
         <Container>
           <ProfileContentsBox>
             <Input
-              type="text"
-              placeholder="활동명을 작성해주세요."
-
+              type='text'
+              placeholder='활동명을 작성해주세요.'
               onChange={handleChange}
               value={formData?.nickName ?? displayName}
-              id="nickName"
-              name="nickName"
+              id='nickName'
+              name='nickName'
               maxLength={10}
-              style={{ width: "180px" }}
+              style={{width: '180px'}}
             />
-
 
             <StackContainer>
               <StackButton
-                type="button"
-                value={"FrontEnd"}
+                type='button'
+                value={'FrontEnd'}
                 onClick={handleChange}
-                id="stack"
-                name="stack"
+                id='stack'
+                name='stack'
                 style={{
                   backgroundColor:
-                    stackData === "FrontEnd" ? "#262b7f" : "#ffffff",
-                  color: stackData === "FrontEnd" ? "#ffffff" : "#262b7f",
+                    stackData === 'FrontEnd' ? '#262b7f' : '#ffffff',
+                  color: stackData === 'FrontEnd' ? '#ffffff' : '#262b7f',
                 }}
               />
               <StackButton
-                type="button"
-                value={"BackEnd"}
+                type='button'
+                value={'BackEnd'}
                 onClick={handleChange}
                 style={{
                   backgroundColor:
-                    stackData === "BackEnd" ? "#262b7f" : "#ffffff",
-                  color: stackData === "BackEnd" ? "#ffffff" : "#262b7f",
+                    stackData === 'BackEnd' ? '#262b7f' : '#ffffff',
+                  color: stackData === 'BackEnd' ? '#ffffff' : '#262b7f',
                 }}
-                id="stack"
-                name="stack"
+                id='stack'
+                name='stack'
               />
               <StackButton
-                type="button"
-                value={"Designer"}
+                type='button'
+                value={'Designer'}
                 onClick={handleChange}
                 style={{
                   backgroundColor:
-                    stackData === "Designer" ? "#262b7f" : "#ffffff",
-                  color: stackData === "Designer" ? "#ffffff" : "#262b7f",
+                    stackData === 'Designer' ? '#262b7f' : '#ffffff',
+                  color: stackData === 'Designer' ? '#ffffff' : '#262b7f',
                 }}
-                id="stack"
-                name="stack"
+                id='stack'
+                name='stack'
               />
               <StackButton
-                type="button"
-                value={"Web Publish"}
+                type='button'
+                value={'Web Publish'}
                 onClick={handleChange}
                 style={{
                   backgroundColor:
-                    stackData === "Web Publish" ? "#262b7f" : "#ffffff",
-                  color: stackData === "Web Publish" ? "#ffffff" : "#262b7f",
+                    stackData === 'Web Publish' ? '#262b7f' : '#ffffff',
+                  color: stackData === 'Web Publish' ? '#ffffff' : '#262b7f',
                 }}
-                id="stack"
-                name="stack"
+                id='stack'
+                name='stack'
               />
               <StackButton
-                type="button"
-                value={"Product Manage"}
+                type='button'
+                value={'Product Manage'}
                 onClick={handleChange}
                 style={{
                   backgroundColor:
-                    stackData === "Product Manage" ? "#262b7f" : "#ffffff",
-                  color: stackData === "Product Manage" ? "#ffffff" : "#262b7f",
+                    stackData === 'Product Manage' ? '#262b7f' : '#ffffff',
+                  color: stackData === 'Product Manage' ? '#ffffff' : '#262b7f',
                 }}
-                id="stack"
-                name="stack"
+                id='stack'
+                name='stack'
               />
             </StackContainer>
 
             <Input
-
-              type="text"
+              type='text'
               onChange={handleChange}
               value={formData?.gitAddress}
-              id="gitAddress"
-              name="gitAddress"
-
-              placeholder="본인 Github 주소를 소개합니다."
-              style={{ width: "240px" }}
+              id='gitAddress'
+              name='gitAddress'
+              placeholder='본인 Github 주소를 소개합니다.'
+              style={{width: '240px'}}
             />
             <TextAreaIntroduce
-              placeholder="간단한 소개글을 적어주세요."
-
+              placeholder='간단한 소개글을 적어주세요.'
               onChange={handleChange}
               value={formData?.introduce}
-              id="introduce"
-              name="introduce"
-
-              maxLength={150}></TextAreaIntroduce>
+              id='introduce'
+              name='introduce'
+              maxLength={150}
+            ></TextAreaIntroduce>
             <BtnContainer>
               <BtnWrap>
                 <SaveBtn>저장</SaveBtn>
                 <CancelBtn
                   onClick={() => {
                     setIsEditProfile(false);
-                  }}>
+                  }}
+                >
                   취소
                 </CancelBtn>
               </BtnWrap>
@@ -147,7 +135,6 @@ export default function MyInfo({
           </ProfileContentsBox>
         </Container>
       </form>
-
     </>
   );
 }
@@ -227,20 +214,6 @@ const BtnWrap = styled.div`
   justify-content: flex-end;
 `;
 
-const IntroduceLb = styled.label`
-  /* background-color: red; */
-  width: 100%;
-  height: 220px;
-`;
-
-const Introducebox = styled.textarea`
-  /* background-color: red; */
-  width: 100%;
-  height: 200px;
-  padding: 20px;
-  border: 1px solid #d0d0d0;
-  border-radius: 10px;
-`;
 const SaveBtn = styled.button`
   margin-right: 8px;
   padding: 4px 12px;

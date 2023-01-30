@@ -1,64 +1,33 @@
-// react-icons 다운
-
-import { useState, useCallback, useEffect, useRef } from "react";
-import styled from "styled-components";
-import MypageModal from "../components/MypageModal";
-
-
-import UploadImage from "../components/UploadImage";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-  updateDoc,
-  Firestore,
-  setDoc,
-  DocumentData,
-
-} from "firebase/firestore";
-import { auth, dbService, authService } from "../shared/firebase";
-import Profile from "../components/Profile";
-import { useParams } from "react-router-dom";
-import MyPost from "../components/MyPost";
-import { identifier } from "@babel/types";
-import { getAuth, onAuthStateChanged, updateProfile } from "@firebase/auth";
-import { UserInfo } from "../shared/type";
-import MyInfo from "../components/MyInfo";
-import EditInfo from "../components/EditInfo";
-import userEvent from "@testing-library/user-event";
-
+import {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {doc, getDoc, updateDoc, DocumentData} from 'firebase/firestore';
+import {dbService, authService} from '../shared/firebase';
+import Profile from '../components/mypage/Profile';
+import MyPost from '../components/mypage/MyPost';
+import {updateProfile} from '@firebase/auth';
+import MyInfo from '../components/mypage/MyInfo';
+import EditInfo from '../components/mypage/EditInfo';
 
 export default function Mypage() {
   const displayName = authService.currentUser?.displayName;
   const [isEditProfile, setIsEditProfile] = useState(false);
-  const [nickName, setnickName] = useState("");
-  const [stack, setStack]: any = useState("");
-  const [gitAddress, setGitAddress] = useState("");
-  const [introduce, setIntroduce] = useState("");
+  const [nickName, setnickName] = useState('');
+  const [stack, setStack]: any = useState('');
+  const [gitAddress, setGitAddress] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
-  const { id } = useParams();
+  const userEmail = authService.currentUser?.email;
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
-
     gitAddress: gitAddress,
     introduce: introduce,
-
     userid: uid,
   });
 
-  console.log("formData", formData);
-
   const handleChange = (e: any) => {
-
     setFormData((prevFormData) => {
-
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,
@@ -68,42 +37,38 @@ export default function Mypage() {
 
   const onChangeNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setnickName(e.target.value);
-    // console.log(nickName)
   };
   const onChangegitAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGitAddress(e.target.value);
-    // console.log(gitAddress);
   };
   const onChangeintroduce = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIntroduce(e.target.value);
-    // console.log(introduce);
   };
-  console.log("formData", formData);
+  console.log('formData', formData);
   console.log(Boolean(formData?.gitAddress));
   const onSubmitMyInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("formdata", formData);
+    console.log('formdata', formData);
     let reg_url =
       /^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))*\/?$/;
     // 문서 id를 uid로 저장해서, 동일한 문서id가 있으면 update 됨.
     if (!(formData?.nickName || displayName)) {
       // formdata가 빈값이면 if문은 true
-      alert("nickname 을 입력해주세요");
+      alert('nickname 을 입력해주세요');
       return;
-
     } else if (formData?.gitAddress) {
       // 닉네임 빈값 아니면 깃어드레스 내용 있는지 체크, 만약 내용이 있으면 true
       if (!reg_url.test(formData?.gitAddress)) {
         // 정규식 체크해서 정규식에 부합하지 않으면 알러트
-        alert("Url 형식에 맞게 입력해주세요!");
+        alert('Url 형식에 맞게 입력해주세요!');
         return;
       } else {
         //정규식에 부합하면 코드 실행
-        await updateDoc(doc(dbService, "user", id), {
-          gitAddress: formData?.gitAddress,
-          nickName: formData?.nickName,
-          introduce: formData?.introduce,
-          stack: formData?.stack,
+        await updateDoc(doc(dbService, 'user', userEmail), {
+          gitAddress: formData?.gitAddress ?? '',
+          nickName: formData?.nickName ?? displayName,
+          introduce: formData?.introduce ?? '',
+          stack: formData?.stack ?? '',
           userid: uid,
         });
         await updateProfile(authService?.currentUser, {
@@ -111,16 +76,15 @@ export default function Mypage() {
         });
         getMyInfo();
         setIsEditProfile(false);
-        console.log("setIsEditProfile", isEditProfile);
+        console.log('setIsEditProfile', isEditProfile);
       }
-
     } else {
       //깃 어드레스 내용 없으면
-      await setDoc(doc(dbService, "user", id), {
-        gitAddress: formData?.gitAddress ?? "",
+      await updateDoc(doc(dbService, 'user', userEmail), {
+        gitAddress: formData?.gitAddress ?? '',
         nickName: formData?.nickName ?? displayName,
-        introduce: formData?.introduce ?? "인사말을 입력해주세요.",
-        stack: formData?.stack ?? "주 스택을 선택 해주세요.",
+        introduce: formData?.introduce ?? '인사말을 입력해주세요.',
+        stack: formData?.stack ?? '주 스택을 선택 해주세요.',
         userid: uid,
       });
       await updateProfile(authService?.currentUser, {
@@ -128,12 +92,12 @@ export default function Mypage() {
       });
       getMyInfo();
       setIsEditProfile(false);
-      console.log("setIsEditProfile", isEditProfile);
+      console.log('setIsEditProfile', isEditProfile);
     }
   };
 
   const getMyInfo: any = async () => {
-    const snapshot = await getDoc(doc(dbService, "user", id));
+    const snapshot = await getDoc(doc(dbService, 'user', userEmail));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setFormData(data);
   };
@@ -141,10 +105,6 @@ export default function Mypage() {
   useEffect(() => {
     getMyInfo();
   }, []);
-
-  // 저장된 데이터를 불러와서 myInfo에 넣어줌.
-
-  const [profileContents, setProfileContents] = useState<any>([]);
 
   return (
     <>
@@ -168,7 +128,12 @@ export default function Mypage() {
               handleChange={handleChange}
             />
           ) : (
-            <EditInfo myInfo={myInfo} setIsEditProfile={setIsEditProfile} stack={stack} formData={formData} />
+            <EditInfo
+              myInfo={myInfo}
+              setIsEditProfile={setIsEditProfile}
+              stack={stack}
+              formData={formData}
+            />
           )}
 
           <BottomContainer>
