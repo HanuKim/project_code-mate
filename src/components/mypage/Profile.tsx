@@ -1,15 +1,16 @@
-import { onAuthStateChanged, updateProfile } from 'firebase/auth';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { storage, auth } from '../shared/firebase';
+import {onAuthStateChanged, updateProfile} from 'firebase/auth';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {ChangeEvent, useEffect, useState} from 'react';
+import {storage, auth, authService, dbService} from '../../shared/firebase';
 import styled from 'styled-components';
-import MypageUploadModal from '../components/modal/MypageUploadModal';
+import {doc, updateDoc} from 'firebase/firestore';
 
 export default function Profile() {
   const currentUser = useAuth();
   const [checkImageModal, setCheckImageModal] = useState<any>(false);
   const [photo, setPhoto] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const userEmail = authService.currentUser?.email;
   const [photoURL, setPhotoURL] = useState(
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
   );
@@ -30,13 +31,15 @@ export default function Profile() {
 
     setLoading(true);
 
-    const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(fileRef);
 
-    updateProfile(currentUser, { photoURL });
+    updateProfile(currentUser, {photoURL});
     setPhotoURL(photoURL);
     setLoading(false);
-    setCheckImageModal(true);
+    await updateDoc(doc(dbService, 'user', userEmail), {
+      imageUrl: photoURL,
+    });
+    alert('Uploaded file!');
   }
   console.log('photoURL', photoURL);
 
@@ -57,26 +60,21 @@ export default function Profile() {
   }, [currentUser]);
 
   return (
-    <>
-      {checkImageModal ? (
-        <MypageUploadModal setCheckImageModal={setCheckImageModal} />
-      ) : null}
-      <PicContainer>
-        <ImageWrap>
-          <ProfileImage src={photoURL} width={150} height={130} />
-        </ImageWrap>
-        <ButtonWrap>
-          <FileSelectBtn htmlFor="input-file">
-            {' '}
-            사진 선택
-            <input type="file" hidden id="input-file" onChange={handleChange} />
-          </FileSelectBtn>
-          <UploatBtn disabled={loading || !photo} onClick={handleClick}>
-            사진 등록
-          </UploatBtn>
-        </ButtonWrap>
-      </PicContainer>
-    </>
+    <PicContainer>
+      <ImageWrap>
+        <ProfileImage src={photoURL} width={150} height={130} />
+      </ImageWrap>
+      <ButtonWrap>
+        <FileSelectBtn htmlFor='input-file'>
+          {' '}
+          사진 선택
+          <input type='file' hidden id='input-file' onChange={handleChange} />
+        </FileSelectBtn>
+        <UploatBtn disabled={loading || !photo} onClick={handleClick}>
+          사진 등록
+        </UploatBtn>
+      </ButtonWrap>
+    </PicContainer>
   );
 }
 

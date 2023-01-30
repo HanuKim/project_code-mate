@@ -1,5 +1,5 @@
-import react, { useEffect, useState } from "react";
-import styled from "styled-components";
+import {useEffect, useState} from 'react';
+import styled from 'styled-components';
 
 export function TopBtn() {
   const [showButton, setShowButton] = useState(false);
@@ -7,7 +7,7 @@ export function TopBtn() {
   const scrollToTop = () => {
     window.scroll({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
   useEffect(() => {
@@ -20,9 +20,9 @@ export function TopBtn() {
     };
 
     console.log(window.scrollY);
-    window.addEventListener("scroll", handleShowButton);
+    window.addEventListener('scroll', handleShowButton);
     return () => {
-      window.removeEventListener("scroll", handleShowButton);
+      window.removeEventListener('scroll', handleShowButton);
     };
   }, []);
 

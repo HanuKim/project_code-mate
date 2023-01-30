@@ -1,23 +1,5 @@
-import React, { Children, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  where,
-} from 'firebase/firestore';
-import { dbService } from '../../shared/firebase';
-import styled from 'styled-components';
+import React from 'react';
+
 import {
   ContainerBg,
   Container,
@@ -27,9 +9,13 @@ import {
 } from './DeleteModal';
 
 export default function CheckModal({
+  
   setCheckViewModal,
+,
 }: {
-  setCheckViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  
+  setCheckViewModal:  React.Dispatch<React.SetStateAction<boolean>>;
+;
 }) {
   const closeModal = () => {
     setCheckViewModal(false);

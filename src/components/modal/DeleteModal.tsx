@@ -1,10 +1,9 @@
-import React, { Children } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { dbService } from '../../shared/firebase';
+import React from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import {doc, deleteDoc} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
 import styled from 'styled-components';
-import { Comment } from '../../shared/type';
-// import {openModal, closeModal} from '../../redux/modules/modalSlice';
+import {Comment} from '../../shared/type';
 
 export default function DeleteModal({
   setDeleteViewModal,
@@ -13,7 +12,7 @@ export default function DeleteModal({
   setDeleteViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   comment: Comment;
 }) {
-  let { id } = useParams();
+  let {id} = useParams();
   const navigate = useNavigate();
   const closeModal = () => {
     setDeleteViewModal(false);

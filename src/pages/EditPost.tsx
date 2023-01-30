@@ -1,31 +1,24 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Map from '../components/main/Map';
-import CreateCategory from '../components/main/CreateCategory';
-import { PostState, MapProps } from '../shared/type';
+import Map from '../components/map/Map';
+import CreateCategory from '../components/post/CreateCategory';
+import { MapProps } from '../shared/type';
 import {
-  collection,
   updateDoc,
   doc,
   getDoc,
   DocumentData,
 } from 'firebase/firestore';
-import { dbService, authService } from '../shared/firebase';
+import { dbService } from '../shared/firebase';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
-import basicImg from '../../img/basicImg.png';
 
 const EditPost = () => {
   const location = useLocation();
   const {
     content,
     coord: { lat, lng },
-    createdAt,
-    isEdit,
-    nickName,
-    profileImg,
     title,
-    userId,
   } = location.state.setDetail;
 
   const navigate = useNavigate();

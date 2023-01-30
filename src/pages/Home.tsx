@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import Pagination from "../components/comment/Paging";
 import {
   collection,
   onSnapshot,
@@ -12,9 +11,8 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { dbService } from "../shared/firebase";
-import MainCategory from "../components/main/MainCategory";
-import PostList from "../components/main/PostList";
-import { useFirestoreQuery } from "@react-query-firebase/firestore";
+import MainCategory from "../components/post/MainCategory";
+import PostList from "../components/post/PostList";
 import { PostState } from "../shared/type";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/modal/AlertModal";
@@ -26,7 +24,6 @@ export default function Home({ setOpenModal }: any) {
   const [AlertMessageText, setAlertMessageText] = useState("");
   const navigate = useNavigate();
   const authService = getAuth();
-  const uid = authService.currentUser?.uid;
   // post 데이터에서 createAt을 내림차순으로 정렬
   const q = query(collection(dbService, "post"), orderBy("createdAt", "desc"));
 
@@ -55,7 +52,6 @@ export default function Home({ setOpenModal }: any) {
   const getPost = () => {
     onSnapshot(q, (snapshot) => {
       const newPosts = snapshot.docs.map((doc) => {
-        // console.log('doc', doc.data());
         const newPost = {
           id: doc.id,
           ...doc.data(), // <- poststate
@@ -63,11 +59,9 @@ export default function Home({ setOpenModal }: any) {
         } as PostState;
         // poststate로 들어올걸 확신해서 as를 사용함
         // as 사용하기 전에는 doc을 추론하지 못해서 계속 에러가 났음
-        // console.log("newpost", newPost);
         return newPost;
       });
       setPosts(newPosts);
-      // console.log("posts2", newPosts);
     });
   };
 
@@ -75,15 +69,12 @@ export default function Home({ setOpenModal }: any) {
 
   useEffect(() => {
     getPost();
-    // console.log("posts", posts);
-    // console.log("category", category);
 
     const getCategory = async () => {
       const snapshot = await getDoc(
         doc(dbService, "category", "currentCategory")
       );
-      // console.log(snapshot.data());
-      setCategory(snapshot.data().category); // 스냅샷.data() 오류났었는데 tsconfig.json에 "strictNullChecks": false, 추가해줬더니 오류안남. 이렇게 해도 괜찮은건지 확인필요
+      setCategory(snapshot.data().category); 
     };
     getCategory();
   }, []);

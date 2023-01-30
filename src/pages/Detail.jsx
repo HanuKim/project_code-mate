@@ -1,39 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Button from '../components/Button';
-import MapContainer from '../components/MapContainer';
-import JobCategory from '../components/JobCategory';
-import CodeMate from '../img/CodeMate.png';
-import Comments from '../components/comment/Comments';
+import MapContainer from '../components/map/MapContainer';
+import JobCategory from '../components/post/JobCategory';
 import CommentInput from '../components/comment/CommentInput';
 import CommentList from '../components/comment/CommentList';
 import basicImg from '../img/basicImg.png';
-import { useLocation } from 'react-router-dom';
-import {
-  collection,
-  addDoc,
-  doc,
-  getDoc,
-  query,
-  orderBy,
-  where,
-  onSnapshot,
-  setDoc,
-  getDocs,
-} from 'firebase/firestore';
-import { dbService, authService } from '../shared/firebase';
-import { getAuth } from 'firebase/auth';
-import UserProfileModal from './UserProfile';
+import {doc, getDoc} from 'firebase/firestore';
+import {dbService, authService} from '../shared/firebase';
+import UserProfileModal from '../components/modal/UserProfile';
 
 // 리액트에서 라우터 사용 시, 파라미터 정보를 가져와 활용하고 싶으면 useParams라는 훅을 사용하면 된다.
 // 참고로 파라미터가 아닌 현재 페이지의 Pathname을 가져오려면 useLocation()을 사용해야 한다.
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 export default function Detail() {
   const [setDetail, getSetDetail] = useState('');
-  let { id } = useParams();
+  let {id} = useParams();
   const uid = authService.currentUser?.uid;
   const [isOpenProfileModal, setOpenProfileModal] = useState(false);
 
@@ -48,7 +31,7 @@ export default function Detail() {
   }, []);
 
   const onClickToggleModal = () => {
-    setOpenProfileModal(!isOpenProfileModal);
+    setOpenProfileModal(true);
   };
   return (
     <>
@@ -62,13 +45,19 @@ export default function Detail() {
               <ProfileWrap>
                 {isOpenProfileModal ? (
                   <UserProfileModal
+                   
                     setOpenProfileModal={setOpenProfileModal}
+                   
                     isOpenProfileModal={isOpenProfileModal}
+                 
                   />
                 ) : null}
                 <ProfilePic
+                 
                   onClick={onClickToggleModal}
+                 
                   profile={setDetail.profileImg ?? basicImg}
+               
                 />
                 <ProfileName>{setDetail.nickName}</ProfileName>
               </ProfileWrap>
@@ -76,8 +65,8 @@ export default function Detail() {
                 <Button
                   location={setDetail.coord}
                   id={id}
-                  delete="삭제"
-                  edit="수정"
+                  delete='삭제'
+                  edit='수정'
                   btnWidth={80}
                   btnHeight={40}
                 ></Button>
@@ -88,7 +77,7 @@ export default function Detail() {
             <JobCategory />
           </ContentsContainer>
         </InnerWidth>
-        <CommentInput />
+        {uid ? <CommentInput /> : undefined}
         <CommentList />
       </Container>
     </>

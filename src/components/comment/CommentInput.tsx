@@ -1,36 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
-import { RootState } from "../../redux/config/configStore";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  DocumentData,
-  Timestamp,
-  limit,
-  QuerySnapshot,
-  serverTimestamp,
-  query,
-  orderBy,
-  where,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
-import { auth, dbService } from "../../shared/firebase";
-import { useNavigate, useParams } from "react-router-dom";
-import CheckModal from "../modal/CheckModal";
-import { getAuth } from "firebase/auth";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {collection, addDoc} from 'firebase/firestore';
+import {dbService} from '../../shared/firebase';
+import {useParams} from 'react-router-dom';
+import CheckModal from '../modal/CheckModal';
+import {getAuth} from 'firebase/auth';
 
 export default function CommentInput() {
-  // const dispatch = useDispatch();
-
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [commentText, setCommentText] = useState("");
-  const [nick, setNick]: any = useState("");
+  const {id} = useParams();
+  const [commentText, setCommentText] = useState('');
   const [checkViewModal, setCheckViewModal] = useState(false);
   const authService = getAuth();
   const uid = authService.currentUser?.uid;
@@ -48,7 +26,7 @@ export default function CommentInput() {
   };
 
   useEffect(() => {
-    console.log("photoURL", authService?.currentUser);
+    console.log('photoURL', authService?.currentUser);
   }, []);
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -65,8 +43,8 @@ export default function CommentInput() {
       setCheckViewModal(true);
       return;
     } else {
-      await addDoc(collection(dbService, "comment"), newComment);
-      setCommentText("");
+      await addDoc(collection(dbService, 'comment'), newComment);
+      setCommentText('');
     }
   };
 
@@ -77,18 +55,16 @@ export default function CommentInput() {
       ) : null}
       <Container>
         <CommentForm onSubmit={handleSubmitButtonClick}>
-          {/* <CommentLabel> */}
           <CommentText
-            placeholder="댓글을 입력 해주세요."
+            placeholder='댓글을 입력 해주세요.'
             onChange={handleChangeComment}
             value={commentText}
             cols={30}
-            wrap="hard"
+            wrap='hard'
           />
           <CommentSubmitButtonContainer>
             <CommentSubmitButton>등록</CommentSubmitButton>
           </CommentSubmitButtonContainer>
-          {/* </CommentLabel> */}
         </CommentForm>
       </Container>
     </>
@@ -105,10 +81,6 @@ const CommentForm = styled.form`
   width: 100%;
   margin: 0 auto;
 `;
-
-// const CommentLabel = styled.label`
-//   position: relative;
-// `;
 
 const CommentText = styled.textarea`
   min-height: 150px;

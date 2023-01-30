@@ -1,35 +1,12 @@
-// react-icons 다운
-import { useState, useCallback, useEffect, useRef } from 'react';
+import {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import MypageModal from '../components/modal/MypageModal';
-import MypageUrlmodal from '../components/modal/MypageUrlmodal';
-
-// import { ShowImage } from '../components/ShowImage';
-import UploadImage from '../components/UploadImage';
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-  updateDoc,
-  Firestore,
-  setDoc,
-  DocumentData,
-} from 'firebase/firestore';
-import { auth, dbService, authService } from '../shared/firebase';
-import Profile from '../components/Profile';
-import { useParams } from 'react-router-dom';
-import MyPost from '../components/MyPost';
-import { identifier } from '@babel/types';
-import { getAuth, onAuthStateChanged, updateProfile } from '@firebase/auth';
-import { UserInfo } from '../shared/type';
-import MyInfo from '../components/MyInfo';
-import EditInfo from '../components/EditInfo';
-import userEvent from '@testing-library/user-event';
+import {doc, getDoc, updateDoc, DocumentData} from 'firebase/firestore';
+import {dbService, authService} from '../shared/firebase';
+import Profile from '../components/mypage/Profile';
+import MyPost from '../components/mypage/MyPost';
+import {updateProfile} from '@firebase/auth';
+import MyInfo from '../components/mypage/MyInfo';
+import EditInfo from '../components/mypage/EditInfo';
 
 export default function Mypage() {
 
@@ -45,21 +22,17 @@ export default function Mypage() {
 
   const [myInfo, setMyInfo] = useState<DocumentData>();
   const uid = authService.currentUser?.uid;
-  const { id } = useParams();
+  const userEmail = authService.currentUser?.email;
   const [formData, setFormData] = useState<DocumentData>({
     nickName: displayName,
     stack: stack,
-
     gitAddress: gitAddress,
     introduce: introduce,
-
     userid: uid,
   });
 
-  console.log('formData', formData);
-
   const handleChange = (e: any) => {
-    setFormData(prevFormData => {
+    setFormData((prevFormData) => {
       return {
         ...prevFormData,
         [e.target.name]: e.target.value,
@@ -69,15 +42,12 @@ export default function Mypage() {
 
   const onChangeNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setnickName(e.target.value);
-    // console.log(nickName)
   };
   const onChangegitAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGitAddress(e.target.value);
-    // console.log(gitAddress);
   };
   const onChangeintroduce = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIntroduce(e.target.value);
-    // console.log(introduce);
   };
   console.log('formData', formData);
   console.log(Boolean(formData?.gitAddress));
@@ -99,11 +69,11 @@ export default function Mypage() {
         return;
       } else {
         //정규식에 부합하면 코드 실행
-        await updateDoc(doc(dbService, 'user', id), {
-          gitAddress: formData?.gitAddress,
-          nickName: formData?.nickName,
-          introduce: formData?.introduce,
-          stack: formData?.stack,
+        await updateDoc(doc(dbService, 'user', userEmail), {
+          gitAddress: formData?.gitAddress ?? '',
+          nickName: formData?.nickName ?? displayName,
+          introduce: formData?.introduce ?? '',
+          stack: formData?.stack ?? '',
           userid: uid,
         });
         await updateProfile(authService?.currentUser, {
@@ -115,11 +85,11 @@ export default function Mypage() {
       }
     } else {
       //깃 어드레스 내용 없으면
-      await setDoc(doc(dbService, "user", id), {
-        gitAddress: formData?.gitAddress ?? "",
+      await updateDoc(doc(dbService, 'user', userEmail), {
+        gitAddress: formData?.gitAddress ?? '',
         nickName: formData?.nickName ?? displayName,
-        introduce: formData?.introduce ?? "인사말을 입력해주세요.",
-        stack: formData?.stack ?? "주 스택을 선택 해주세요.",
+        introduce: formData?.introduce ?? '인사말을 입력해주세요.',
+        stack: formData?.stack ?? '주 스택을 선택 해주세요.',
         userid: uid,
       });
       await updateProfile(authService?.currentUser, {
@@ -132,7 +102,7 @@ export default function Mypage() {
   };
 
   const getMyInfo: any = async () => {
-    const snapshot = await getDoc(doc(dbService, 'user', id));
+    const snapshot = await getDoc(doc(dbService, 'user', userEmail));
     const data = snapshot.data(); // 가져온 doc의 객체 내용
     setFormData(data);
   };

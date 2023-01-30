@@ -1,13 +1,12 @@
-import React, { FC, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Map from '../components/main/Map';
-import CreateCategory from '../components/main/CreateCategory';
-import { PostState, MapProps } from '../shared/type';
-import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
-import { dbService, authService } from '../shared/firebase';
-import { useNavigate } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
-import basicImg from '../../img/basicImg.png';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Map from "../components/map/Map";
+import CreateCategory from "../components/post/CreateCategory";
+import {  MapProps } from "../shared/type";
+import { collection, addDoc } from "firebase/firestore";
+import { dbService } from "../shared/firebase";
+import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 const CreatePost = () => {
   const navigate = useNavigate();
