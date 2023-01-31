@@ -5,7 +5,7 @@ import {BtnProps, MixBtnProps} from '../shared/type';
 import {doc, getDoc} from 'firebase/firestore';
 import {dbService} from '../shared/firebase';
 import DeleteModal from './modal/DeleteModal';
-
+// 
 export default function Button(props: MixBtnProps, {comment}: any) {
   let {id} = useParams();
   const [viewDeleteModal, setDeleteViewModal] = useState(false);
